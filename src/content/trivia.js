@@ -1,5 +1,5 @@
 // Multiple-choice trivia pool, shared by Brain Board and Wedge Rush.
-// Each category has 20 questions. Within every block of 10, the questions go
+// Each category has 30 questions. Within every block of 10, the questions go
 // easiest to hardest in pairs: index % 10 → 0-1 = tier 0 (100 points) … 8-9 = tier 4 (500).
 // "a" is the correct answer, "w" are three wrong options.
 
@@ -26,7 +26,17 @@ export const CATEGORIES = [
       { q: "Transylvania is a region of which country?", a: "Romania", w: ["Hungary", "Bulgaria", "Serbia"] },
       { q: "Riga is the capital of which country?", a: "Latvia", w: ["Lithuania", "Estonia", "Finland"] },
       { q: "Which country has three capital cities?", a: "South Africa", w: ["Bolivia", "Netherlands", "Malaysia"] },
-      { q: "In which country is Mount Kilimanjaro?", a: "Tanzania", w: ["Kenya", "Uganda", "Ethiopia"] }
+      { q: "In which country is Mount Kilimanjaro?", a: "Tanzania", w: ["Kenya", "Uganda", "Ethiopia"] },
+      { q: "What is the capital of Italy?", a: "Rome", w: ["Milan", "Venice", "Naples"] },
+      { q: "In which city is Big Ben?", a: "London", w: ["Dublin", "Edinburgh", "Manchester"] },
+      { q: "What is the capital of Germany?", a: "Berlin", w: ["Munich", "Hamburg", "Frankfurt"] },
+      { q: "Which is the largest country by area?", a: "Russia", w: ["Canada", "China", "USA"] },
+      { q: "What is the capital of Norway?", a: "Oslo", w: ["Bergen", "Stockholm", "Helsinki"] },
+      { q: "The Great Barrier Reef lies off the coast of which country?", a: "Australia", w: ["Indonesia", "Philippines", "New Zealand"] },
+      { q: "What is the capital of New Zealand?", a: "Wellington", w: ["Auckland", "Christchurch", "Queenstown"] },
+      { q: "Which country has the most natural lakes?", a: "Canada", w: ["Finland", "Russia", "USA"] },
+      { q: "Which country is completely surrounded by South Africa?", a: "Lesotho", w: ["Eswatini", "Botswana", "Namibia"] },
+      { q: "What is the capital of Mongolia?", a: "Ulaanbaatar", w: ["Astana", "Bishkek", "Tashkent"] }
     ]
   },
   {
@@ -51,7 +61,17 @@ export const CATEGORIES = [
       { q: "What is called the powerhouse of the cell?", a: "Mitochondria", w: ["Nucleus", "Ribosome", "Golgi apparatus"] },
       { q: "Which blood type is the universal donor?", a: "O negative", w: ["AB positive", "A negative", "B positive"] },
       { q: "Which metal is liquid at room temperature?", a: "Mercury", w: ["Gallium", "Lead", "Sodium"] },
-      { q: "Absolute zero is roughly…", a: "−273 °C", w: ["−100 °C", "−459 °C", "−373 °C"] }
+      { q: "Absolute zero is roughly…", a: "−273 °C", w: ["−100 °C", "−459 °C", "−373 °C"] },
+      { q: "How many planets are in our solar system?", a: "8", w: ["9", "7", "10"] },
+      { q: "Which organ pumps blood around the body?", a: "Heart", w: ["Lungs", "Liver", "Kidneys"] },
+      { q: "What is H₂O better known as?", a: "Water", w: ["Salt", "Hydrogen peroxide", "Oxygen"] },
+      { q: "Which planet is famous for its big bright rings?", a: "Saturn", w: ["Jupiter", "Mars", "Neptune"] },
+      { q: "What is the largest organ of the human body?", a: "Skin", w: ["Liver", "Brain", "Lungs"] },
+      { q: "What is the chemical symbol for iron?", a: "Fe", w: ["Ir", "In", "I"] },
+      { q: "Which planet has the shortest year?", a: "Mercury", w: ["Venus", "Mars", "Earth"] },
+      { q: "What does the 'D' in DNA stand for?", a: "Deoxyribo", w: ["Double", "Di", "Dynamic"] },
+      { q: "Which is the most common element in the universe?", a: "Hydrogen", w: ["Helium", "Oxygen", "Carbon"] },
+      { q: "Which is the most common element in Earth's crust?", a: "Oxygen", w: ["Silicon", "Iron", "Aluminium"] }
     ]
   },
   {
@@ -76,7 +96,17 @@ export const CATEGORIES = [
       { q: "Which country does halloumi cheese come from?", a: "Cyprus", w: ["Greece", "Turkey", "Lebanon"] },
       { q: "The Latvian dish 'pelēkie zirņi' is made from…", a: "Grey peas", w: ["Rye bread", "Beetroot", "Herring"] },
       { q: "Which nuts go into classic Genovese pesto?", a: "Pine nuts", w: ["Walnuts", "Almonds", "Cashews"] },
-      { q: "Which of these peppers is the hottest?", a: "Carolina Reaper", w: ["Jalapeño", "Habanero", "Cayenne"] }
+      { q: "Which of these peppers is the hottest?", a: "Carolina Reaper", w: ["Jalapeño", "Habanero", "Cayenne"] },
+      { q: "Eating one of which fruit a day is said to keep the doctor away?", a: "Apple", w: ["Banana", "Orange", "Pear"] },
+      { q: "What is the main ingredient of an omelette?", a: "Eggs", w: ["Milk", "Flour", "Cheese"] },
+      { q: "Paella comes from which country?", a: "Spain", w: ["Italy", "Mexico", "Portugal"] },
+      { q: "Which vegetable makes people cry when they cut it?", a: "Onion", w: ["Garlic", "Leek", "Celery"] },
+      { q: "Feta cheese is made mostly from which animal's milk?", a: "Sheep", w: ["Cow", "Buffalo", "Camel"] },
+      { q: "Miso paste is made mainly from fermented…", a: "Soybeans", w: ["Fish", "Seaweed", "Mushrooms"] },
+      { q: "The noodle soup pho comes from which country?", a: "Vietnam", w: ["Thailand", "China", "Cambodia"] },
+      { q: "Japanese sake is brewed from which grain?", a: "Rice", w: ["Barley", "Wheat", "Millet"] },
+      { q: "Which country grows the most coffee?", a: "Brazil", w: ["Colombia", "Vietnam", "Ethiopia"] },
+      { q: "Which spice is the dried flower bud of a tree?", a: "Cloves", w: ["Nutmeg", "Cinnamon", "Cardamom"] }
     ]
   },
   {
@@ -101,7 +131,17 @@ export const CATEGORIES = [
       { q: "What is the paper company in The Office (US)?", a: "Dunder Mifflin", w: ["Wernham Hogg", "Sabre", "Staples"] },
       { q: "In Squid Game, what color do the guards wear?", a: "Pink", w: ["Red", "Green", "Black"] },
       { q: "Which was the first video game played in space?", a: "Tetris", w: ["Pong", "Pac-Man", "Space Invaders"] },
-      { q: "Who directed the film Spirited Away?", a: "Hayao Miyazaki", w: ["Isao Takahata", "Makoto Shinkai", "Mamoru Hosoda"] }
+      { q: "Who directed the film Spirited Away?", a: "Hayao Miyazaki", w: ["Isao Takahata", "Makoto Shinkai", "Mamoru Hosoda"] },
+      { q: "What is the name of Mickey Mouse's girlfriend?", a: "Minnie Mouse", w: ["Daisy Duck", "Clarabelle Cow", "Betty Boop"] },
+      { q: "Which green ogre lives in a swamp?", a: "Shrek", w: ["The Hulk", "The Grinch", "Fiona"] },
+      { q: "Which superhero is called the Dark Knight?", a: "Batman", w: ["Superman", "Iron Man", "Daredevil"] },
+      { q: "What kind of dog is Scooby-Doo?", a: "Great Dane", w: ["Beagle", "Labrador", "Boxer"] },
+      { q: "In Finding Nemo, what kind of fish is Dory?", a: "Blue tang", w: ["Clownfish", "Angelfish", "Pufferfish"] },
+      { q: "In The Legend of Zelda, what is the hero usually called?", a: "Link", w: ["Zelda", "Ganon", "Epona"] },
+      { q: "In which country does Black Panther live?", a: "Wakanda", w: ["Genovia", "Latveria", "Sokovia"] },
+      { q: "In The Simpsons, what is the bar Homer goes to?", a: "Moe's Tavern", w: ["Paddy's Pub", "The Drunken Clam", "MacLaren's"] },
+      { q: "In which year did Super Mario Bros. come out on the NES?", a: "1985", w: ["1983", "1988", "1981"] },
+      { q: "Which Pixar film follows a rat who wants to be a chef in Paris?", a: "Ratatouille", w: ["Luca", "Coco", "Soul"] }
     ]
   },
   {
@@ -126,7 +166,17 @@ export const CATEGORIES = [
       { q: "In which sport is the Ryder Cup played?", a: "Golf", w: ["Tennis", "Sailing", "Cricket"] },
       { q: "What is the maximum break in snooker (without free balls)?", a: "147", w: ["155", "100", "180"] },
       { q: "Who won the first Rugby World Cup in 1987?", a: "New Zealand", w: ["Australia", "England", "South Africa"] },
-      { q: "What is the highest score with three darts?", a: "180", w: ["150", "170", "200"] }
+      { q: "What is the highest score with three darts?", a: "180", w: ["150", "170", "200"] },
+      { q: "In which sport do you hit a home run?", a: "Baseball", w: ["Cricket", "Rugby", "Golf"] },
+      { q: "Which sport is played at Wimbledon?", a: "Tennis", w: ["Golf", "Cricket", "Polo"] },
+      { q: "How many players does a basketball team have on court?", a: "5", w: ["6", "4", "7"] },
+      { q: "In which sport can you get a hole-in-one?", a: "Golf", w: ["Bowling", "Snooker", "Darts"] },
+      { q: "How long is a football (soccer) match, without stoppage time?", a: "90 minutes", w: ["80 minutes", "100 minutes", "120 minutes"] },
+      { q: "In which sport is the Stanley Cup won?", a: "Ice hockey", w: ["Baseball", "American football", "Basketball"] },
+      { q: "How long is an Olympic swimming pool?", a: "50 m", w: ["25 m", "100 m", "40 m"] },
+      { q: "In cricket, how many balls are in a standard over?", a: "6", w: ["5", "8", "10"] },
+      { q: "In which sport did Nadia Comăneci score the first perfect 10 at the Olympics?", a: "Gymnastics", w: ["Diving", "Figure skating", "Synchronised swimming"] },
+      { q: "How wide is a basketball hoop?", a: "45 cm", w: ["40 cm", "50 cm", "55 cm"] }
     ]
   },
   {
@@ -151,7 +201,17 @@ export const CATEGORIES = [
       { q: "What is a male duck called?", a: "Drake", w: ["Gander", "Cob", "Buck"] },
       { q: "Which bird can fly backwards?", a: "Hummingbird", w: ["Swift", "Kingfisher", "Kestrel"] },
       { q: "What color is a polar bear's skin?", a: "Black", w: ["White", "Pink", "Grey"] },
-      { q: "How many eyes does a honeybee have?", a: "5", w: ["2", "4", "8"] }
+      { q: "How many eyes does a honeybee have?", a: "5", w: ["2", "4", "8"] },
+      { q: "Which animal has the longest neck?", a: "Giraffe", w: ["Ostrich", "Camel", "Llama"] },
+      { q: "What is a baby dog called?", a: "A puppy", w: ["A kitten", "A calf", "A foal"] },
+      { q: "Which lizard is famous for changing color?", a: "Chameleon", w: ["Iguana", "Gecko", "Komodo dragon"] },
+      { q: "What is the largest bird in the world?", a: "Ostrich", w: ["Emu", "Albatross", "Condor"] },
+      { q: "How many arms does an octopus have?", a: "8", w: ["6", "10", "12"] },
+      { q: "What is a group of wolves called?", a: "A pack", w: ["A pride", "A herd", "A school"] },
+      { q: "Which of these mammals lays eggs?", a: "Platypus", w: ["Kangaroo", "Koala", "Armadillo"] },
+      { q: "What is a baby swan called?", a: "A cygnet", w: ["A gosling", "A duckling", "An eaglet"] },
+      { q: "How many compartments does a cow's stomach have?", a: "4", w: ["2", "3", "6"] },
+      { q: "What is a female fox called?", a: "A vixen", w: ["A doe", "A jill", "A sow"] }
     ]
   },
   {
@@ -176,7 +236,17 @@ export const CATEGORIES = [
       { q: "Who was the first woman to win a Nobel Prize?", a: "Marie Curie", w: ["Ada Lovelace", "Rosalind Franklin", "Florence Nightingale"] },
       { q: "In which year did Latvia first declare independence?", a: "1918", w: ["1991", "1905", "1940"] },
       { q: "What was the first artificial satellite called?", a: "Sputnik 1", w: ["Explorer 1", "Vostok 1", "Telstar"] },
-      { q: "Genghis Khan founded which empire?", a: "The Mongol Empire", w: ["The Ottoman Empire", "The Persian Empire", "The Han dynasty"] }
+      { q: "Genghis Khan founded which empire?", a: "The Mongol Empire", w: ["The Ottoman Empire", "The Persian Empire", "The Han dynasty"] },
+      { q: "What were the pyramids of Giza built as?", a: "Tombs for pharaohs", w: ["Palaces", "Grain stores", "Observatories"] },
+      { q: "Who built the Colosseum?", a: "The ancient Romans", w: ["The ancient Greeks", "The Egyptians", "The Vikings"] },
+      { q: "Which French emperor was beaten at Waterloo?", a: "Napoleon", w: ["Louis XIV", "Charlemagne", "Charles de Gaulle"] },
+      { q: "Which queen reigned for over 70 years until 2022?", a: "Elizabeth II", w: ["Victoria", "Elizabeth I", "Mary I"] },
+      { q: "Who was the first woman to fly solo across the Atlantic?", a: "Amelia Earhart", w: ["Bessie Coleman", "Amy Johnson", "Harriet Quimby"] },
+      { q: "Who sailed across the Atlantic to the Americas in 1492?", a: "Christopher Columbus", w: ["Vasco da Gama", "Ferdinand Magellan", "Amerigo Vespucci"] },
+      { q: "Who was the first person to travel into space?", a: "Yuri Gagarin", w: ["Neil Armstrong", "Alan Shepard", "John Glenn"] },
+      { q: "Constantinople was the capital of which empire?", a: "The Byzantine Empire", w: ["The Roman Republic", "The Persian Empire", "The Mongol Empire"] },
+      { q: "In which year did the Baltic Way human chain link Estonia, Latvia and Lithuania?", a: "1989", w: ["1991", "1987", "1990"] },
+      { q: "Which Wonder of the Ancient World stood in Alexandria?", a: "The Lighthouse", w: ["The Hanging Gardens", "The Colossus", "The Temple of Artemis"] }
     ]
   },
   {
@@ -201,7 +271,17 @@ export const CATEGORIES = [
       { q: "Daft Punk is a duo from which country?", a: "France", w: ["Germany", "Belgium", "Netherlands"] },
       { q: "What is the highest female singing voice?", a: "Soprano", w: ["Alto", "Mezzo-soprano", "Contralto"] },
       { q: "Who composed The Four Seasons?", a: "Vivaldi", w: ["Bach", "Handel", "Haydn"] },
-      { q: "How many lines does a music staff have?", a: "5", w: ["4", "6", "7"] }
+      { q: "How many lines does a music staff have?", a: "5", w: ["4", "6", "7"] },
+      { q: "How many strings does a violin have?", a: "4", w: ["5", "6", "3"] },
+      { q: "Which of these is a wind instrument?", a: "Flute", w: ["Violin", "Cello", "Drums"] },
+      { q: "Who is known as the 'Queen of Pop'?", a: "Madonna", w: ["Beyoncé", "Lady Gaga", "Britney Spears"] },
+      { q: "Freddie Mercury was the singer of which band?", a: "Queen", w: ["The Beatles", "Aerosmith", "U2"] },
+      { q: "Reggae music comes from which country?", a: "Jamaica", w: ["Cuba", "Brazil", "Trinidad and Tobago"] },
+      { q: "In 4/4 time, how many beats does a whole note last?", a: "4", w: ["2", "1", "8"] },
+      { q: "Who composed the opera The Magic Flute?", a: "Mozart", w: ["Beethoven", "Haydn", "Wagner"] },
+      { q: "What is the music word for getting gradually louder?", a: "Crescendo", w: ["Diminuendo", "Staccato", "Legato"] },
+      { q: "How many symphonies did Beethoven complete?", a: "9", w: ["5", "7", "12"] },
+      { q: "Which instrument has 47 strings and 7 pedals in its concert form?", a: "Harp", w: ["Piano", "Zither", "Lute"] }
     ]
   },
   {
@@ -226,7 +306,17 @@ export const CATEGORIES = [
       { q: "How many letters does the Latvian alphabet have?", a: "33", w: ["26", "29", "36"] },
       { q: "What is the fear of spiders called?", a: "Arachnophobia", w: ["Acrophobia", "Claustrophobia", "Agoraphobia"] },
       { q: "'The quick brown fox jumps over the lazy dog' is a…", a: "Pangram", w: ["Palindrome", "Anagram", "Haiku"] },
-      { q: "What does 'déjà vu' literally mean?", a: "Already seen", w: ["Already lived", "Never seen", "Seen twice"] }
+      { q: "What does 'déjà vu' literally mean?", a: "Already seen", w: ["Already lived", "Never seen", "Seen twice"] },
+      { q: "What is the opposite of 'whisper'?", a: "Shout", w: ["Mumble", "Hum", "Sigh"] },
+      { q: "Which of these words is a verb?", a: "Run", w: ["Happy", "Blue", "Table"] },
+      { q: "What does 'LOL' stand for?", a: "Laugh out loud", w: ["Lots of love", "Look out loser", "Lord of laughs"] },
+      { q: "A word that sounds like what it means, like 'buzz', is an example of…", a: "Onomatopoeia", w: ["Alliteration", "Metaphor", "Simile"] },
+      { q: "What does 'gracias' mean in Spanish?", a: "Thank you", w: ["Please", "Hello", "Sorry"] },
+      { q: "The haiku poem comes from which country?", a: "Japan", w: ["China", "Korea", "India"] },
+      { q: "What does the Latin phrase 'carpe diem' mean?", a: "Seize the day", w: ["Love conquers all", "I came, I saw", "Day of the dead"] },
+      { q: "'Kindergarten' is a word from which language?", a: "German", w: ["Dutch", "Swedish", "Danish"] },
+      { q: "What does 'sesquipedalian' mean?", a: "Using long words", w: ["Very old", "Having six feet", "Easily angered"] },
+      { q: "The word 'robot' comes from which language?", a: "Czech", w: ["Russian", "German", "Polish"] }
     ]
   },
   {
@@ -251,7 +341,17 @@ export const CATEGORIES = [
       { q: "In which year did the original Nintendo Switch launch?", a: "2017", w: ["2015", "2019", "2016"] },
       { q: "What does 'USB' stand for?", a: "Universal Serial Bus", w: ["United System Board", "Universal Storage Box", "Ultra Speed Bus"] },
       { q: "Who co-founded Microsoft with Bill Gates?", a: "Paul Allen", w: ["Steve Wozniak", "Larry Page", "Steve Ballmer"] },
-      { q: "What was Twitter renamed to in 2023?", a: "X", w: ["Threads", "Bluesky", "Chirp"] }
+      { q: "What was Twitter renamed to in 2023?", a: "X", w: ["Threads", "Bluesky", "Chirp"] },
+      { q: "Which company makes Galaxy phones?", a: "Samsung", w: ["Apple", "Huawei", "Sony"] },
+      { q: "Which Nintendo hero wears a red cap with an 'M' on it?", a: "Mario", w: ["Luigi", "Wario", "Toad"] },
+      { q: "What does 'PC' stand for?", a: "Personal computer", w: ["Power circuit", "Program code", "Private connection"] },
+      { q: "Which company makes the Xbox?", a: "Microsoft", w: ["Sony", "Nintendo", "Sega"] },
+      { q: "In storage, what does 'GB' stand for?", a: "Gigabyte", w: ["Great byte", "Gigabox", "Grand bit"] },
+      { q: "Which company develops Android?", a: "Google", w: ["Apple", "Microsoft", "Samsung"] },
+      { q: "Which Nintendo handheld from 1989 had a small greenish screen?", a: "Game Boy", w: ["Game Gear", "Atari Lynx", "Nintendo DS"] },
+      { q: "What does 'RAM' stand for?", a: "Random Access Memory", w: ["Read Access Memory", "Rapid Action Module", "Run All Memory"] },
+      { q: "Which company sold the first handheld mobile phone, the DynaTAC?", a: "Motorola", w: ["Nokia", "Ericsson", "Siemens"] },
+      { q: "What was the very first web browser called?", a: "WorldWideWeb", w: ["Mosaic", "Netscape Navigator", "Internet Explorer"] }
     ]
   }
 ];
