@@ -104,6 +104,7 @@ function startReveal(g) {
     c.results[pid] = { pts: r.pts * mult, spot: r.spot };
     byPlayer[pid] = r.pts * mult;
   }
+  g.statTop(byPlayer, 'close');
   const best = g.awardBest(byPlayer, c.gained);
   for (const [uid, b] of Object.entries(best)) c.best[uid] = b.by;
   c.nextAt = g.now() + T.reveal + Math.min(4000, Object.keys(c.guesses).length * 400);

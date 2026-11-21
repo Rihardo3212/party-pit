@@ -130,7 +130,7 @@ function vote(g, from, k) {
 function tally(g) {
   const c = g.state.chain;
   c.gained = {};
-  for (const k of Object.values(c.votes)) g.award(authorOf(c, c.showIdx, k), POINTS.vote, c.gained);
+  for (const k of Object.values(c.votes)) { const a = authorOf(c, c.showIdx, k); g.award(a, POINTS.vote, c.gained); g.stat(a, 'art'); }
   c.tallied = true;
   c.until = g.now() + T.tally;
   g.save();

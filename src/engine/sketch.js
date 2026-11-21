@@ -121,6 +121,7 @@ async function startReveal(g) {
     m.results[pid] = { pts };
     byPlayer[pid] = pts;
   }
+  g.statTop(byPlayer, 'art');
   const best = g.awardBest(byPlayer, m.gained);
   for (const [uid, b] of Object.entries(best)) m.best[uid] = b.by;
   m.nextAt = g.now() + T.reveal + Math.min(4000, Object.keys(byPlayer).length * 300);

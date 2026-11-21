@@ -91,6 +91,7 @@ function startReveal(g) {
     const speed = perfect ? Math.round(POINTS.speed * Math.max(0, 1 - (l.took[pid] || total) / total)) : 0;
     const pts = right * POINTS.card + (perfect ? POINTS.perfect + speed : 0);
     l.results[pid] = { right, perfect, pts };
+    if (perfect) g.stat(pid, 'right');
     byPlayer[pid] = pts;
   }
   const best = g.awardBest(byPlayer, l.gained);

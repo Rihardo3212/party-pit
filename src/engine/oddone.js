@@ -122,8 +122,10 @@ function result(g) {
       }
     } else {
       g.award(spy, POINTS.escaped, o.gained);
+      g.stat(spy, 'spy');
     }
   }
+  for (const [p, target] of Object.entries(o.votes || {})) if (!o.spies.includes(p) && o.spies.includes(target)) g.stat(p, 'eye');
   o.until = g.now() + T.result;
   s.phase = 'oresult';
   g.save();

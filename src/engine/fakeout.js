@@ -114,13 +114,15 @@ function revealStep(g) {
   const opt = f.options.find((o) => o.id === f.order[f.step]);
   const pickers = s.unitOrder.filter((u) => f.picks[u]?.id === opt.id);
   if (opt.kind === 'truth') {
-    for (const u of pickers) { s.units[u].score += POINTS.truth; f.gained[u] = (f.gained[u] || 0) + POINTS.truth; }
+    for (const u of pickers) { s.units[u].score += POINTS.truth; f.gained[u] = (f.gained[u] || 0) + POINTS.truth; g.stat(u, 'eye'); }
   } else if (opt.kind === 'lie') {
     for (const a of opt.authors) {
       const pts = POINTS.fool * pickers.length;
       s.units[a].score += pts;
       f.gained[a] = (f.gained[a] || 0) + pts;
+      g.stat(a, 'fooled', pickers.length);
     }
+    for (const u of pickers) g.stat(u, 'gotFooled');
   }
   f.nextAt = g.now() + (f.step === f.order.length - 1 ? T.step + T.after : T.step);
   g.save();

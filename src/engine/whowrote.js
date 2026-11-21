@@ -89,8 +89,8 @@ function reveal(g) {
   w.author = author;
   w.gained = {};
   for (const [pid, pick] of Object.entries(w.guesses)) {
-    if (pick === author) g.award(pid, POINTS.right, w.gained);
-    else g.award(author, POINTS.fooled, w.gained);
+    if (pick === author) { g.award(pid, POINTS.right, w.gained); g.stat(pid, 'eye'); }
+    else { g.award(author, POINTS.fooled, w.gained); g.stat(author, 'fooled'); g.stat(pid, 'gotFooled'); }
   }
   w.until = g.now() + T.show;
   s.phase = 'wshow';

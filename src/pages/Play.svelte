@@ -199,7 +199,7 @@
       </div>
 
     {:else if s.phase === 'end' && s.results}
-      <EndPhone {s} {myUnit} {unit} {send} {isCtrl} {react} />
+      <EndPhone {s} myId={id} {myUnit} {unit} {send} {isCtrl} {react} />
 
     {:else if game === 'board'}
       <BoardPhone {s} {id} {myUnit} {unit} {avatars} {send} {now} {react} />

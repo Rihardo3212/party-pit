@@ -118,6 +118,7 @@ function reveal(g) {
       const ok = !!a && a.i === w.q.correctIndex;
       const pts = ok ? 100 + Math.round(400 * Math.max(0, 1 - a.t / limit)) : 0;
       results[u] = { ok, pts };
+      if (ok) { g.stat(u, 'right'); g.statMin(u, 'buzz', a.t); } else if (a) g.stat(u, 'wrong');
       if (ok && !s.units[u].wedges[cat.id]) candidates.push({ u, key: a.t });
     }
   } else {
@@ -129,6 +130,7 @@ function reveal(g) {
       const ok = d !== undefined && d === best;
       const pts = ok ? (d === 0 ? 500 : 300) : 0;
       results[u] = { ok, pts, dist: d ?? null };
+      if (ok) g.stat(u, 'close');
       if (d !== undefined && !s.units[u].wedges[cat.id]) candidates.push({ u, key: d * 1e6 + w.answers[u].t });
     }
   }

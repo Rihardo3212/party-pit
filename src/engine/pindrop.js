@@ -117,6 +117,7 @@ function startReveal(g) {
     const km = distanceKm(pin, place);
     f.results[pid] = { km: Math.round(km * 10) / 10, pts: pointsFor(km) * mult };
   }
+  g.statTop(Object.fromEntries(Object.entries(f.results).map(([pid, r]) => [pid, r.km])), 'close', true);
   // Each unit scores with its closest pin.
   for (const uid of s.unitOrder) {
     const mine = Object.keys(f.results).filter((pid) => s.players[pid]?.unit === uid);

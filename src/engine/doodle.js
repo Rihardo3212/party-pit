@@ -91,6 +91,8 @@ function guess(g, from, text) {
     const artistUnit = g.unitOf(d.drawer);
     const artistPts = Math.round(100 * mult);
     if (artistUnit) s.units[artistUnit].score += artistPts;
+    g.stat(from, 'eye');
+    g.stat(d.drawer, 'art');
     d.artistPts = (d.artistPts || 0) + artistPts;
     d.feed = [...d.feed, { pid: from, kind: 'ok' }].slice(-FEED);
     const left = guessers(g).filter((p) => !d.guessed[p]);

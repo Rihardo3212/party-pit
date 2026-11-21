@@ -1,11 +1,14 @@
 <script>
   import Avatar from '../../components/Avatar.svelte';
   import Pie from '../../components/Pie.svelte';
+  import AwardCards from '../../components/AwardCards.svelte';
   import { MODES } from '../../lib/modes.js';
+  import { AWARDS_AT } from '../../lib/awards.js';
 
   let { s, avatars } = $props();
   const U = (id) => (id && s.units[id] ? { id, ...s.units[id] } : null);
   const ctrlName = $derived(s.mode === 'host' ? s.hostName : s.players[s.vip]?.name);
+  const hasAwards = $derived((s.results.awards || []).length > 0);
 </script>
 
 <section class="main">
@@ -19,7 +22,7 @@
       {@const won = s.results.winners.includes(id)}
       <div class="place card pop-in" class:won style="animation-delay:{300 + i * 180}ms">
         {#if won}<div class="trophy">🏆</div>{:else}<div class="rank">#{i + 1}</div>{/if}
-        <Avatar src={avatars[id]} color={u.color} name={u.name} size={won ? 150 : 96} />
+        <Avatar src={avatars[id]} color={u.color} name={u.name} size={won ? (hasAwards ? 120 : 150) : hasAwards ? 80 : 96} />
         <div class="pname">{u.name}</div>
         {#if s.teamMode}<div class="mem muted">{u.members.map((m) => s.players[m]?.name).join(', ')}</div>{/if}
         {#if s.settings.game === 'wedge'}<Pie wedges={u.wedges} size={won ? 70 : 52} />{/if}
@@ -27,6 +30,7 @@
       </div>
     {/each}
   </div>
+  <AwardCards {s} {avatars} delay={AWARDS_AT(s)} />
   <p class="muted">{ctrlName} can start a new round from their phone.</p>
 </section>
 

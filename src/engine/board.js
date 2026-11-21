@@ -98,6 +98,8 @@ function settleBuzz(g) {
   const first = [...pending].sort((a, b) => a.ts - b.ts)[0];
   s.current.buzzer = first.id;
   s.current.buzzUnit = first.uid;
+  // How fast they buzzed after the buzzers opened (for the Fastest Finger award).
+  g.mem.buzzMs = s.current.closeAt ? first.ts - (s.current.closeAt - T.buzz) : null;
   s.current.answerUntil = g.now() + (s.mode === 'host' ? T.answerHost : T.answerParty);
   s.phase = 'answer';
   save(g);
@@ -112,12 +114,15 @@ function resolve(g, right, chosen) {
 
   if (right) {
     unit.score += cur.value;
+    g.stat(cur.buzzer, 'right');
+    if (typeof g.mem.buzzMs === 'number' && g.mem.buzzMs >= 0) g.statMin(cur.buzzer, 'buzz', g.mem.buzzMs);
     s.turn = uid;
     reveal(g, 'correct', chosen, uid);
     return;
   }
 
   unit.score -= cur.value;
+  g.stat(cur.buzzer, 'wrong');
   cur.lockedOut[uid] = true;
   cur.wrongs.push({ id: cur.buzzer, uid, i: chosen });
   cur.buzzer = null;
@@ -352,6 +357,7 @@ export default {
             const delta = f.judged[uid] ? f.bets[uid] : -f.bets[uid];
             s.units[uid].score += delta;
             f.deltas[uid] = delta;
+            if (f.judged[uid]) g.stat(uid, 'right');
             f.nextAt = now + T.revealStep;
             save(g);
           } else {

@@ -121,6 +121,7 @@ function score(g) {
     r.points[e.pid] = pts;
     byPlayer[e.pid] = pts;
   });
+  g.statTop(byPlayer, 'reflex');
   const best = g.awardBest(byPlayer, r.gained);
   for (const [uid, b] of Object.entries(best)) r.best[uid] = b.by;
   r.nextAt = g.now() + T.result + Math.min(3000, ranked.length * 250);

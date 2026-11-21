@@ -11,6 +11,7 @@
 import { PLAYER_COLORS, MAX_SOLO, MAX_PLAYERS, TEAMS, TEAM_KEYS, REACTIONS } from '../lib/room.js';
 import { MODES } from '../lib/modes.js';
 import { addWin } from '../lib/wins.js';
+import { pickAwards } from '../lib/awards.js';
 import { shuffle, renderStrokes } from './util.js';
 import board from './board.js';
 import wedge from './wedge.js';
@@ -42,6 +43,7 @@ export function normalize(s) {
   s.unitOrder = s.unitOrder || [];
   s.teamReady = s.teamReady || {};
   s.pscore = s.pscore || {}; // points per player this game (social modes show them)
+  s.stats = s.stats || {}; // award stats this game: { key: { who: value } }
   for (const k of ['vip', 'turn', 'results', 'hostId', 'hostName', 'drawUntil', 'introUntil']) s[k] = s[k] ?? null;
   s.mode = s.mode || 'party';
   s.teamMode = !!s.teamMode;
@@ -52,6 +54,7 @@ export function normalize(s) {
   if (s.results) {
     s.results.ranked = s.results.ranked || [];
     s.results.winners = s.results.winners || [];
+    s.results.awards = s.results.awards || [];
   }
   for (const e of Object.values(ENGINES)) e.normalize(s);
   return s;
@@ -134,6 +137,28 @@ export class GameHost {
     }
     return best;
   }
+
+  // Award stats (see lib/awards.js). who = player id or unit id.
+  stat(who, key, n = 1) {
+    if (!who || !n) return;
+    const st = (this.state.stats[key] = this.state.stats[key] || {});
+    st[who] = (st[who] || 0) + n;
+  }
+  // Keeps the lowest value, e.g. the fastest buzz in ms.
+  statMin(who, key, v) {
+    if (!who || typeof v !== 'number' || !isFinite(v)) return;
+    const st = (this.state.stats[key] = this.state.stats[key] || {});
+    st[who] = Math.min(st[who] ?? Infinity, Math.max(0, Math.round(v)));
+  }
+  // One point for whoever had the top value this round (all of them on a tie). byWho: { who: number }.
+  statTop(byWho, key, low = false) {
+    const vals = Object.values(byWho).filter((v) => typeof v === 'number');
+    if (!vals.length) return;
+    const top = low ? Math.min(...vals) : Math.max(...vals);
+    if (!low && top <= 0) return;
+    for (const [who, v] of Object.entries(byWho)) if (v === top) this.stat(who, key);
+  }
+
   get engine() { return ENGINES[this.state?.settings.game] || board; }
 
   async start(resume) {
@@ -318,6 +343,7 @@ export class GameHost {
     const s = this.state;
     s.unitOrder.forEach((u) => { s.units[u].score = 0; s.units[u].wedges = {}; });
     s.pscore = {};
+    s.stats = {};
     s.game += 1;
     this.mem = {};
     this.engine.start(this);
@@ -378,7 +404,9 @@ export class GameHost {
     const ranked = [...s.unitOrder].sort(rank || byScore);
     const best = ranked[0];
     const winners = ranked.filter((u) => (rank || byScore)(u, best) === 0);
-    s.results = { ranked, winners };
+    let awards = [];
+    try { awards = pickAwards(s.stats); } catch (e) { console.warn('awards failed', e); }
+    s.results = { ranked, winners, awards };
     winners.forEach((u) => addWin(s.units[u].name));
     s.phase = 'end';
     this.save();

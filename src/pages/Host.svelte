@@ -30,6 +30,7 @@
   import { TOUR_PHASES } from '../engine/tour.js';
   import { WEDGES } from '../content/wedges.js';
   import { topWins } from '../lib/wins.js';
+  import { AWARDS_AT, AWARD_GAP } from '../lib/awards.js';
   import { sfx, isMuted, setMuted, unlockAudio, audioReady } from '../lib/sound.js';
   import { play as playMusic, stopMusic, musicEnabled, setMusicEnabled } from '../lib/music.js';
   import { fx } from '../lib/fx.js';
@@ -341,6 +342,7 @@
         setTimeout(() => sfx.applause(2.4), 400);
         fx.confetti(260);
         setTimeout(() => fx.confetti(200), 900);
+        (b.results?.awards || []).forEach((_, i) => setTimeout(() => sfx.ding(), AWARDS_AT(b) + i * AWARD_GAP));
         setTimeout(() => playMusic('lobby'), 4500);
         wins = topWins();
         break;
