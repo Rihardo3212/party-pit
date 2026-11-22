@@ -11,6 +11,8 @@ import { FAKEOUT } from './fakeout.js';
 import { PLACES } from './places.js';
 import { CLOSEST } from './closest.js';
 import { PROMPTS } from './whowrote.js';
+import { HOT_TAKES } from './hottakes.js';
+import { BOMB_CATS } from './bombcats.js';
 
 export const LINES = {
   // ---------- lobby / start ----------
@@ -85,6 +87,26 @@ export const LINES = {
   intro_sketch: [
     "This is Memory Sketch! Look at the drawing, then draw it from memory.",
     "Memory Sketch! A quick look, then copy it. The closer the better."
+  ],
+  intro_hottake: [
+    "Hot Take! Rate how much you agree, then guess what everyone else thinks. Friendships may wobble.",
+    "It's Hot Take! Spicy opinions, secret ratings, and nowhere to hide."
+  ],
+  intro_peek: [
+    "Pixel Peek! A photo, zoomed right in. Buzz in the moment you know what it is.",
+    "It's Pixel Peek! The sooner you buzz, the more you score. Squint, everybody!"
+  ],
+  intro_hum: [
+    "Hum Hunt! I'll play a famous tune, you buzz in and name it. I've been practising.",
+    "It's Hum Hunt! Ears open, buzzers ready. And no humming along, it's distracting."
+  ],
+  intro_bomb: [
+    "Bomb Pass! Type a word that fits the category to pass the bomb. Don't be holding it when it goes bang!",
+    "It's Bomb Pass! Think fast, type faster, and pass that bomb along. Tick tock!"
+  ],
+  intro_know: [
+    "Who Knows Who! Answer a few questions about yourself, then let's see who really knows you.",
+    "It's Who Knows Who! Time to find out who your real friends are. No pressure."
   ],
   intro_reflex: [
     "This is Reflex Rumble! Quick little challenges. Fingers at the ready!",
@@ -453,6 +475,128 @@ export const LINES = {
     "Lovely stuff. Back to the tour!"
   ],
 
+  // ---------- Hot Take ----------
+  hotRate: [
+    "Rate it, then guess the average. Be honest!",
+    "How much do you agree? And what will everyone else say?",
+    "Secret ratings, please. No peeking at your neighbour."
+  ],
+  hotReveal: [
+    "Let's see what the room really thinks!",
+    "The ratings are in. Brace yourselves.",
+    "And the average is..."
+  ],
+  hotHot: [
+    "Ooh, somebody has a very hot take! Spicy!",
+    "We have a rebel in the room! Hottest take of the round!"
+  ],
+
+  // ---------- Pixel Peek ----------
+  peekGo: [
+    "Here's the photo. What could it be?",
+    "Zooming out slowly. Buzz when you know!",
+    "Eyes on the screen. What are we looking at?"
+  ],
+  peekReveal: [
+    "And here's the full picture!",
+    "Ta-da! Obvious now, isn't it?"
+  ],
+
+  // ---------- Hum Hunt ----------
+  humReveal: [
+    "That was my best performance yet.",
+    "A classic! I could play it all night. Please don't make me.",
+    "Lovely tune, that one."
+  ],
+
+  // ---------- Bomb Pass ----------
+  bombVote: [
+    "Hmm, does that count? You decide!",
+    "That's a bold one. Thumbs up or thumbs down?",
+    "Is that allowed? Vote, quickly!"
+  ],
+  bombNo: [
+    "Rejected! Try again, quickly!",
+    "Nope! That one didn't count."
+  ],
+  bombBoom: [
+    "Kaboom! Oh dear. Somebody's a bit crispy.",
+    "Boom! That's going to cost you.",
+    "And it's gone off! Unlucky!",
+    "Bang! Well, somebody had to hold it."
+  ],
+
+  // ---------- Who Knows Who ----------
+  knowWrite: [
+    "Answer the questions about yourself. Honestly, please!",
+    "Tell us a bit about yourself. Your friends will be tested on this."
+  ],
+  knowGuess: [
+    "So, how well do you know your friends?",
+    "Pick the answer you think is right. No pressure. Well, a bit.",
+    "Let's find out who's been paying attention!"
+  ],
+  knowKnew: [
+    "They know you so well! Lovely.",
+    "Proper friends, that lot!",
+    "Spot on! Somebody's been listening."
+  ],
+  knowNobody: [
+    "Nobody knew! Do you even talk to each other?",
+    "Not a single friend got it. Awkward!",
+    "A total mystery! You're harder to read than a doctor's handwriting."
+  ],
+
+  // ---------- Party Tour: items and spaces ----------
+  tourItem: [
+    "A present! Ooh, what's inside?",
+    "Free item! Use it wisely. Or wildly."
+  ],
+  tourShop: [
+    "Shopping time! A little something for later.",
+    "Kerching! A shiny new item."
+  ],
+  tourShield: [
+    "Saved by the shield! Clever.",
+    "The shield blocks it! Not today, trap."
+  ],
+  tourDouble: ["Double dice! Twice the rolling, twice the fun!"],
+  tourSwap: ["A swap! Everybody shuffle!", "Swapsies! Didn't see that coming."],
+  tourSteal: ["Daylight robbery! Points stolen!", "A thief in our midst! Hide your points."],
+  tourBlocked: ["Blocked by a shield! Better luck next time, you little rascal."],
+  tourPick_hottake: ["Next up, Hot Take! Spicy opinions ahead."],
+  tourPick_peek: ["Next up, Pixel Peek! Squint those eyes."],
+  tourPick_hum: ["Next up, Hum Hunt! Name that tune."],
+  tourPick_bomb: ["Next up, Bomb Pass! Don't hold it too long."],
+  tourPick_know: ["Next up, Who Knows Who! How well do you know each other?"],
+
+  // ---------- Audience and awards ----------
+  crowd: [
+    "We have an audience! Hello, lovely people!",
+    "Welcome, audience! Cheer loudly, cheer often.",
+    "More fans in the stands! Give us a wave."
+  ],
+  awards: [
+    "And now, the awards!",
+    "But wait, there's more! It's awards time!",
+    "Before you go, some very special awards!"
+  ],
+  award_crowd: ["Crowd Favourite! The audience loves you!"],
+  award_spy: ["Super Spy! Sneaky, very sneaky."],
+  award_fooled: ["Master Liar! I'll never trust you again."],
+  award_art: ["Star Artist! Somebody call a gallery."],
+  award_buzz: ["Fastest Finger! Blink and you'd miss it."],
+  award_reflex: ["Lightning Reflexes! Are you sure you're not a robot?"],
+  award_close: ["Bullseye! Uncanny accuracy."],
+  award_hot: ["Spice Lord! The hottest takes in the house."],
+  award_boom: ["Butterfingers! You really can't hold on to a bomb, can you?"],
+  award_bff: ["Best Friend! You know everybody's secrets."],
+  award_open: ["Open Book! Everyone knows you inside out."],
+  award_eye: ["Sharp Eye! Nothing gets past you."],
+  award_right: ["Know-It-All! A walking encyclopedia."],
+  award_gotFooled: ["Easily Fooled! Bless you."],
+  award_wrong: ["Oops! Well, at least you were confident."],
+
   hurry: [
     "Five seconds!",
     "Tick tock! Hurry up!",
@@ -501,6 +645,7 @@ export function voiceId(text) {
 
 export const teamLine = (text, team) => text.replace(/\{team\}/g, team);
 export const placeLine = (p) => `${p.name}! ${p.where}.`;
+export const bombCatLine = (c) => `The category is... ${c.cat}!`;
 
 /** Every piece of text Lewis may say, for the voice generator. */
 export function allSpokenLines() {
@@ -519,6 +664,8 @@ export function allSpokenLines() {
   PLACES.forEach((p) => out.add(placeLine(p)));
   CLOSEST.forEach((q) => out.add(q.q));
   PROMPTS.forEach((p) => out.add(p));
+  HOT_TAKES.forEach((h) => out.add(h));
+  BOMB_CATS.forEach((c) => out.add(bombCatLine(c)));
   return [...out].map((t) => spoken(t)).filter(Boolean);
 }
 

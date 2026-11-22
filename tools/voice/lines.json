@@ -160,6 +160,46 @@
   "text": "Memory Sketch! A quick look, then copy it. The closer the better."
  },
  {
+  "id": "01aa45e867ff5697",
+  "text": "Hot Take! Rate how much you agree, then guess what everyone else thinks. Friendships may wobble."
+ },
+ {
+  "id": "28b1f0543f039191",
+  "text": "It's Hot Take! Spicy opinions, secret ratings, and nowhere to hide."
+ },
+ {
+  "id": "4d6d4f1968f45ebd",
+  "text": "Pixel Peek! A photo, zoomed right in. Buzz in the moment you know what it is."
+ },
+ {
+  "id": "69d62112370d4854",
+  "text": "It's Pixel Peek! The sooner you buzz, the more you score. Squint, everybody!"
+ },
+ {
+  "id": "3b074e005545c19b",
+  "text": "Hum Hunt! I'll play a famous tune, you buzz in and name it. I've been practising."
+ },
+ {
+  "id": "37dfc8aa19f480ec",
+  "text": "It's Hum Hunt! Ears open, buzzers ready. And no humming along, it's distracting."
+ },
+ {
+  "id": "f5189f06ff6832de",
+  "text": "Bomb Pass! Type a word that fits the category to pass the bomb. Don't be holding it when it goes bang!"
+ },
+ {
+  "id": "4462d378b0f78d37",
+  "text": "It's Bomb Pass! Think fast, type faster, and pass that bomb along. Tick tock!"
+ },
+ {
+  "id": "eb254fcb3d060584",
+  "text": "Who Knows Who! Answer a few questions about yourself, then let's see who really knows you."
+ },
+ {
+  "id": "cf5e602ee0dc1196",
+  "text": "It's Who Knows Who! Time to find out who your real friends are. No pressure."
+ },
+ {
   "id": "962f68a6d020cddc",
   "text": "This is Reflex Rumble! Quick little challenges. Fingers at the ready!"
  },
@@ -1118,6 +1158,302 @@
  {
   "id": "9a88082c6363f1e1",
   "text": "Lovely stuff. Back to the tour!"
+ },
+ {
+  "id": "04672e67f4ccb6e8",
+  "text": "Rate it, then guess the average. Be honest!"
+ },
+ {
+  "id": "c813e1e09889c85d",
+  "text": "How much do you agree? And what will everyone else say?"
+ },
+ {
+  "id": "0cb4f138e7da7846",
+  "text": "Secret ratings, please. No peeking at your neighbour."
+ },
+ {
+  "id": "6385b262b4b1b731",
+  "text": "Let's see what the room really thinks!"
+ },
+ {
+  "id": "b6428be55e3f9b3e",
+  "text": "The ratings are in. Brace yourselves."
+ },
+ {
+  "id": "1797d72c2ca59c21",
+  "text": "And the average is..."
+ },
+ {
+  "id": "68f72a40be3103f2",
+  "text": "Ooh, somebody has a very hot take! Spicy!"
+ },
+ {
+  "id": "8a6fdd5b708d5a10",
+  "text": "We have a rebel in the room! Hottest take of the round!"
+ },
+ {
+  "id": "9989582ac021f328",
+  "text": "Here's the photo. What could it be?"
+ },
+ {
+  "id": "29767ee8f7926b52",
+  "text": "Zooming out slowly. Buzz when you know!"
+ },
+ {
+  "id": "ffb83716125ba7d5",
+  "text": "Eyes on the screen. What are we looking at?"
+ },
+ {
+  "id": "519fca2b28370499",
+  "text": "And here's the full picture!"
+ },
+ {
+  "id": "ba7ffdabd1a115ef",
+  "text": "Ta-da! Obvious now, isn't it?"
+ },
+ {
+  "id": "fd87d25595466142",
+  "text": "That was my best performance yet."
+ },
+ {
+  "id": "c1d546b1280ea325",
+  "text": "A classic! I could play it all night. Please don't make me."
+ },
+ {
+  "id": "11a1e7a1a88b4c3f",
+  "text": "Lovely tune, that one."
+ },
+ {
+  "id": "c006a14fc45788ae",
+  "text": "Hmm, does that count? You decide!"
+ },
+ {
+  "id": "322a55234dc28f40",
+  "text": "That's a bold one. Thumbs up or thumbs down?"
+ },
+ {
+  "id": "e4379b9e61187dc8",
+  "text": "Is that allowed? Vote, quickly!"
+ },
+ {
+  "id": "4298fb0cff9997d9",
+  "text": "Rejected! Try again, quickly!"
+ },
+ {
+  "id": "a613f5a47fc41e3f",
+  "text": "Nope! That one didn't count."
+ },
+ {
+  "id": "4ba15b9c4de5446b",
+  "text": "Kaboom! Oh dear. Somebody's a bit crispy."
+ },
+ {
+  "id": "c2c1d8871b8892cd",
+  "text": "Boom! That's going to cost you."
+ },
+ {
+  "id": "617cf9c03b043c61",
+  "text": "And it's gone off! Unlucky!"
+ },
+ {
+  "id": "61cb86947b7f787b",
+  "text": "Bang! Well, somebody had to hold it."
+ },
+ {
+  "id": "2b77d8d00bae9e43",
+  "text": "Answer the questions about yourself. Honestly, please!"
+ },
+ {
+  "id": "bb3810f15213061c",
+  "text": "Tell us a bit about yourself. Your friends will be tested on this."
+ },
+ {
+  "id": "730887d7b7523978",
+  "text": "So, how well do you know your friends?"
+ },
+ {
+  "id": "8c314e6a60aeab10",
+  "text": "Pick the answer you think is right. No pressure. Well, a bit."
+ },
+ {
+  "id": "5ce414de822fb9f2",
+  "text": "Let's find out who's been paying attention!"
+ },
+ {
+  "id": "c8d58819433b4fdd",
+  "text": "They know you so well! Lovely."
+ },
+ {
+  "id": "a56c777bb84cb506",
+  "text": "Proper friends, that lot!"
+ },
+ {
+  "id": "17398da6863428d5",
+  "text": "Spot on! Somebody's been listening."
+ },
+ {
+  "id": "220c8157735e6e28",
+  "text": "Nobody knew! Do you even talk to each other?"
+ },
+ {
+  "id": "1a028c40822e8b1f",
+  "text": "Not a single friend got it. Awkward!"
+ },
+ {
+  "id": "b38620f4d84dae4f",
+  "text": "A total mystery! You're harder to read than a doctor's handwriting."
+ },
+ {
+  "id": "2eb25c852ffe1885",
+  "text": "A present! Ooh, what's inside?"
+ },
+ {
+  "id": "75466e32762a94de",
+  "text": "Free item! Use it wisely. Or wildly."
+ },
+ {
+  "id": "7b7bf18b917ecf71",
+  "text": "Shopping time! A little something for later."
+ },
+ {
+  "id": "7f467a642b41455d",
+  "text": "Kerching! A shiny new item."
+ },
+ {
+  "id": "16b387dd5a6940c1",
+  "text": "Saved by the shield! Clever."
+ },
+ {
+  "id": "13759374c0a251c1",
+  "text": "The shield blocks it! Not today, trap."
+ },
+ {
+  "id": "6d276a41795cb652",
+  "text": "Double dice! Twice the rolling, twice the fun!"
+ },
+ {
+  "id": "0a4f72eb90979947",
+  "text": "A swap! Everybody shuffle!"
+ },
+ {
+  "id": "7535fcd0976c5ec9",
+  "text": "Swapsies! Didn't see that coming."
+ },
+ {
+  "id": "41c3a204a0a55aed",
+  "text": "Daylight robbery! Points stolen!"
+ },
+ {
+  "id": "ef486a771b5ef330",
+  "text": "A thief in our midst! Hide your points."
+ },
+ {
+  "id": "ea9d2df3063bc433",
+  "text": "Blocked by a shield! Better luck next time, you little rascal."
+ },
+ {
+  "id": "a5465eac6a93efa0",
+  "text": "Next up, Hot Take! Spicy opinions ahead."
+ },
+ {
+  "id": "7e9d074ac93f2056",
+  "text": "Next up, Pixel Peek! Squint those eyes."
+ },
+ {
+  "id": "04f95199d17d01a8",
+  "text": "Next up, Hum Hunt! Name that tune."
+ },
+ {
+  "id": "12b34c2be304fc90",
+  "text": "Next up, Bomb Pass! Don't hold it too long."
+ },
+ {
+  "id": "0173c8b9331401d1",
+  "text": "Next up, Who Knows Who! How well do you know each other?"
+ },
+ {
+  "id": "d11ca54c43b5410e",
+  "text": "We have an audience! Hello, lovely people!"
+ },
+ {
+  "id": "20b0fda9be5b50de",
+  "text": "Welcome, audience! Cheer loudly, cheer often."
+ },
+ {
+  "id": "f564edaf7fa6afdd",
+  "text": "More fans in the stands! Give us a wave."
+ },
+ {
+  "id": "e0bed274adc7021c",
+  "text": "And now, the awards!"
+ },
+ {
+  "id": "a76fd7f086869b42",
+  "text": "But wait, there's more! It's awards time!"
+ },
+ {
+  "id": "b140e401de73e4fc",
+  "text": "Before you go, some very special awards!"
+ },
+ {
+  "id": "970e87acc3d2b55a",
+  "text": "Crowd Favourite! The audience loves you!"
+ },
+ {
+  "id": "e0ce0753898b3878",
+  "text": "Super Spy! Sneaky, very sneaky."
+ },
+ {
+  "id": "8e85e747c3ade9da",
+  "text": "Master Liar! I'll never trust you again."
+ },
+ {
+  "id": "b4ed2b38fdd17f50",
+  "text": "Star Artist! Somebody call a gallery."
+ },
+ {
+  "id": "a23793ef9fe5b883",
+  "text": "Fastest Finger! Blink and you'd miss it."
+ },
+ {
+  "id": "59dca4a6b4dcdfc5",
+  "text": "Lightning Reflexes! Are you sure you're not a robot?"
+ },
+ {
+  "id": "ed7670a65b8d59b1",
+  "text": "Bullseye! Uncanny accuracy."
+ },
+ {
+  "id": "c12d879dc84934d5",
+  "text": "Spice Lord! The hottest takes in the house."
+ },
+ {
+  "id": "ad24fcab14f85028",
+  "text": "Butterfingers! You really can't hold on to a bomb, can you?"
+ },
+ {
+  "id": "38f5ce7045aa4f4f",
+  "text": "Best Friend! You know everybody's secrets."
+ },
+ {
+  "id": "f086a5bb3ece505f",
+  "text": "Open Book! Everyone knows you inside out."
+ },
+ {
+  "id": "f9eee53ebdc3fb6d",
+  "text": "Sharp Eye! Nothing gets past you."
+ },
+ {
+  "id": "386deaefee566b69",
+  "text": "Know-It-All! A walking encyclopedia."
+ },
+ {
+  "id": "0d4f81966a9398b2",
+  "text": "Easily Fooled! Bless you."
+ },
+ {
+  "id": "11caca51fe9736ad",
+  "text": "Oops! Well, at least you were confident."
  },
  {
   "id": "1bd5cd77c6964053",
@@ -4218,5 +4554,529 @@
  {
   "id": "769aba42e849279a",
   "text": "Your phone wallpaper right now"
+ },
+ {
+  "id": "0b0dcf0ac7a623df",
+  "text": "Pineapple belongs on pizza."
+ },
+ {
+  "id": "109f9740a758e121",
+  "text": "Cats are better than dogs."
+ },
+ {
+  "id": "bf236bd675e661aa",
+  "text": "Breakfast is the best meal of the day."
+ },
+ {
+  "id": "d79befc32250e928",
+  "text": "Cereal is a soup."
+ },
+ {
+  "id": "f992016999c82c07",
+  "text": "A hot dog is a sandwich."
+ },
+ {
+  "id": "70ead8a2057a0010",
+  "text": "Socks with sandals are fine."
+ },
+ {
+  "id": "e8bf662a0d5e9aa7",
+  "text": "Summer is the best season."
+ },
+ {
+  "id": "493e20b4e03e5834",
+  "text": "Winter is better than summer."
+ },
+ {
+  "id": "fc2d4b6476170cc3",
+  "text": "The book is always better than the movie."
+ },
+ {
+  "id": "23426fd3bd410e81",
+  "text": "Sequels are usually worse than the original."
+ },
+ {
+  "id": "c7445d383f6e1dd4",
+  "text": "Morning people have life figured out."
+ },
+ {
+  "id": "1de82c695eceb9ae",
+  "text": "Naps are for everyone, not just kids."
+ },
+ {
+  "id": "818c95403b1b80ff",
+  "text": "You should make your bed every morning."
+ },
+ {
+  "id": "14c629bf50173861",
+  "text": "Cold pizza is better than hot pizza."
+ },
+ {
+  "id": "30c2812477867e6e",
+  "text": "Chocolate ice cream beats vanilla."
+ },
+ {
+  "id": "224af53d96dd8c07",
+  "text": "Ketchup on fries is the only way."
+ },
+ {
+  "id": "9cde2fdb3670de71",
+  "text": "Mayonnaise is overrated."
+ },
+ {
+  "id": "b50fd03eba510b7e",
+  "text": "Coffee tastes good."
+ },
+ {
+  "id": "e3c2ba24ac127a98",
+  "text": "Tea is better than coffee."
+ },
+ {
+  "id": "012e104cd7572811",
+  "text": "Sparkling water is delicious."
+ },
+ {
+  "id": "bce602dab2f269c4",
+  "text": "Spicy food is always better."
+ },
+ {
+  "id": "0b9b6d6d7390cdab",
+  "text": "Mint chocolate tastes like toothpaste."
+ },
+ {
+  "id": "276a95c4fb4dfba2",
+  "text": "Popcorn is the best cinema snack."
+ },
+ {
+  "id": "eeff44288dc65ed9",
+  "text": "Sushi is the best food in the world."
+ },
+ {
+  "id": "3a2096689b18dba5",
+  "text": "Brussels sprouts are actually tasty."
+ },
+ {
+  "id": "c536479ac3ff1dcd",
+  "text": "Olives are disgusting."
+ },
+ {
+  "id": "64ddde2ebf00b87f",
+  "text": "Milk goes in the bowl before the cereal."
+ },
+ {
+  "id": "20bf87beed2d21e2",
+  "text": "Avocado toast is worth the hype."
+ },
+ {
+  "id": "79d6f046653c7500",
+  "text": "Fries should be eaten with a fork."
+ },
+ {
+  "id": "0ace3a3d1df2839c",
+  "text": "Dessert is the best part of any meal."
+ },
+ {
+  "id": "2a61ae19a3ba3f96",
+  "text": "Watching a movie at home beats going to the cinema."
+ },
+ {
+  "id": "f916d6a4ccbb58ba",
+  "text": "Subtitles make every show better."
+ },
+ {
+  "id": "18cdc8bd4413d1a2",
+  "text": "Reality TV is secretly great."
+ },
+ {
+  "id": "338bf421efcc39cc",
+  "text": "Horror movies are fun."
+ },
+ {
+  "id": "5f8960a277940efc",
+  "text": "Musicals are the best kind of movie."
+ },
+ {
+  "id": "ea71a60e2acc4557",
+  "text": "Animated movies are not just for kids."
+ },
+ {
+  "id": "2324ba7db9a7aa86",
+  "text": "Spoilers are no big deal."
+ },
+ {
+  "id": "c57194a230a1fefe",
+  "text": "Binge-watching a whole series in one go is the best way to watch."
+ },
+ {
+  "id": "2cc0cc86d360ab6e",
+  "text": "Video games are art."
+ },
+ {
+  "id": "78e1c1e5f3dbf513",
+  "text": "Board games are more fun than video games."
+ },
+ {
+  "id": "48f54b8944fb9a58",
+  "text": "Playing games on a phone counts as real gaming."
+ },
+ {
+  "id": "52c5b81362aee7b1",
+  "text": "Karaoke is the best party activity."
+ },
+ {
+  "id": "eead67e24ffbd8c1",
+  "text": "Singing in the shower is a must."
+ },
+ {
+  "id": "e4eae88f719c6d08",
+  "text": "Dancing is fun even if you are bad at it."
+ },
+ {
+  "id": "5b6820a0855128fe",
+  "text": "Camping is a great holiday."
+ },
+ {
+  "id": "6d857e66be653436",
+  "text": "Beach holidays are boring."
+ },
+ {
+  "id": "46273652b7ec575d",
+  "text": "Mountains are better than the sea."
+ },
+ {
+  "id": "7273bda2489fe557",
+  "text": "Airports are exciting places."
+ },
+ {
+  "id": "a74eb601a8e7de69",
+  "text": "The window seat is the best seat on a plane."
+ },
+ {
+  "id": "31ca4e3eed65d41a",
+  "text": "Road trips are the best way to travel."
+ },
+ {
+  "id": "4ba65b33e82c88e7",
+  "text": "It is fine to wear pyjamas all day on the weekend."
+ },
+ {
+  "id": "301c84bfa41bc103",
+  "text": "Texting is better than calling."
+ },
+ {
+  "id": "0f712f48a0accdc0",
+  "text": "Voice messages are annoying."
+ },
+ {
+  "id": "1ee44e081f022cb7",
+  "text": "Emojis make every message better."
+ },
+ {
+  "id": "a66772e4ad120d52",
+  "text": "Phones should be banned at the dinner table."
+ },
+ {
+  "id": "ebdf99d899cad623",
+  "text": "Getting up early is worth it."
+ },
+ {
+  "id": "042afebf49074a0b",
+  "text": "Staying up late is the best part of the day."
+ },
+ {
+  "id": "563e3d2d8a88d6ab",
+  "text": "Rain is cosy."
+ },
+ {
+  "id": "bb6958e100361adc",
+  "text": "Snow days are the best days."
+ },
+ {
+  "id": "da52a6c8a61d46a6",
+  "text": "Thunderstorms are exciting."
+ },
+ {
+  "id": "51f65676889bce81",
+  "text": "Birthdays get less fun as you get older."
+ },
+ {
+  "id": "506291d51c5092c5",
+  "text": "Surprise parties are a great idea."
+ },
+ {
+  "id": "f588a041931a4556",
+  "text": "Christmas music should only start in December."
+ },
+ {
+  "id": "bf28a8551aee4f24",
+  "text": "Halloween is better than Christmas."
+ },
+ {
+  "id": "5e7ef23768ea3b6f",
+  "text": "Fireworks are overrated."
+ },
+ {
+  "id": "68c7e4f73ce0fbad",
+  "text": "Giving gifts is more fun than getting them."
+ },
+ {
+  "id": "2ba4e81a01fa3502",
+  "text": "Money can buy happiness."
+ },
+ {
+  "id": "7f85b5dd3c9b3955",
+  "text": "Being early is the same as being on time."
+ },
+ {
+  "id": "a8e142cb02b537d5",
+  "text": "Being five minutes late is fine."
+ },
+ {
+  "id": "f44e7e10815c2a3c",
+  "text": "Everyone should learn to cook."
+ },
+ {
+  "id": "a47e50f7c577dfa6",
+  "text": "Doing the dishes is relaxing."
+ },
+ {
+  "id": "793484fd981eb333",
+  "text": "Tidy rooms make people happier."
+ },
+ {
+  "id": "092eb9ffad07daec",
+  "text": "Plants make every room better."
+ },
+ {
+  "id": "d5fdf9a6b63ed0dd",
+  "text": "Living in a big city is better than the countryside."
+ },
+ {
+  "id": "3e29e46cb8f35d6e",
+  "text": "Working from home is better than going to an office."
+ },
+ {
+  "id": "ccb5dc93a104f5e7",
+  "text": "School uniforms are a good idea."
+ },
+ {
+  "id": "c0b1f2f68129939f",
+  "text": "Homework should not exist."
+ },
+ {
+  "id": "17eb720eefecc323",
+  "text": "Maths was the best school subject."
+ },
+ {
+  "id": "11e5dcfe75326221",
+  "text": "P.E. was the best school subject."
+ },
+ {
+  "id": "721cc5fa6e1ee675",
+  "text": "Exercise is fun."
+ },
+ {
+  "id": "3f6d38d052391f2f",
+  "text": "Running is the worst sport."
+ },
+ {
+  "id": "65b552b90ae54401",
+  "text": "Football is the most exciting sport to watch."
+ },
+ {
+  "id": "03f2d3956983d4c9",
+  "text": "Bowling is the perfect group activity."
+ },
+ {
+  "id": "96848e319f8c9bdd",
+  "text": "Escape rooms are the best way to spend an evening with friends."
+ },
+ {
+  "id": "a7bb0bc3c0393888",
+  "text": "Cats secretly understand everything we say."
+ },
+ {
+  "id": "cb7665cab3baa997",
+  "text": "Dogs can tell when you are sad."
+ },
+ {
+  "id": "045fd9163927df6d",
+  "text": "Spiders should be put outside, not squashed."
+ },
+ {
+  "id": "e55c9e8fe3a20292",
+  "text": "Zoos are fun to visit."
+ },
+ {
+  "id": "17438e64f2d685ac",
+  "text": "Aliens exist somewhere in the universe."
+ },
+ {
+  "id": "da8ffeb0ea7a9fbb",
+  "text": "Time travel to the past would be more fun than to the future."
+ },
+ {
+  "id": "63d62d0d7c391958",
+  "text": "Having the power to fly would be better than being invisible."
+ },
+ {
+  "id": "6301818b3a2af2b5",
+  "text": "Robots will do most chores in 20 years."
+ },
+ {
+  "id": "a02fc3625186fa90",
+  "text": "Superheroes would be annoying in real life."
+ },
+ {
+  "id": "9e19a5d7af7c60a2",
+  "text": "Pirates are cooler than ninjas."
+ },
+ {
+  "id": "bc9d09c70670de4c",
+  "text": "Dragons are the best fantasy creature."
+ },
+ {
+  "id": "f71d573e97733374",
+  "text": "Pineapple on pizza is a crime, but pizza for breakfast is fine."
+ },
+ {
+  "id": "91d3e8048b13e888",
+  "text": "Toilet paper should hang over, not under."
+ },
+ {
+  "id": "cb8370e846ea6137",
+  "text": "Pancakes are better than waffles."
+ },
+ {
+  "id": "839803678ad7b721",
+  "text": "Crunchy peanut butter beats smooth."
+ },
+ {
+  "id": "68249f0254cbbbe5",
+  "text": "Leftovers taste better the next day."
+ },
+ {
+  "id": "e90264c4e1950e63",
+  "text": "The category is... Fruits!"
+ },
+ {
+  "id": "dcae5f8dcc53303c",
+  "text": "The category is... Vegetables!"
+ },
+ {
+  "id": "32a828661565e970",
+  "text": "The category is... Animals!"
+ },
+ {
+  "id": "0daaecb38e18bba6",
+  "text": "The category is... Countries!"
+ },
+ {
+  "id": "9a17cc104bcb3ce3",
+  "text": "The category is... Capital cities!"
+ },
+ {
+  "id": "605fbc10cb8420c2",
+  "text": "The category is... Sports!"
+ },
+ {
+  "id": "3f3d8b9dedaadbbe",
+  "text": "The category is... Jobs!"
+ },
+ {
+  "id": "6431b5acf1d4d377",
+  "text": "The category is... Things in a kitchen!"
+ },
+ {
+  "id": "e1b08380be3a5dc7",
+  "text": "The category is... Things in a bathroom!"
+ },
+ {
+  "id": "08786b1d02c9b04f",
+  "text": "The category is... Colors!"
+ },
+ {
+  "id": "649aa7c7cacf67f7",
+  "text": "The category is... Things that are cold!"
+ },
+ {
+  "id": "930192d6ff577637",
+  "text": "The category is... Things with wheels!"
+ },
+ {
+  "id": "8f3a5eddfe652b15",
+  "text": "The category is... Musical instruments!"
+ },
+ {
+  "id": "3f9c2fa5a65f9337",
+  "text": "The category is... Clothes!"
+ },
+ {
+  "id": "64dba8470c9b299b",
+  "text": "The category is... Body parts!"
+ },
+ {
+  "id": "25ea770e08936064",
+  "text": "The category is... Things at a party!"
+ },
+ {
+  "id": "9f94f9bddb101e46",
+  "text": "The category is... Breakfast foods!"
+ },
+ {
+  "id": "356046df21b9a0d6",
+  "text": "The category is... Pizza toppings!"
+ },
+ {
+  "id": "2d3e33fb207806ed",
+  "text": "The category is... Things in the sky!"
+ },
+ {
+  "id": "e900775facad4f78",
+  "text": "The category is... Things at the beach!"
+ },
+ {
+  "id": "16a0b9843ade85d8",
+  "text": "The category is... Superheroes!"
+ },
+ {
+  "id": "25f7df745cf03fe0",
+  "text": "The category is... Board & card games!"
+ },
+ {
+  "id": "2630c4e4cfadd60f",
+  "text": "The category is... Things that fly!"
+ },
+ {
+  "id": "152579e3ad6847d5",
+  "text": "The category is... Pets!"
+ },
+ {
+  "id": "68ead9ca5686a81a",
+  "text": "The category is... School things!"
+ },
+ {
+  "id": "53b863d00dfa2a3f",
+  "text": "The category is... Words that rhyme with cat!"
+ },
+ {
+  "id": "08154cfe1801b8d9",
+  "text": "The category is... Words that rhyme with day!"
+ },
+ {
+  "id": "197e613170937f68",
+  "text": "The category is... Halloween things!"
+ },
+ {
+  "id": "aab1d556495ef451",
+  "text": "The category is... Christmas things!"
+ },
+ {
+  "id": "73aff2197d8163fe",
+  "text": "The category is... Car brands!"
+ },
+ {
+  "id": "93d3835a15dbf18b",
+  "text": "The category is... Ice cream flavours!"
  }
 ]

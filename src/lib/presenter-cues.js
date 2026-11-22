@@ -3,8 +3,9 @@
 // only does the jokes.
 
 import { say, hush, preload, lewis } from './presenter.svelte.js';
-import { line, placeLine } from '../content/presenter.js';
+import { line, placeLine, bombCatLine } from '../content/presenter.js';
 import { placeById } from '../engine/pindrop.js';
+import { catOf } from '../engine/bomb.js';
 
 const count = (o) => Object.keys(o || {}).length;
 const chance = (p) => Math.random() < p;
@@ -29,6 +30,10 @@ export function lewisReact(a, b) {
     if (a.order.length === 0) say(line('lobbyFirst'));
     else if (chance(0.5)) say(line('lobbyJoin'), { maxWait: 1500 });
   }
+
+  // The audience: say hello to the first watcher, and now and then to more.
+  const crowdA = count(a.audience), crowdB = count(b.audience);
+  if (crowdB > crowdA && (crowdA === 0 || chance(0.3))) say(line('crowd'), { maxWait: 2500 });
 
   if (a.phase !== b.phase) phase(a, b);
   else step(a, b);
@@ -179,6 +184,57 @@ function phase(a, b) {
     case 'tpick': if (b.tour?.mode) say(line(`tourPick_${b.tour.mode}`), { interrupt: true }); break;
     case 'tscore': if (chance(0.5)) say(line('tourScore'), { interrupt: true }); break;
 
+    // Hot Take
+    case 'hrate':
+      read(b, b.hot?.text);
+      if (b.hot?.round === 1 || chance(0.3)) say(line('hotRate'), { maxWait: 8000 });
+      break;
+    case 'hreveal':
+      say(line(b.hot?.hot ? 'hotHot' : 'hotReveal'), { interrupt: true });
+      break;
+
+    // Pixel Peek (Lewis may talk over the photo; a buzz cuts him off)
+    case 'xplay':
+      if (a.phase === 'xanswer') say(line('wrong'), { interrupt: true, maxWait: 800 });
+      else if (b.peek?.round === 1 || chance(0.35)) say(line('peekGo'), { interrupt: true });
+      break;
+    case 'xanswer': say(byUnit(b, b.peek?.buzzUnit, 'buzz', 'buzzTeam'), { interrupt: true, maxWait: 600 }); break;
+    case 'xreveal': {
+      const r = b.peek;
+      if (r?.result === 'right') say(byUnit(b, r.winner, 'correct', 'correctTeam'), { interrupt: true });
+      else say(line(chance(0.5) ? 'peekReveal' : 'nobody'), { interrupt: true });
+      break;
+    }
+
+    // Hum Hunt: never talk over the tune. Only the reveal.
+    case 'uplay': case 'uanswer': hush(); break;
+    case 'ureveal': {
+      const r = b.hum;
+      if (r?.result === 'right') say(byUnit(b, r.winner, 'correct', 'correctTeam'), { interrupt: true, maxWait: 1500 });
+      else say(line('nobody'), { interrupt: true, maxWait: 1500 });
+      if (chance(0.4)) say(line('humReveal'), { maxWait: 4000 });
+      break;
+    }
+
+    // Bomb Pass
+    case 'bplay': {
+      const c = catOf(b.bomb?.cat);
+      if (c) say(bombCatLine(c), { interrupt: true, maxWait: 2000 });
+      break;
+    }
+    case 'bboom': say(line('bombBoom'), { interrupt: true }); break;
+
+    // Who Knows Who
+    case 'kwrite': say(line('knowWrite'), { interrupt: true }); break;
+    case 'kguess': if (b.know?.idx === 0 || chance(0.3)) say(line('knowGuess'), { interrupt: true }); break;
+    case 'kreveal': {
+      const k = b.know;
+      const knew = Object.values(k?.picks || {}).filter((i) => i === k.correct).length;
+      if (!knew) say(line('knowNobody'), { interrupt: true });
+      else if (chance(0.6)) say(line('knowKnew'), { interrupt: true });
+      break;
+    }
+
     case 'end': {
       const r = b.results;
       if (!r) break;
@@ -186,6 +242,11 @@ function phase(a, b) {
       setTimeout(() => {
         if (r.winners.length > 1) say(line('tie'));
         else say(byUnit(b, r.winners[0], 'winner', 'winnerTeam'));
+        // Then the awards, in the order the cards appear.
+        if (r.awards?.length) {
+          say(line('awards'), { maxWait: 9000 });
+          for (const aw of r.awards) say(line(`award_${aw.key}`), { maxWait: 16000 });
+        }
       }, 1200);
       break;
     }
@@ -193,8 +254,19 @@ function phase(a, b) {
 }
 
 function step(a, b) {
-  // Party Tour: each piece's move.
+  // Party Tour: each piece's move, and items used before rolling.
   if (b.phase === 'tmove' && b.tour && a.tour && b.tour.moveIdx !== a.tour.moveIdx) tourMove(b);
+  const fl = b.tour?.flash;
+  if (b.phase === 'troll' && fl && fl.at !== a.tour?.flash?.at) {
+    const kind = fl.k === 'steal' ? (fl.blocked ? 'tourBlocked' : 'tourSteal') : fl.k === 'swap' ? 'tourSwap' : 'tourDouble';
+    say(line(kind), { interrupt: true, maxWait: 1200 });
+  }
+  // Bomb Pass: a word goes to the vote, or gets voted out.
+  const ba = a.bomb, bb = b.bomb;
+  if (b.phase === 'bplay' && ba && bb) {
+    if (bb.vote && !ba.vote) say(line('bombVote'), { interrupt: true, maxWait: 1000 });
+    else if (bb.flash?.t === 'no' && bb.flash.at !== ba.flash?.at && chance(0.6)) say(line('bombNo'), { interrupt: true, maxWait: 800 });
+  }
   // Fake Out reveal: each lie that fooled someone, then the truth.
   if (b.phase === 'freveal' && b.fake && a.fake && b.fake.step > a.fake.step && b.fake.step < b.fake.order.length) {
     const opt = b.fake.options.find((o) => o.id === b.fake.order[b.fake.step]);
@@ -210,13 +282,14 @@ function tourMove(b) {
   const t = b.tour;
   const ev = t?.events?.[t.moveOrder?.[t.moveIdx]];
   if (!ev) return;
-  if (ev.kind === 'trap') say(line('tourTrap'), { interrupt: true, maxWait: 1200 });
+  if (ev.kind === 'trap') say(line(ev.shield ? 'tourShield' : 'tourTrap'), { interrupt: true, maxWait: 1200 });
+  else if (ev.item) say(line(ev.bought ? 'tourShop' : 'tourItem'), { interrupt: true, maxWait: 1200 });
   else if (ev.kind === 'bonus' && chance(0.7)) say(line('tourBonus'), { interrupt: true, maxWait: 1200 });
   else if (ev.lap && chance(0.6)) say(line('tourLap'), { interrupt: true, maxWait: 1200 });
 }
 
 // Long timed phases where a "hurry up" fits at 5 seconds left.
-const HURRY = new Set(['lie', 'pick', 'ddraw', 'pguess', 'finalBet', 'finalQ', 'wq', 'cguess', 'tguess', 'wwrite', 'oclue', 'ovote', 'scdraw', 'mdraw', 'troll']);
+const HURRY = new Set(['lie', 'pick', 'ddraw', 'pguess', 'finalBet', 'finalQ', 'wq', 'cguess', 'tguess', 'wwrite', 'oclue', 'ovote', 'scdraw', 'mdraw', 'troll', 'hrate', 'kwrite', 'kguess']);
 
 /** Call once when a countdown reaches 5 seconds. */
 export function lewisHurry(s) {
