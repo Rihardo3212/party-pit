@@ -61,6 +61,7 @@
             <div class="muted">Does it count?</div>
             <div class="vw">“{b.vote.w}”</div>
             <div class="tally">👍 {Object.keys(b.vote.yes).length} · 👎 {Object.keys(b.vote.no).length} · {secs(b.vote.until)}s</div>
+            {#if Object.keys(b.vote.cyes || {}).length + Object.keys(b.vote.cno || {}).length}<div class="crowdt">📣 Crowd: 👍 {Object.keys(b.vote.cyes || {}).length} · 👎 {Object.keys(b.vote.cno || {}).length}</div>{/if}
           </div>
         {:else}
           <div class="bomb shake" class:fast={b.passes > 6}>💣</div>
@@ -81,6 +82,7 @@
 {/if}
 
 <style>
+  .crowdt { font-weight: 800; opacity: 0.8; font-size: 1rem; }
   .main {
     flex: 1; display: flex; flex-direction: column; gap: 0.8rem; align-items: center; justify-content: center;
     padding: 0.3rem 2.5rem 1rem; max-width: 1400px; width: 100%; margin: 0 auto; position: relative; z-index: 1;

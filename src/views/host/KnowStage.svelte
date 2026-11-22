@@ -50,7 +50,7 @@
       <div class="options">
         {#each k.options as o, i}
           <div
-            class="opt slide-up"
+            class="opt flip-in"
             style="animation-delay:{150 + i * 90}ms"
             class:correct={s.phase === 'kreveal' && i === k.correct}
             class:faded={s.phase === 'kreveal' && i !== k.correct}

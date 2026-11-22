@@ -27,6 +27,10 @@
   import HumStage from '../views/host/HumStage.svelte';
   import BombStage from '../views/host/BombStage.svelte';
   import KnowStage from '../views/host/KnowStage.svelte';
+  import JokesStage from '../views/host/JokesStage.svelte';
+  import Backdrop from '../components/Backdrop.svelte';
+  import TransitionLayer from '../components/TransitionLayer.svelte';
+  import { hostScene, sceneIn } from '../lib/motion.js';
   import EndView from '../views/host/EndView.svelte';
   import ScoreBar from '../views/host/ScoreBar.svelte';
   import { getDb, isLocal } from '../lib/db.js';
@@ -48,7 +52,8 @@
   import { fit } from '../lib/fit.js';
 
   let { arg = '', watch = '' } = $props();
-  const watching = !!watch;
+  // svelte-ignore state_referenced_locally
+  const watching = !!watch; // the route remounts this page when the code changes
   let lost = $state(false); // watch mode: no room with that code
 
   let s = $state(null);
@@ -161,11 +166,12 @@
     rready: 'board', rgo: 'think', rresult: 'board',
     mlook: 'think', mdraw: 'chill', mreveal: 'chill',
     hrate: 'sneaky', hreveal: 'sneaky', bplay: 'think', bboom: 'think', kwrite: 'chill', kguess: 'sneaky', kreveal: 'sneaky',
-    xplay: 'think', xanswer: 'think', xreveal: 'think'
+    xplay: 'think', xanswer: 'think', xreveal: 'think',
+    jplay: 'sneaky', janswer: 'sneaky', jreveal: 'sneaky'
   };
   // Phases where the background music stops (Hum Hunt plays its own tune).
   const SILENT = new Set(['uplay', 'uanswer', 'ureveal']);
-  const STAGE = new Set(['question', 'answer', 'reveal', 'finalBet', 'finalQ', 'finalJudge', 'finalReveal', 'spin', 'wq', 'wreveal', 'lie', 'pick', 'freveal', 'dchoose', 'ddraw', 'dreveal', 'pguess', 'preveal', 'cguess', 'creveal', 'tguess', 'treveal', 'troll', 'tmove', 'tpick', 'tscore', 'scwrite', 'scdraw', 'scdesc', 'scshow', 'scvote', 'oclue', 'ovote', 'oguess', 'oresult', 'wwrite', 'wguess', 'wshow', 'rready', 'rgo', 'rresult', 'mlook', 'mdraw', 'mreveal', 'tpick', 'tscore', 'hrate', 'hreveal', 'xplay', 'xanswer', 'xreveal', 'uplay', 'uanswer', 'ureveal', 'bplay', 'bboom', 'kwrite', 'kguess', 'kreveal']);
+  const STAGE = new Set(['question', 'answer', 'reveal', 'finalBet', 'finalQ', 'finalJudge', 'finalReveal', 'spin', 'wq', 'wreveal', 'lie', 'pick', 'freveal', 'dchoose', 'ddraw', 'dreveal', 'pguess', 'preveal', 'cguess', 'creveal', 'tguess', 'treveal', 'troll', 'tmove', 'tpick', 'tscore', 'scwrite', 'scdraw', 'scdesc', 'scshow', 'scvote', 'oclue', 'ovote', 'oguess', 'oresult', 'wwrite', 'wguess', 'wshow', 'rready', 'rgo', 'rresult', 'mlook', 'mdraw', 'mreveal', 'tpick', 'tscore', 'hrate', 'hreveal', 'xplay', 'xanswer', 'xreveal', 'uplay', 'uanswer', 'ureveal', 'bplay', 'bboom', 'kwrite', 'kguess', 'kreveal', 'jplay', 'janswer', 'jreveal']);
   const count = (o) => Object.keys(o || {}).length;
 
   function react(a, b) {
@@ -268,20 +274,20 @@
         fx.confetti(50, ['#f97316', '#3a3a3a', '#ffc400']);
         break;
       }
-      case 'xanswer': case 'uanswer': {
-        const r = b.peek && b.phase === 'xanswer' ? b.peek : b.hum;
+      case 'xanswer': case 'uanswer': case 'janswer': {
+        const r = b.phase === 'xanswer' ? b.peek : b.phase === 'janswer' ? b.jokes : b.hum;
         sfx.buzz(Math.max(0, b.unitOrder.indexOf(r?.buzzUnit)));
         break;
       }
-      case 'xplay': case 'uplay': {
-        if (['xanswer', 'uanswer'].includes(a.phase)) sfx.wrong();
-        else if (b.phase === 'xplay') sfx.whoosh();
+      case 'xplay': case 'uplay': case 'jplay': {
+        if (['xanswer', 'uanswer', 'janswer'].includes(a.phase)) sfx.wrong();
+        else if (b.phase !== 'uplay') sfx.whoosh();
         break;
       }
-      case 'xreveal': case 'ureveal': {
-        const r = b.phase === 'xreveal' ? b.peek : b.hum;
+      case 'xreveal': case 'ureveal': case 'jreveal': {
+        const r = b.phase === 'xreveal' ? b.peek : b.phase === 'jreveal' ? b.jokes : b.hum;
         if (r?.result === 'right') { sfx.correct(); fx.confetti(60, [b.units[r.winner]?.color || '#22c55e', '#ffffff']); }
-        else { if (['xanswer', 'uanswer'].includes(a.phase)) sfx.wrong(); else sfx.sadTrombone(); }
+        else { if (['xanswer', 'uanswer', 'janswer'].includes(a.phase)) sfx.wrong(); else sfx.sadTrombone(); }
         break;
       }
       case 'hreveal': {
@@ -538,6 +544,7 @@
       case 'kwrite': case 'kguess': return s.know?.until;
       case 'xanswer': return s.peek?.until;
       case 'uanswer': return s.hum?.until;
+      case 'janswer': return s.jokes?.until;
       default: return null;
     }
   }
@@ -578,10 +585,9 @@
 </script>
 
 <div class="screen" class:stage>
-  {#if stage}
-    <div class="beams" aria-hidden="true"><span></span><span></span><span></span></div>
-  {/if}
+  <Backdrop {stage} />
   <FxLayer />
+  <TransitionLayer {s} />
 
   <header>
     <a href="#/" class="home" aria-label="Home"><Logo size={0.5} /></a>
@@ -606,6 +612,7 @@
   </header>
 
   <div class="fit-box" use:fit={{ min: 0.45 }}><div class="fit-in">
+  {#key hostScene(s)}<div class="scene" in:sceneIn>
   {#if lost}
     <div class="center"><div class="lost"><h2>No room {cleanCode(watch)} right now</h2><p class="muted">Check the code on the big screen. This page updates by itself once the room is open.</p><a class="btn" href="#/">Home</a></div></div>
   {:else if !s}
@@ -638,7 +645,7 @@
     <OddStage {s} {avatars} {now} />
   {:else if game === 'scribble'}
     <ScribbleStage {s} {avatars} {now} {db} />
-  {:else if game === 'tour'}
+  {:else if game === 'tour' || game === 'mix'}
     <TourStage {s} {avatars} {now} />
   {:else if game === 'closest'}
     <ClosestStage {s} {avatars} {now} />
@@ -654,7 +661,10 @@
     <BombStage {s} {avatars} {now} />
   {:else if game === 'know'}
     <KnowStage {s} {avatars} {now} />
+  {:else if game === 'jokes'}
+    <JokesStage {s} {avatars} {now} />
   {/if}
+  </div>{/key}
   </div></div>
 
   {#if s && !['lobby', 'end', 'teamdraw', 'intro'].includes(s.phase)}
@@ -683,19 +693,10 @@
       radial-gradient(ellipse at 50% 110%, #5b2bd6 0%, #2a1468 38%, #120a33 72%, #08051a 100%);
     color: #fff;
   }
-  .beams { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
-  .beams span {
-    position: absolute; top: -20%; width: 34vw; height: 140%;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0) 75%);
-    clip-path: polygon(45% 0, 55% 0, 100% 100%, 0 100%);
-    transform-origin: 50% 0; filter: blur(6px);
-  }
-  .beams span:nth-child(1) { left: 2%; animation: sweep 7s ease-in-out infinite alternate; }
-  .beams span:nth-child(2) { left: 33%; animation: sweep 9s ease-in-out infinite alternate-reverse; opacity: 0.7; }
-  .beams span:nth-child(3) { right: 2%; animation: sweep 6s ease-in-out infinite alternate; animation-delay: -2s; }
-  @keyframes sweep { from { transform: rotate(-22deg); } to { transform: rotate(22deg); } }
+  .scene { flex: 1 0 auto; display: flex; flex-direction: column; }
 
   header { display: flex; align-items: center; gap: 0.9rem; padding: 1rem 1.5rem 0.6rem; position: relative; z-index: 2; flex-wrap: wrap; }
+  .fit-box { position: relative; z-index: 1; }
   .home { text-decoration: none; margin-right: 0.4rem; }
   .code { font-size: 1.2rem; }
   .code b { color: var(--red); letter-spacing: 0.14em; }

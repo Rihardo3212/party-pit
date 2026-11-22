@@ -104,6 +104,14 @@ export const LINES = {
     "Bomb Pass! Type a word that fits the category to pass the bomb. Don't be holding it when it goes bang!",
     "It's Bomb Pass! Think fast, type faster, and pass that bomb along. Tick tock!"
   ],
+  intro_mix: [
+    "Quick Party! No board, no fuss. Just one surprise game after another!",
+    "It's Quick Party! I pick the games, you win them. Let's go, let's go!"
+  ],
+  intro_jokes: [
+    "Inside Jokes! Tonight's questions were written by you lot. I take no responsibility.",
+    "It's Inside Jokes! Your questions, your answers. I have no idea what any of this means."
+  ],
   intro_know: [
     "Who Knows Who! Answer a few questions about yourself, then let's see who really knows you.",
     "It's Who Knows Who! Time to find out who your real friends are. No pressure."
@@ -453,6 +461,10 @@ export const LINES = {
     "A bonus space! Lucky you!",
     "Ooh, free points! Don't spend them all at once."
   ],
+  tourGoal: [
+    "Right in the middle of the spiral! That's the goal! Five hundred points!",
+    "Bullseye! You made it to the star! Have a huge pile of points!"
+  ],
   tourTrap: [
     "Oh dear, a trap! That's going to sting.",
     "Ouch! Mind your step next time."
@@ -489,6 +501,17 @@ export const LINES = {
   hotHot: [
     "Ooh, somebody has a very hot take! Spicy!",
     "We have a rebel in the room! Hottest take of the round!"
+  ],
+
+  // ---------- Inside Jokes ----------
+  jokesGo: [
+    "Here's one from the audience. Buzz if you know!",
+    "Ooh, I don't understand this one at all. Do you?",
+    "Somebody wrote this. Somebody in this room. Buzz in!"
+  ],
+  jokesReveal: [
+    "Well, I suppose you had to be there!",
+    "And that's the answer. Is anyone going to explain it to me?"
   ],
 
   // ---------- Pixel Peek ----------

@@ -3,7 +3,7 @@
   import Timer from '../../components/Timer.svelte';
   import StepFlow from '../../components/StepFlow.svelte';
   import { MODES } from '../../lib/modes.js';
-  import { T, POINTS, ITEMS, layoutOf, cellOf, itemsOf } from '../../engine/tour.js';
+  import { T, POINTS, ITEMS, layoutOf, pathCell, itemsOf } from '../../engine/tour.js';
 
   let { s, avatars, now } = $props();
 
@@ -18,7 +18,8 @@
     bonus: { icon: '⭐', label: `+${POINTS.bonus}`, c: '#ffc400', fg: '#2b2240' },
     trap: { icon: '💀', label: `−${POINTS.trap}`, c: '#2b2240', fg: '#ffffff' },
     item: { icon: '🎁', label: 'Free item', c: '#22c55e', fg: '#ffffff' },
-    shop: { icon: '🛒', label: `Shop −${POINTS.shop}`, c: '#0ea5e9', fg: '#ffffff' }
+    shop: { icon: '🛒', label: `Shop −${POINTS.shop}`, c: '#0ea5e9', fg: '#ffffff' },
+    goal: { icon: '🌟', label: `GOAL +${POINTS.goal}`, c: '#ff4fa3', fg: '#ffffff' }
   };
   const fresh = (f) => f && now - f.at < 3000;
   const look = (sp) => (sp.k === 'mode' ? { icon: MODES[sp.m].icon, label: MODES[sp.m].name, c: MODES[sp.m].color, fg: '#fff' } : SPACE[sp.k]);
@@ -40,11 +41,14 @@
 </script>
 
 {#if t}
-  <section class="main">
-    <div class="board" style="--cols:{layout.c}; --rows:{layout.r}">
+  <section class="main" class:side={layout.side && !t.mix}>
+    {#if t.mix}
+      <div class="center solo">{@render panel()}</div>
+    {:else}
+    <div class="board" class:shaped={layout.side} style="--cols:{layout.c}; --rows:{layout.r}">
       {#each t.board as sp, i (i)}
         {@const L = look(sp)}
-        {@const [r, c] = cellOf(i, layout)}
+        {@const [r, c] = pathCell(i, layout)}
         <div class="space" class:hot={ev && ev.to === i} class:pickme={s.phase === 'tpick' && i === pickIdx}
           style="grid-row:{r}; grid-column:{c}; --c:{L.c}; --fg:{L.fg}">
           <span class="si">{L.icon}</span>
@@ -57,11 +61,21 @@
         </div>
       {/each}
 
-      <div class="center" style="grid-row:2 / {layout.r}; grid-column:2 / {layout.c}">
+      {#if !layout.side}
+        <div class="center" style="grid-row:2 / {layout.r}; grid-column:2 / {layout.c}">{@render panel()}</div>
+      {/if}
+    </div>
+    {#if layout.side}<div class="center beside">{@render panel()}</div>{/if}
+    {/if}
+  </section>
+{/if}
+
+{#snippet panel()}
         <div class="qhead">
-          <span class="chip" style="--c:#22c55e; --cd:#15803d">🗺️ Party Tour</span>
-          <span class="chip sun">Round {t.round} of {t.rounds}</span>
-          {#if t.round === 1 && s.phase === 'troll'}<span class="chip" style="--c:#6d5bd0; --cd:#4c3ba8">🗺️ {layout.name}</span>{/if}
+          {#if t.mix}<span class="chip" style="--c:#ff4fa3; --cd:#c0267a">🎉 Quick Party</span>
+          {:else}<span class="chip" style="--c:#22c55e; --cd:#15803d">🗺️ Party Tour</span>{/if}
+          <span class="chip sun">{t.mix ? 'Game' : 'Round'} {t.round} of {t.rounds}</span>
+          {#if !t.mix && t.round === 1 && s.phase === 'troll'}<span class="chip" style="--c:#6d5bd0; --cd:#4c3ba8">🗺️ {layout.name}</span>{/if}
         </div>
 
         {#if s.phase === 'troll'}
@@ -101,6 +115,7 @@
                 <div class="evs">
                   {#if ev.lap}<span class="pill ok">🏁 Lap! +{POINTS.lap}</span>{/if}
                   {#if ev.kind === 'bonus'}<span class="pill sun">⭐ Bonus! +{POINTS.bonus}</span>{/if}
+                  {#if ev.kind === 'goal'}<span class="pill sun">🌟 GOAL! +{POINTS.goal}</span>{/if}
                   {#if ev.kind === 'trap' && ev.shield}<span class="pill ok">🛡️ Shield blocked the trap!</span>
                   {:else if ev.kind === 'trap'}{@const loss = (ev.lap ? POINTS.lap : 0) - ev.pts}<span class="pill bad">💀 Trap! {loss ? `−${loss}` : 'Nothing to lose!'}</span>{/if}
                   {#if ev.item}<span class="pill ok">{ev.bought ? `🛒 Bought (−${POINTS.shop})` : '🎁 Got'} {ITEMS[ev.item].icon} {ITEMS[ev.item].name}!</span>{/if}
@@ -114,6 +129,7 @@
           {/key}
 
         {:else if s.phase === 'tpick' && mode}
+          {#if t.mix}<div class="sticker big tilt-r">🎰 The next game is…</div>{/if}
           <div class="pick pop-in" style="--mc:{mode.color}">
             <span class="pi">{mode.icon}</span>
             <div>
@@ -137,10 +153,7 @@
             {/each}
           </div>
         {/if}
-      </div>
-    </div>
-  </section>
-{/if}
+{/snippet}
 
 <style>
   .main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 0.3rem 1.5rem 0.6rem 150px; /* room for Lewis on the left */ width: 100%; position: relative; z-index: 1; }
@@ -159,6 +172,15 @@
   .tokens { position: absolute; bottom: -10px; left: 0; right: 0; display: flex; justify-content: center; flex-wrap: wrap; gap: 0; }
   .tok { margin: 0 -4px; transition: transform 0.3s; }
   .tok.moving { transform: translateY(-8px) scale(1.25); z-index: 3; }
+  .main.side { gap: 1.2rem; }
+  .board.shaped { width: auto; aspect-ratio: calc(var(--cols) * 1.05) / var(--rows); flex: 0 1 auto; max-width: 62%; gap: 0.4rem; }
+  .board.shaped .space { border-radius: 14px; }
+  .board.shaped .sl { font-size: clamp(0.5rem, 0.7vw, 0.75rem); }
+  .center.beside { flex: 1; min-width: 320px; max-width: 640px; align-self: stretch; }
+  .beside .move { flex-direction: column; text-align: center; padding: 0.8rem 1rem; }
+  .beside .mname { font-size: 1.5rem; }
+  .beside .evs { justify-content: center; }
+  .center.solo { width: min(100%, 1100px); min-height: 60vh; }
   .center {
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.8rem;
     padding: 0.6rem 1rem; min-height: 0; overflow: hidden;

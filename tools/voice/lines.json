@@ -192,6 +192,22 @@
   "text": "It's Bomb Pass! Think fast, type faster, and pass that bomb along. Tick tock!"
  },
  {
+  "id": "bd9b2105a11dc00f",
+  "text": "Quick Party! No board, no fuss. Just one surprise game after another!"
+ },
+ {
+  "id": "5ac7304e735a0f07",
+  "text": "It's Quick Party! I pick the games, you win them. Let's go, let's go!"
+ },
+ {
+  "id": "f41cfc08bb5629e7",
+  "text": "Inside Jokes! Tonight's questions were written by you lot. I take no responsibility."
+ },
+ {
+  "id": "5db0e66f9d017a00",
+  "text": "It's Inside Jokes! Your questions, your answers. I have no idea what any of this means."
+ },
+ {
   "id": "eb254fcb3d060584",
   "text": "Who Knows Who! Answer a few questions about yourself, then let's see who really knows you."
  },
@@ -1100,6 +1116,14 @@
   "text": "Ooh, free points! Don't spend them all at once."
  },
  {
+  "id": "1e62e78e3b77c349",
+  "text": "Right in the middle of the spiral! That's the goal! Five hundred points!"
+ },
+ {
+  "id": "4054c43e0c1e0e73",
+  "text": "Bullseye! You made it to the star! Have a huge pile of points!"
+ },
+ {
   "id": "201cc866067b24e9",
   "text": "Oh dear, a trap! That's going to sting."
  },
@@ -1190,6 +1214,26 @@
  {
   "id": "8a6fdd5b708d5a10",
   "text": "We have a rebel in the room! Hottest take of the round!"
+ },
+ {
+  "id": "dcaa6bbdb48f0df3",
+  "text": "Here's one from the audience. Buzz if you know!"
+ },
+ {
+  "id": "761fc033a7863ebf",
+  "text": "Ooh, I don't understand this one at all. Do you?"
+ },
+ {
+  "id": "3d8108234a9e3777",
+  "text": "Somebody wrote this. Somebody in this room. Buzz in!"
+ },
+ {
+  "id": "636a0bfe2d6e5598",
+  "text": "Well, I suppose you had to be there!"
+ },
+ {
+  "id": "77ccf875f5631c3e",
+  "text": "And that's the answer. Is anyone going to explain it to me?"
  },
  {
   "id": "9989582ac021f328",
@@ -4956,6 +5000,170 @@
   "text": "Leftovers taste better the next day."
  },
  {
+  "id": "e254fcdab1ba58c0",
+  "text": "Breakfast for dinner is the best dinner."
+ },
+ {
+  "id": "9bb1f005e5f45509",
+  "text": "Socks with sandals are fine, actually."
+ },
+ {
+  "id": "86c161f805275645",
+  "text": "Mornings are the best part of the day."
+ },
+ {
+  "id": "3da2ad34bf200468",
+  "text": "Texting is better than phone calls."
+ },
+ {
+  "id": "e86c502d0a170841",
+  "text": "Dogs should be allowed in restaurants."
+ },
+ {
+  "id": "cb2cd0323b56201e",
+  "text": "Summer is overrated."
+ },
+ {
+  "id": "a8e6ae69c825e343",
+  "text": "Sequels are usually better than the original."
+ },
+ {
+  "id": "5c5fa97d0ee65ef6",
+  "text": "Ketchup belongs on pasta."
+ },
+ {
+  "id": "c99a8ffbf0b04cb6",
+  "text": "You should always read the book before watching the film."
+ },
+ {
+  "id": "0f07c6d419317dd4",
+  "text": "Napping is a skill."
+ },
+ {
+  "id": "4b3a1700c076b1bd",
+  "text": "Christmas music before December is fine."
+ },
+ {
+  "id": "188a8e197d45850e",
+  "text": "Camping is fun."
+ },
+ {
+  "id": "0b05a347c4de1782",
+  "text": "Cold showers are good for you."
+ },
+ {
+  "id": "4a58ed718a2cb2a4",
+  "text": "Milk should go in the bowl before the cereal."
+ },
+ {
+  "id": "9959a368bab43101",
+  "text": "Reality TV is great entertainment."
+ },
+ {
+  "id": "1c58face6296f1a0",
+  "text": "Cats secretly rule the world."
+ },
+ {
+  "id": "7a3d68712d04e897",
+  "text": "Rain is relaxing."
+ },
+ {
+  "id": "f04b0346ccf9222c",
+  "text": "Fruit does not belong in salad."
+ },
+ {
+  "id": "aa32a3abb74657ae",
+  "text": "Theme parks are better than beaches."
+ },
+ {
+  "id": "647da8fcb027dd9e",
+  "text": "Popcorn is the best snack ever made."
+ },
+ {
+  "id": "2aace899d2f5dd04",
+  "text": "Puns are the highest form of humour."
+ },
+ {
+  "id": "04c5fcb531333ce3",
+  "text": "Being early is the same as being late."
+ },
+ {
+  "id": "6b9570cee2f6a143",
+  "text": "The book is always better than the film."
+ },
+ {
+  "id": "0ab85054ca289e7a",
+  "text": "Sleeping with socks on is fine."
+ },
+ {
+  "id": "344471b3495cb312",
+  "text": "Bananas are the perfect fruit."
+ },
+ {
+  "id": "8c8432694c48b351",
+  "text": "Sunday is better than Saturday."
+ },
+ {
+  "id": "bdff2efd95fb9f7d",
+  "text": "Cartoons are just as good for adults."
+ },
+ {
+  "id": "02375553af94cf1f",
+  "text": "Karaoke is always a good idea."
+ },
+ {
+  "id": "9097d3de589c91a2",
+  "text": "Ironing clothes is a waste of time."
+ },
+ {
+  "id": "2e850a656ea523a8",
+  "text": "Winter holidays beat summer holidays."
+ },
+ {
+  "id": "090808f037a24f60",
+  "text": "Window seats are better than aisle seats."
+ },
+ {
+  "id": "2e38e2b95877c1ee",
+  "text": "Fries taste better dipped in milkshake."
+ },
+ {
+  "id": "90cfb4e6d01eb9e8",
+  "text": "Dark mode is better than light mode."
+ },
+ {
+  "id": "04eb6887ac70fd00",
+  "text": "Penguins are the best animal."
+ },
+ {
+  "id": "b0d431293d35218f",
+  "text": "You can never have too many cushions."
+ },
+ {
+  "id": "10c56dc6f8916a4b",
+  "text": "Pyjamas are acceptable outside the house."
+ },
+ {
+  "id": "3ee5b48f66e722fd",
+  "text": "Brunch is the best meal of the week."
+ },
+ {
+  "id": "61e76e49a3b4dfb9",
+  "text": "Board game rules are made to be changed."
+ },
+ {
+  "id": "7876bce3ec839eb6",
+  "text": "Robots will do all the chores one day."
+ },
+ {
+  "id": "1e8502c5cae31710",
+  "text": "Rainbow sprinkles make anything taste better."
+ },
+ {
+  "id": "ede736319c9ea36c",
+  "text": "Long car journeys are fun."
+ },
+ {
   "id": "e90264c4e1950e63",
   "text": "The category is... Fruits!"
  },
@@ -5078,5 +5286,65 @@
  {
   "id": "93d3835a15dbf18b",
   "text": "The category is... Ice cream flavours!"
+ },
+ {
+  "id": "51503f1a21535943",
+  "text": "The category is... Dog breeds!"
+ },
+ {
+  "id": "b80db55d4348434d",
+  "text": "The category is... Things in a garden!"
+ },
+ {
+  "id": "c1a367dddae43a0b",
+  "text": "The category is... Weather!"
+ },
+ {
+  "id": "8588e3800536b3d2",
+  "text": "The category is... Things in a hospital!"
+ },
+ {
+  "id": "17fb1dc3cee1df64",
+  "text": "The category is... Shapes!"
+ },
+ {
+  "id": "ef9f0ffd28349c39",
+  "text": "The category is... Birds!"
+ },
+ {
+  "id": "879a1e77156790b4",
+  "text": "The category is... Things in space!"
+ },
+ {
+  "id": "e8058b20b2068c62",
+  "text": "The category is... Desserts!"
+ },
+ {
+  "id": "1ba2bdd1e5673fa3",
+  "text": "The category is... Things that are yellow!"
+ },
+ {
+  "id": "0613336886095e93",
+  "text": "The category is... Things that are red!"
+ },
+ {
+  "id": "8504ff3a54a8b9b2",
+  "text": "The category is... Movies!"
+ },
+ {
+  "id": "5284dd4906ea0a84",
+  "text": "The category is... Things you can open!"
+ },
+ {
+  "id": "63ca825f52a97bfc",
+  "text": "The category is... Insects & bugs!"
+ },
+ {
+  "id": "33e247d2a054f503",
+  "text": "The category is... Things at a zoo!"
+ },
+ {
+  "id": "46434ff56f0d72bd",
+  "text": "The category is... Things in a suitcase!"
  }
 ]

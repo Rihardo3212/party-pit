@@ -15,6 +15,13 @@
   const game = $derived(MODES[s.settings.sub || s.settings.game]);
   const canJoin = $derived(s.phase === 'lobby' && s.order.length < MAX_PLAYERS);
 
+  // Audience votes: rate Hot Takes and judge Bomb Pass words (they count half).
+  const hot = $derived(s.phase === 'hrate' ? s.hot : null);
+  const myRate = $derived(hot?.crowd?.[id]);
+  let rate = $state(5);
+  const bv = $derived(s.phase === 'bplay' ? s.bomb?.vote : null);
+  const myThumb = $derived(bv ? (bv.cyes?.[id] ? 'yes' : bv.cno?.[id] ? 'no' : null) : null);
+
   function cheer(pid) {
     sfx.pop();
     navigator.vibrate?.(30);
@@ -26,6 +33,30 @@
   <div class="stack center">
     <div class="badge sticker">👀 You're in the audience</div>
     {#if s.phase !== 'lobby' && game}<p class="muted now">Now playing: <b>{game.icon} {game.name}</b></p>{/if}
+
+    {#if hot}
+      <div class="card stack wide crowdbox pop-in">
+        <p class="ht">🌶️ “{hot.text}”</p>
+        {#if myRate !== undefined}
+          <p class="muted tip">You said <b>{myRate}</b>. The crowd counts half!</p>
+        {:else}
+          <input class="slider" type="range" min="0" max="10" step="1" bind:value={rate} />
+          <button class="btn sun block" onclick={() => { sfx.pop(); send('hcrowd', { rate }); }}>📣 I'd say {rate}/10</button>
+        {/if}
+      </div>
+    {:else if bv}
+      <div class="card stack wide crowdbox pop-in">
+        <p class="ht">💣 Does “{bv.w}” count?</p>
+        {#if myThumb}
+          <p class="muted tip">You voted {myThumb === 'yes' ? '👍' : '👎'}</p>
+        {:else}
+          <div class="thumbs">
+            <button class="btn green" onclick={() => { sfx.pop(); send('bvote', { ok: true }); }}>👍 Yes</button>
+            <button class="btn red" onclick={() => { sfx.pop(); send('bvote', { ok: false }); }}>👎 No</button>
+          </div>
+        {/if}
+      </div>
+    {/if}
 
     <h3>📣 Cheer for a player</h3>
     {#if players.length}
@@ -55,6 +86,9 @@
 
 <style>
   .now { margin: 0; }
+  .crowdbox { gap: 0.5rem; }
+  .ht { margin: 0; font-weight: 900; text-align: center; }
+  .thumbs { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
   h3 { margin: 0.3rem 0 0; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(86px, 1fr)); gap: 0.5rem; width: 100%; }
   .fan {

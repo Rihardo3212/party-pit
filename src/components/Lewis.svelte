@@ -33,6 +33,12 @@
       <circle r="4.5" fill="#d61f37" />
     </g>
 
+    <!-- his free hand: waves about while he talks -->
+    <g class="hand">
+      <circle cx="40" cy="184" r="12" fill="#f2b48a" />
+      <path d="M33 176 q-3 -10 2 -12 q4 0 4 8 M41 172 q0 -11 5 -11 q4 1 2 11" fill="#f2b48a" stroke="#e29c72" stroke-width="1.5" />
+    </g>
+
     <!-- microphone in his hand -->
     <g class="mic">
       <rect x="163" y="140" width="6" height="42" rx="3" fill="#2b2240" transform="rotate(8 166 160)" />
@@ -99,10 +105,23 @@
   .mic { transform-origin: 162px 182px; transition: transform 0.12s; }
   .talking .mic { transform: rotate(-6deg) translateY(-3px); }
   .spark { animation: twinkle 1.8s ease-in-out infinite; }
+  .hand { transform-origin: 46px 200px; transition: transform 0.3s cubic-bezier(0.2, 1.6, 0.4, 1); }
+  .talking .hand { animation: gesture 2.4s ease-in-out infinite; }
+  .talking svg { animation: sway 1.8s ease-in-out infinite; transform-origin: 50% 100%; }
+  .lewis:not(.talking) .hand { animation: idlehand 5s ease-in-out infinite; }
+  @keyframes gesture {
+    0%, 100% { transform: translate(0, 0) rotate(0); }
+    20% { transform: translate(-6px, -34px) rotate(-18deg); }
+    35% { transform: translate(-2px, -26px) rotate(-8deg); }
+    50% { transform: translate(-8px, -40px) rotate(-24deg); }
+    70% { transform: translate(0, -12px) rotate(4deg); }
+  }
+  @keyframes idlehand { 0%, 80%, 100% { transform: none; } 88% { transform: translate(-3px, -14px) rotate(-12deg); } }
+  @keyframes sway { 0%, 100% { transform: rotate(-1.5deg); } 50% { transform: rotate(1.5deg) translateY(-2px); } }
   @keyframes breathe { 50% { transform: translateY(-3px) rotate(-1.5deg); } }
   @keyframes blink { 0%, 94%, 100% { transform: scaleY(1); } 97% { transform: scaleY(0.1); } }
   @keyframes twinkle { 50% { opacity: 0.35; } }
   @media (prefers-reduced-motion: reduce) {
-    .head, .eyes, .spark { animation: none !important; }
+    .head, .eyes, .spark, .hand, svg { animation: none !important; }
   }
 </style>

@@ -18,7 +18,8 @@ export const MODES = {
       'Everyone rolls the dice on their phone at the same time, and the pieces move around the board.',
       "Each round one player (or team) is the chooser: the space they land on picks the next mini game.",
       'Mini games are short rounds of the other modes. 1st place gets +500, 2nd +300, 3rd +200, 4th +100.',
-      '⭐ spaces give +300, 💀 spaces take 200, and passing START gives +400. Most points at the end wins!'
+      '⭐ spaces give +300, 💀 spaces take 200, 🎁 gives an item, 🛒 sells one, and passing START gives +400.',
+      'Boards change every game: loops, a figure eight, or a spiral with a 🌟 goal (+500) in the middle. Most points at the end wins!'
     ],
     min: 1,
     hostRole: 'The host keeps the tour moving and can skip ahead.',
@@ -473,6 +474,61 @@ export const MODES = {
       tour: { label: 'Tour', detail: 'tour', rounds: 1, hidden: true }
     }
   },
+  mix: {
+    id: 'mix',
+    group: 'mix',
+    steps: [
+      { icon: '🎰', label: 'A random mini game' },
+      { icon: '⚡', label: 'Play a short round' },
+      { icon: '🏆', label: 'Win it', tag: '+500' },
+      { icon: '🔁', label: 'Next surprise!' }
+    ],
+    name: 'Quick Party',
+    icon: '🎉',
+    color: '#ff4fa3',
+    tagline: 'Surprise mini games, back to back.',
+    how: [
+      'No board, no waiting: a random mini game starts right away.',
+      'Each one is a short round of another mode. You never get the same one twice in a row.',
+      '1st place gets +500, 2nd +300, 3rd +200, 4th +100.',
+      'Most points after the last game wins!'
+    ],
+    min: 1,
+    hostRole: 'The host keeps the party moving and can skip ahead.',
+    lengths: {
+      quick: { label: 'Quick', detail: '3 games · ~9 min', rounds: 3 },
+      full: { label: 'Full', detail: '6 games · ~18 min', rounds: 6 },
+      tiny: { label: 'Tiny', detail: 'test', rounds: 2, hidden: true }
+    }
+  },
+  jokes: {
+    id: 'jokes',
+    group: 'social',
+    needsPack: true,
+    steps: [
+      { icon: '✍️', label: 'Everyone writes questions in the lobby' },
+      { icon: '🔔', label: 'Buzz in on the big screen' },
+      { icon: '🎯', label: 'Pick the right answer', tag: '+1000' },
+      { icon: '🤫', label: "Can't buzz on your own" }
+    ],
+    name: 'Inside Jokes',
+    icon: '🤫',
+    color: '#14b8a6',
+    tagline: 'Your own questions. Your own jokes.',
+    how: [
+      'In the lobby, everyone writes questions on their phone, with the right answer. Like "Who fell in the lake last summer?"',
+      'In the game, buzz in and pick the answer from 4. The wrong ones come from the other answers!',
+      "Buzz early for more points. A wrong pick locks you out. You can't buzz on your own question.",
+      'The questions are only kept for this game.'
+    ],
+    min: 2,
+    hostRole: 'The host reads the questions out loud and can skip ahead.',
+    lengths: {
+      quick: { label: 'Quick', detail: 'up to 8 questions', rounds: 8 },
+      full: { label: 'Full', detail: 'up to 15 questions', rounds: 15 },
+      tiny: { label: 'Tiny', detail: 'test', rounds: 2, hidden: true }
+    }
+  },
   know: {
     id: 'know',
     group: 'social',
@@ -502,7 +558,7 @@ export const MODES = {
   }
 };
 
-export const MODE_LIST = ['tour', 'board', 'wedge', 'fakeout', 'pindrop', 'closest', 'timeline', 'peek', 'hum', 'whowrote', 'oddone', 'hottake', 'know', 'doodle', 'scribble', 'sketch', 'reflex', 'bomb'];
+export const MODE_LIST = ['tour', 'mix', 'board', 'wedge', 'fakeout', 'pindrop', 'closest', 'timeline', 'peek', 'hum', 'whowrote', 'oddone', 'hottake', 'know', 'jokes', 'doodle', 'scribble', 'sketch', 'reflex', 'bomb'];
 
 // Mode groups for the picker, home page and How to play page.
 export const GROUPS = [
@@ -531,7 +587,7 @@ export const EXTRAS = [
 
 export function lengthOf(settings) {
   // Party Tour runs one short round of another mode at a time.
-  if (settings.game === 'tour' && settings.sub && MODES[settings.sub]?.lengths.tour) return MODES[settings.sub].lengths.tour;
+  if ((settings.game === 'tour' || settings.game === 'mix') && settings.sub && MODES[settings.sub]?.lengths.tour) return MODES[settings.sub].lengths.tour;
   const m = MODES[settings.game] || MODES.board;
   return m.lengths[settings.length] || m.lengths.quick;
 }

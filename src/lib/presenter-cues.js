@@ -206,6 +206,19 @@ function phase(a, b) {
       break;
     }
 
+    // Inside Jokes (player-written questions, so Lewis can't read them: he only reacts)
+    case 'jplay':
+      if (a.phase === 'janswer') say(line('wrong'), { interrupt: true, maxWait: 800 });
+      else if (b.jokes?.round === 1 || chance(0.3)) say(line('jokesGo'), { interrupt: true });
+      break;
+    case 'janswer': say(byUnit(b, b.jokes?.buzzUnit, 'buzz', 'buzzTeam'), { interrupt: true, maxWait: 600 }); break;
+    case 'jreveal': {
+      const r = b.jokes;
+      if (r?.result === 'right') say(byUnit(b, r.winner, 'correct', 'correctTeam'), { interrupt: true });
+      else say(line(chance(0.5) ? 'jokesReveal' : 'nobody'), { interrupt: true });
+      break;
+    }
+
     // Hum Hunt: never talk over the tune. Only the reveal.
     case 'uplay': case 'uanswer': hush(); break;
     case 'ureveal': {
@@ -284,6 +297,7 @@ function tourMove(b) {
   if (!ev) return;
   if (ev.kind === 'trap') say(line(ev.shield ? 'tourShield' : 'tourTrap'), { interrupt: true, maxWait: 1200 });
   else if (ev.item) say(line(ev.bought ? 'tourShop' : 'tourItem'), { interrupt: true, maxWait: 1200 });
+  else if (ev.kind === 'goal') say(line('tourGoal'), { interrupt: true, maxWait: 1200 });
   else if (ev.kind === 'bonus' && chance(0.7)) say(line('tourBonus'), { interrupt: true, maxWait: 1200 });
   else if (ev.lap && chance(0.6)) say(line('tourLap'), { interrupt: true, maxWait: 1200 });
 }

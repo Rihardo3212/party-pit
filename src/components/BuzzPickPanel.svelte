@@ -14,7 +14,7 @@
   {#each r.options as o, i}
     {@const wrongBy = r.wrongs.find((w) => w.i === i)}
     <div
-      class="opt slide-up"
+      class="opt flip-in"
       style="animation-delay:{150 + i * 90}ms"
       class:correct={s.phase === PH.reveal && i === r.correctIndex}
       class:wrong={!!wrongBy}

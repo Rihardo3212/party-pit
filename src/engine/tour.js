@@ -13,14 +13,45 @@ import { MODES } from '../lib/modes.js';
 import { shuffle } from './util.js';
 
 export const TOUR_MODES = ['closest', 'timeline', 'pindrop', 'reflex', 'sketch', 'oddone', 'wedge', 'board', 'hottake', 'peek', 'hum', 'bomb', 'know'];
-// Loop layouts: c columns × r rows around the edge of a grid (the middle shows what's going on).
+// Hourglass: a loop pinched in the middle (9 × 6), so it looks like an 8.
+function hourglass() {
+  const out = [];
+  for (let c = 1; c <= 4; c++) out.push([1, c]);
+  out.push([2, 4], [2, 5], [2, 6]);
+  for (let c = 6; c <= 9; c++) out.push([1, c]);
+  for (let r = 2; r <= 5; r++) out.push([r, 9]);
+  for (let c = 9; c >= 6; c--) out.push([6, c]);
+  out.push([5, 6], [5, 5], [5, 4]);
+  for (let c = 4; c >= 1; c--) out.push([6, c]);
+  for (let r = 5; r >= 2; r--) out.push([r, 1]);
+  return out;
+}
+// Spiral: from the corner round and inward (with gaps between the rings) to a 🌟 goal, then back to START.
+// Walk like a turtle: [direction, steps] with directions right, down, left, up.
+function spiral() {
+  const D = { r: [0, 1], d: [1, 0], l: [0, -1], u: [-1, 0] };
+  const out = [[1, 1]];
+  for (const [dir, n] of [['r', 7], ['d', 5], ['l', 7], ['u', 3], ['r', 5], ['d', 1]]) {
+    for (let k = 0; k < n; k++) {
+      const [y, x] = out[out.length - 1];
+      out.push([y + D[dir][0], x + D[dir][1]]);
+    }
+  }
+  return out;
+}
+
+// Board layouts. Loops (c columns × r rows around the edge) show the game in the middle.
+// cells: an explicit path of [row, column]; side: the game panel sits next to the board; goal: last space is ⭐.
 export const LAYOUTS = [
   { id: 'classic', name: 'Classic Loop', c: 7, r: 5 },
   { id: 'grand', name: 'Grand Tour', c: 8, r: 5 },
-  { id: 'speedway', name: 'Speedway', c: 6, r: 5 }
+  { id: 'speedway', name: 'Speedway', c: 6, r: 5 },
+  { id: 'hourglass', name: 'Figure Eight', c: 9, r: 6, cells: hourglass(), side: true },
+  { id: 'spiral', name: 'Spiral Star', c: 8, r: 6, cells: spiral(), side: true, goal: true }
 ];
 export const layoutOf = (t) => LAYOUTS.find((l) => l.id === t?.layout) || LAYOUTS[0];
-export const spacesOf = (l) => 2 * l.c + 2 * l.r - 4;
+export const spacesOf = (l) => (l.cells ? l.cells.length : 2 * l.c + 2 * l.r - 4);
+export const pathCell = (i, l) => (l.cells ? l.cells[i] : cellOf(i, l));
 // Space i of the loop → [row, column], clockwise from the top left.
 export function cellOf(i, { c, r }) {
   if (i < c) return [1, i + 1];
@@ -31,7 +62,7 @@ export function cellOf(i, { c, r }) {
 export const T = { roll: 15000, firstRoll: 2500, step: 2600, pick: 8000, score: 7000 };
 export const PLACE = [500, 300, 200, 100];
 export const LAST_PLACE = 50;
-export const POINTS = { bonus: 300, trap: 200, lap: 400, steal: 200, shop: 150 };
+export const POINTS = { bonus: 300, trap: 200, lap: 400, steal: 200, shop: 150, goal: 500 };
 export const ITEMS = {
   double: { icon: '🎲', name: 'Double Dice', what: 'Roll two dice' },
   swap: { icon: '🔄', name: 'Swap', what: 'Swap spots with a random player' },
@@ -70,10 +101,11 @@ export function modeAt(board, from) {
   return 'closest';
 }
 
-function makeBoard(players, spaces) {
+function makeBoard(players, spaces, goal = false) {
   const modes = TOUR_MODES.filter((m) => players >= (MODES[m].min || 1));
-  const specials = ['bonus', 'bonus', 'bonus', 'trap', 'trap', 'item', 'item', 'shop'].map((k) => ({ k }));
-  const nModes = spaces - 1 - specials.length;
+  const extra = spaces > 26 ? ['bonus', 'trap', 'item'] : [];
+  const specials = ['bonus', 'bonus', 'bonus', 'trap', 'trap', 'item', 'item', 'shop', ...extra].map((k) => ({ k }));
+  const nModes = spaces - 1 - (goal ? 1 : 0) - specials.length;
   const modeSpaces = [];
   while (modeSpaces.length < nModes) modeSpaces.push(...shuffle(modes));
   let rest = shuffle([...specials, ...modeSpaces.slice(0, nModes).map((m) => ({ k: 'mode', m }))]);
@@ -83,7 +115,19 @@ function makeBoard(players, spaces) {
     if (!bad) break;
     rest = shuffle(rest);
   }
-  return [{ k: 'start' }, ...rest];
+  return [{ k: 'start' }, ...rest, ...(goal ? [{ k: 'goal' }] : [])];
+}
+
+// Quick Party: no board, just random mini games one after another (never the same one twice in a row).
+function pickMix(g) {
+  const t = g.state.tour;
+  const n = g.playersHere().length;
+  const ok = TOUR_MODES.filter((m) => n >= (MODES[m].min || 1));
+  const fresh = ok.filter((m) => !t.played.includes(m));
+  const pool = fresh.length ? fresh : ok.filter((m) => m !== t.played[t.played.length - 1]);
+  const m = shuffle(pool)[0] || 'closest';
+  t.played = [...t.played, m].slice(-Math.max(1, ok.length - 1));
+  return m;
 }
 
 // The engine for the running mini game, with finish() sending the game back to the board.
@@ -107,6 +151,13 @@ function startRound(g) {
   t.used = {};
   t.dice = {};
   t.flash = null;
+  if (t.mix) {
+    t.mode = pickMix(g);
+    t.until = g.now() + T.pick + (t.round === 1 ? T.firstRoll : 0);
+    s.phase = 'tpick';
+    g.save();
+    return;
+  }
   t.until = g.now() + T.roll + (t.round === 1 ? T.firstRoll : 0);
   s.phase = 'troll';
   g.save();
@@ -192,6 +243,7 @@ function nextMove(g) {
   let pts = 0;
   if (lap) pts += POINTS.lap;
   if (kind === 'bonus') pts += POINTS.bonus;
+  if (kind === 'goal') pts += POINTS.goal;
   const unit = s.units[uid];
   if (kind === 'trap') {
     if (takeItem(t, uid, 'shield')) ev.shield = true;
@@ -284,6 +336,8 @@ export default {
       for (const k of ['pos', 'rolls', 'rolledBy', 'events', 'mini', 'place', 'saved', 'items', 'used', 'dice']) t[k] = t[k] || {};
       t.flash = t.flash ?? null;
       t.layout = t.layout || 'classic';
+      t.mix = !!t.mix;
+      t.played = t.played || [];
       t.board = t.board || [];
       t.moveOrder = t.moveOrder || [];
       t.mode = t.mode ?? null;
@@ -296,10 +350,13 @@ export default {
   },
   start(g) {
     const s = g.state;
-    const len = MODES.tour.lengths[s.settings.length] || MODES.tour.lengths.quick;
+    const me = MODES[s.settings.game] || MODES.tour;
+    const len = me.lengths[s.settings.length] || me.lengths.quick;
+    const mix = s.settings.game === 'mix';
     const layout = LAYOUTS[Math.floor(Math.random() * LAYOUTS.length)];
     s.tour = {
-      rounds: len.rounds, round: 0, layout: layout.id, board: makeBoard(g.playersHere().length, spacesOf(layout)), items: {},
+      rounds: len.rounds, round: 0, mix, played: [], layout: layout.id, items: {},
+      board: mix ? [] : makeBoard(g.playersHere().length, spacesOf(layout), !!layout.goal),
       pos: Object.fromEntries(s.unitOrder.map((u) => [u, 0])), rolls: {}, rolledBy: {}, events: {}, moveOrder: [], moveIdx: -1
     };
     startRound(g);

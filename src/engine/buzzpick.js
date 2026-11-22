@@ -7,7 +7,8 @@
 // cfg: {
 //   key: state key ('peek'), p: phase prefix ('x' → xplay / xanswer / xreveal),
 //   T: { play, answer, reveal, intro },
-//   choose(n, s) → list of item ids, item(id) → { answer, options: [4 strings] },
+//   choose(n, s) → list of item ids, item(id, s) → { answer, options: [4 strings] },
+//   canBuzz(s, from, round) → false to keep someone out (optional),
 //   extra(item, round, rounds) → extra fields for the round (optional)
 // }
 import { lengthOf } from '../lib/modes.js';
@@ -33,7 +34,7 @@ export function makeBuzzPick(cfg) {
     const r = s[key];
     r.round += 1;
     r.id = r.list[r.round - 1];
-    const it = cfg.item(r.id);
+    const it = cfg.item(r.id, s);
     r.options = it.options;
     r.answer = s.mode === 'host' ? it.answer : null; // only the host sees it early
     r.correctIndex = null;
@@ -61,6 +62,7 @@ export function makeBuzzPick(cfg) {
     const uid = g.unitOf(from);
     const now = g.now();
     if (s.phase !== PH.play || !uid || r.lockedOut[uid] || now < r.startAt) return;
+    if (cfg.canBuzz && !cfg.canBuzz(s, from, r)) return;
     const pending = (g.mem.pending = g.mem.pending || []);
     if (pending.some((b) => b.id === from)) return;
     pending.push({ id: from, uid, ts: typeof ts === 'number' ? Math.max(ts, r.startAt) : now });
@@ -88,7 +90,7 @@ export function makeBuzzPick(cfg) {
     const r = s[key];
     if (s.phase !== PH.answer || r.buzzer !== from || !Number.isInteger(i) || i < 0 || i >= r.options.length) return;
     if (r.wrongs.some((w) => w.i === i)) return;
-    const it = cfg.item(r.id);
+    const it = cfg.item(r.id, s);
     if (r.options[i] === it.answer) {
       r.chosen = i;
       r.pts = pointsAt(r.elapsed, T.play);
@@ -124,7 +126,7 @@ export function makeBuzzPick(cfg) {
   function reveal(g, result) {
     const s = g.state;
     const r = s[key];
-    const it = cfg.item(r.id);
+    const it = cfg.item(r.id, s);
     r.answer = it.answer;
     r.correctIndex = r.options.indexOf(it.answer);
     r.result = result;

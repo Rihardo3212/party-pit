@@ -47,7 +47,7 @@
       <div class="sticker big tilt-r">🕵️ Which one is the TRUTH?</div>
       <div class="options" class:many={f.options.length > 4}>
         {#each f.options as o, i (o.id)}
-          <div class="opt big slide-up" style="animation-delay:{i * 80}ms"><span class="coin l{i % 4}">{i + 1}</span>{o.text}</div>
+          <div class="opt big flip-in" style="animation-delay:{i * 80}ms"><span class="coin l{i % 4}">{i + 1}</span>{o.text}</div>
         {/each}
       </div>
       <div class="locks">

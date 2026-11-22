@@ -105,7 +105,7 @@ function word(g, from, input) {
   // Not on the list: pause the fuse and let the others (or the host) decide.
   b.left = Math.max(1500, b.endsAt - g.now());
   b.endsAt = null;
-  b.vote = { w, by: from, yes: {}, no: {}, until: g.now() + T.vote };
+  b.vote = { w, by: from, yes: {}, no: {}, cyes: {}, cno: {}, until: g.now() + T.vote };
   g.save();
 }
 
@@ -122,7 +122,9 @@ function settle(g, ok) {
   g.save();
 }
 // More thumbs up than down passes the bomb. A tie, or nobody voting, gives the benefit of the doubt.
-const verdict = (v) => Object.keys(v.yes).length >= Object.keys(v.no).length;
+// Audience thumbs count half.
+const n = (o) => Object.keys(o || {}).length;
+const verdict = (v) => n(v.yes) + n(v.cyes) / 2 >= n(v.no) + n(v.cno) / 2;
 
 function castVote(g, from, input) {
   const s = g.state;
@@ -130,6 +132,12 @@ function castVote(g, from, input) {
   const v = b.vote;
   if (s.phase !== 'bplay' || !v) return;
   if (from === s.hostId) { settle(g, !!input.ok); return; } // the host's call is final
+  if (s.audience?.[from]) {
+    if (v.cyes[from] || v.cno[from]) return;
+    (input.ok ? v.cyes : v.cno)[from] = 1;
+    g.save();
+    return;
+  }
   if (from === v.by || !g.unitOf(from) || v.yes[from] || v.no[from]) return;
   (input.ok ? v.yes : v.no)[from] = 1;
   if (voters(g).every((p) => v.yes[p] || v.no[p])) settle(g, verdict(v));
@@ -179,7 +187,7 @@ export default {
       b.order = b.order || [];
       b.list = b.list || [];
       for (const k of ['vote', 'flash', 'holder', 'endsAt', 'left', 'until', 'boom']) b[k] = b[k] ?? null;
-      if (b.vote) { b.vote.yes = b.vote.yes || {}; b.vote.no = b.vote.no || {}; }
+      if (b.vote) for (const k of ['yes', 'no', 'cyes', 'cno']) b.vote[k] = b.vote[k] || {};
       b.passes = b.passes || 0;
     }
   },

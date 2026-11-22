@@ -60,6 +60,7 @@
           {#each Array(11) as _, i}<span class="tick" style="left:{pct(i)}">{i}</span>{/each}
           {#if h.avg !== null}
             <div class="avg drop" style="left:{pct(h.avg)}"><b>{h.avg}</b><span>average</span></div>
+            {#if h.crowdAvg !== null}<div class="crowdavg drop" style="left:{pct(h.crowdAvg)}">📣 {h.crowdAvg}</div>{/if}
           {/if}
         </div>
         <div class="ends"><span>🙅 Nope</span><span>Totally 🔥</span></div>
@@ -82,6 +83,7 @@
 {/if}
 
 <style>
+  .crowdavg { position: absolute; top: -2.6rem; transform: translateX(-50%); background: #ff4fa3; color: #fff; font-weight: 900; border-radius: 999px; padding: 0.1rem 0.6rem; font-size: 0.95rem; white-space: nowrap; }
   .main {
     flex: 1; display: flex; flex-direction: column; gap: 1.1rem; align-items: center; justify-content: center;
     padding: 0.3rem 2.5rem 1rem; max-width: 1400px; width: 100%; margin: 0 auto; position: relative; z-index: 1;

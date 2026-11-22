@@ -46,7 +46,7 @@
         {#each cur.options as o, i}
           {@const wrongBy = cur.wrongs.find((w) => w.i === i)}
           <div
-            class="opt big slide-up"
+            class="opt big flip-in"
             style="animation-delay:{150 + i * 90}ms"
             class:correct={s.phase === 'reveal' && i === cur.correctIndex}
             class:wrong={wrongBy || (s.phase === 'reveal' && cur.chosen === i && i !== cur.correctIndex)}
@@ -115,7 +115,7 @@
     {#if s.mode === 'party'}
       <div class="options">
         {#each fin.options as o, i}
-          <div class="opt big slide-up" style="animation-delay:{150 + i * 90}ms"><span class="coin l{i}">{'ABCD'[i]}</span> {o}</div>
+          <div class="opt big flip-in" style="animation-delay:{150 + i * 90}ms"><span class="coin l{i}">{'ABCD'[i]}</span> {o}</div>
         {/each}
       </div>
     {/if}

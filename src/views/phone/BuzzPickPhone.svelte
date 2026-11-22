@@ -3,6 +3,7 @@
   import Avatar from '../../components/Avatar.svelte';
   import ReactBar from '../../components/ReactBar.svelte';
   import { sfx, unlockAudio } from '../../lib/sound.js';
+  import { ownJoke } from '../../engine/jokes.js';
 
   let { s, id, myUnit, avatars, send, now, react, k, p, icon, ask } = $props();
 
@@ -12,6 +13,10 @@
   const U = (uid) => (uid && s.units[uid] ? { id: uid, ...s.units[uid] } : null);
   const locked = $derived(!!r?.lockedOut?.[myUnit]);
   const started = $derived(r && now >= r.startAt);
+  // Inside Jokes: the question text, and whether I wrote it (then I can't buzz).
+  const joke = $derived(k === 'jokes' && r ? s.pack?.[r.id] : null);
+  const own = $derived(!!joke && ownJoke(s, id, r.id));
+  const ownTeam = $derived(own && joke.by !== id);
 
   let buzzedLocal = $state(false);
   $effect(() => {
@@ -36,7 +41,14 @@
 
 {#if r}
   {#if s.phase === PH.play}
-    {#if locked}
+    {#if own}
+      <div class="stack center">
+        <div class="bigemoji bounce">🤫</div>
+        <h2>{ownTeam ? 'Your team wrote this one!' : "This one's yours!"}</h2>
+        <p class="muted">Sit back and watch who gets it.</p>
+        <ReactBar onReact={react} />
+      </div>
+    {:else if locked}
       <div class="stack center">
         <div class="bigemoji">🔒</div>
         <h2>Locked out</h2>
@@ -46,6 +58,7 @@
     {:else}
       <div class="stack center">
         <p class="qmini">{icon} {r.round} of {r.rounds} · {ask}</p>
+        {#if joke}<p class="jq">{joke.q}</p>{/if}
         <button class="buzzer" class:open={started} class:sent={buzzedLocal} onpointerdown={buzz}>
           <span>{#if buzzedLocal}Buzzed!{:else if started}BUZZ!{:else}Wait…{/if}</span>
         </button>
@@ -86,4 +99,5 @@
 
 <style>
   .qmini { margin: 0; text-align: center; }
+  .jq { margin: 0; text-align: center; font-weight: 900; font-size: 1.15rem; }
 </style>

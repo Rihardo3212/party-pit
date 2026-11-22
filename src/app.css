@@ -150,7 +150,7 @@ button { font: inherit; cursor: pointer; border: none; color: inherit; backgroun
   box-shadow: 0 16px 28px -8px color-mix(in srgb, var(--c) 85%, transparent);
   filter: brightness(1.05);
 }
-.btn:active:not(:disabled) { transform: scale(0.95); box-shadow: 0 4px 10px -4px color-mix(in srgb, var(--c) 80%, transparent); }
+.btn:active:not(:disabled) { transform: scale(1.06, 0.88); box-shadow: 0 4px 10px -4px color-mix(in srgb, var(--c) 80%, transparent); }
 .btn:focus-visible { outline: 4px solid var(--ring); outline-offset: 4px; }
 .btn:disabled { --c: #6f6a8e; opacity: 0.5; cursor: default; box-shadow: none; }
 .btn.blue { --c: var(--blue); }
@@ -284,6 +284,19 @@ input.field:focus { border-color: var(--ring); }
 .shake { animation: shake 0.4s; }
 @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
 @keyframes throb { to { transform: scale(1.07) rotate(-1deg); } }
+/* Answer options and cards flip in like cards being dealt. */
+.flip-in { animation: flip-in 0.6s cubic-bezier(0.2, 1.5, 0.4, 1) both; transform-origin: 50% 0; }
+@keyframes flip-in {
+  0% { transform: perspective(700px) rotateX(-95deg) translateY(-10px); opacity: 0; }
+  60% { opacity: 1; }
+  100% { transform: perspective(700px) rotateX(0) translateY(0); opacity: 1; }
+}
+/* Gentle idle bob for avatars and stickers. */
+.bob { animation: bob 2.6s ease-in-out infinite; }
+@keyframes bob { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-5px) rotate(2deg); } }
+.jelly { animation: jelly 0.7s cubic-bezier(0.2, 1.6, 0.4, 1) both; }
+@keyframes jelly { 0% { transform: scale(1, 1); } 25% { transform: scale(1.18, 0.84); } 45% { transform: scale(0.9, 1.1); } 65% { transform: scale(1.04, 0.97); } 100% { transform: scale(1, 1); } }
+
 
 /* ---------- misc ---------- */
 

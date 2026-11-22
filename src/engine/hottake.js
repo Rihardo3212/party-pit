@@ -9,6 +9,7 @@ export const T = { rate: 40000, intro: 2500, reveal: 10000 };
 export const POINTS = { max: 1000, hot: 300 };
 // Guess points fade with distance from the average: spot on 1000, 1 off 750, 4+ off 0.
 export const guessPoints = (d) => Math.round(POINTS.max * Math.max(0, 1 - d / 4));
+const CROWD = 0.5; // an audience rating counts half as much as a player's (and scores nothing)
 const HOT_GAP = 2.5; // a rating this far from the average can win the hottest take bonus
 
 const seen = new Set();
@@ -28,6 +29,8 @@ function startRound(g) {
   h.round += 1;
   h.text = HOT_TAKES[h.list[h.round - 1]];
   h.votes = {};
+  h.crowd = {};
+  h.crowdAvg = null;
   h.avg = null;
   h.results = {};
   h.hot = null;
@@ -51,13 +54,25 @@ function vote(g, from, input) {
   else g.save();
 }
 
+// The audience rates too: it nudges the average a little.
+function crowdVote(g, from, input) {
+  const s = g.state;
+  const h = s.hot;
+  const r = Number(input.rate);
+  if (s.phase !== 'hrate' || !s.audience?.[from] || h.crowd[from] !== undefined || !Number.isFinite(r)) return;
+  h.crowd[from] = clamp(Math.round(r), 0, 10);
+  g.save();
+}
+
 function reveal(g) {
   const s = g.state;
   const h = s.hot;
   const ids = Object.keys(h.votes);
   h.gained = {};
   if (ids.length) {
-    const avg = ids.reduce((a, p) => a + h.votes[p].r, 0) / ids.length;
+    const cr = Object.values(h.crowd);
+    const avg = (ids.reduce((a, p) => a + h.votes[p].r, 0) + CROWD * cr.reduce((a, r) => a + r, 0)) / (ids.length + CROWD * cr.length);
+    h.crowdAvg = cr.length ? Math.round((cr.reduce((a, r) => a + r, 0) / cr.length) * 10) / 10 : null;
     h.avg = Math.round(avg * 10) / 10;
     const byPlayer = {};
     for (const p of ids) {
@@ -94,7 +109,8 @@ export default {
     s.hot = s.hot ?? null;
     if (s.hot) {
       const h = s.hot;
-      for (const k of ['votes', 'results', 'gained']) h[k] = h[k] || {};
+      for (const k of ['votes', 'results', 'gained', 'crowd']) h[k] = h[k] || {};
+      h.crowdAvg = h.crowdAvg ?? null;
       for (const v of Object.values(h.votes)) { v.r = v.r || 0; v.g = v.g || 0; }
       h.list = h.list || [];
       h.avg = h.avg ?? null;
@@ -110,6 +126,7 @@ export default {
   },
   input(g, from, input) {
     if (input.type === 'hvote') vote(g, from, input);
+    else if (input.type === 'hcrowd') crowdVote(g, from, input);
   },
   skip(g) {
     const s = g.state;

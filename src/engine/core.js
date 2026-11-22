@@ -32,8 +32,9 @@ import peek from './peek.js';
 import hum from './hum.js';
 import bomb from './bomb.js';
 import know from './know.js';
+import jokes, { MAX_PACK, MAX_Q, MAX_A } from './jokes.js';
 
-export const ENGINES = { board, wedge, fakeout, doodle, pindrop, closest, timeline, tour, scribble, oddone, whowrote, reflex, sketch, hottake, peek, hum, bomb, know };
+export const ENGINES = { board, wedge, fakeout, doodle, pindrop, closest, timeline, tour, scribble, oddone, whowrote, reflex, sketch, hottake, peek, hum, bomb, know, jokes, mix: tour };
 setEngines(ENGINES);
 export const TEAM_DRAW_TIME = 45000;
 export const INTRO_TIME = 14000; // how-to-play screen before each game
@@ -50,6 +51,7 @@ export function normalize(s) {
   s.teamReady = s.teamReady || {};
   s.pscore = s.pscore || {}; // points per player this game (social modes show them)
   s.stats = s.stats || {}; // award stats this game: { key: { who: value } }
+  s.pack = s.pack || {}; // Inside Jokes questions written in the lobby: { id: { q, a, by } }
   s.audience = s.audience || {}; // watchers (late joiners or "Just watch"): { id: { name, fan } }
   for (const a of Object.values(s.audience)) a.fan = a.fan ?? null;
   for (const k of ['vip', 'turn', 'results', 'hostId', 'hostName', 'drawUntil', 'introUntil']) s[k] = s[k] ?? null;
@@ -279,8 +281,23 @@ export class GameHost {
         if (len && (!len.hidden || this.allowTiny)) s.settings.length = input.length;
         break;
       }
+      case 'packAdd': {
+        // Inside Jokes: anyone in the lobby can add a question and its answer.
+        const q = String(input.q || '').trim().slice(0, MAX_Q);
+        const a = String(input.a || '').trim().slice(0, MAX_A);
+        if (!p || s.phase !== 'lobby' || !q || !a || Object.keys(s.pack).length >= MAX_PACK) return;
+        s.pack[`j${Date.now().toString(36)}${Math.random().toString(36).slice(2, 5)}`] = { q, a, by: from };
+        break;
+      }
+      case 'packDel': {
+        const x = s.pack[input.id];
+        if (!x || s.phase !== 'lobby' || (x.by !== from && !isCtrl)) return;
+        delete s.pack[input.id];
+        break;
+      }
       case 'start':
         if (!isCtrl || s.phase !== 'lobby' || s.order.length < MODES[s.settings.game].min) return;
+        if (MODES[s.settings.game].needsPack && !Object.keys(s.pack).length) return;
         this.startGame();
         return;
       case 'teamDone': {

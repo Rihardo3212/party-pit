@@ -41,13 +41,16 @@
         <ol class="how">
           {#each mode.how as line, i}<li style="animation-delay:{150 + i * 80}ms" class="slide-up">{line}</li>{/each}
         </ol>
+        {#if mode.needsPack}
+          {#key Object.keys(s.pack || {}).length}<p class="packn pop-in">✍️ <b>{Object.keys(s.pack || {}).length}</b> secret questions written</p>{/key}
+        {/if}
       </div>
     {/key}
 
     <div class="slots" class:many>
       {#each players as p (p.id)}
         <div class="slot card pop-in">
-          <Avatar src={avatars[p.id]} color={p.color} name={p.name} size={many ? 70 : 100} crown={s.vip === p.id && s.mode === 'party'} dim={!here(p.id)} />
+          <span class="bob" style="animation-delay:-{(p.name?.length || 1) * 0.31}s"><Avatar src={avatars[p.id]} color={p.color} name={p.name} size={many ? 70 : 100} crown={s.vip === p.id && s.mode === 'party'} dim={!here(p.id)} /></span>
           <div class="pname">{p.name}</div>
           {#if many}
             <div class="tbadge" style="--c:{p.team ? TEAMS[p.team].color : '#8a85a6'}">{p.team ? TEAMS[p.team].emoji : '?'}</div>
@@ -99,6 +102,7 @@
 </section>
 
 <style>
+  .packn { margin: 0.6rem 0 0; font-size: 1.3rem; font-weight: 800; }
   .lobby {
     flex: 1; display: grid; grid-template-columns: minmax(300px, 400px) 1fr; gap: 2.2rem;
     padding: 0.5rem 2.5rem 1rem; align-items: center; max-width: 1380px; margin: 0 auto; width: 100%;

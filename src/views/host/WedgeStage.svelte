@@ -50,7 +50,7 @@
         <div class="options">
           {#each w.q.options as o, i}
             <div
-              class="opt big slide-up"
+              class="opt big flip-in"
               style="animation-delay:{150 + i * 90}ms"
               class:correct={s.phase === 'wreveal' && i === w.q.correctIndex}
               class:faded={s.phase === 'wreveal' && i !== w.q.correctIndex}

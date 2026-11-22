@@ -301,6 +301,9 @@ export function play(name, force = false) {
   }
 }
 
+// Beats per minute of the loop that is playing right now (0 = silent). The background pulses to it.
+export function musicBpm() { return timer && track && enabled ? track.bpm : 0; }
+
 export function stopMusic() {
   current = null;
   stopLoop();

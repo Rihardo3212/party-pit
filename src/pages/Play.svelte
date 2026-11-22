@@ -33,6 +33,8 @@
   import { sfx, unlockAudio } from '../lib/sound.js';
   import { getTheme, toggleTheme } from '../lib/theme.js';
   import { fit } from '../lib/fit.js';
+  import Backdrop from '../components/Backdrop.svelte';
+  import { phoneScene, flipIn } from '../lib/motion.js';
 
   let { code: rawCode = '' } = $props();
   // svelte-ignore state_referenced_locally
@@ -120,7 +122,7 @@
       if (s.phase === 'answer' && s.current?.buzzer === id) navigator.vibrate?.([80, 40, 80]);
       if (s.phase === 'reveal' && s.current?.result === 'correct' && s.current?.winner === myUnit) { sfx.correct(); navigator.vibrate?.([40, 30, 40, 30, 120]); }
       if (s.phase === 'board' && s.turn === myUnit) navigator.vibrate?.(100);
-      if (['finalBet', 'wq', 'lie', 'pick', 'pguess', 'cguess', 'tguess', 'troll', 'scwrite', 'scdraw', 'scdesc', 'scvote', 'oclue', 'ovote', 'wwrite', 'wguess', 'rready', 'mdraw', 'hrate', 'xplay', 'uplay', 'kwrite', 'kguess'].includes(s.phase)) navigator.vibrate?.([60, 40, 60]);
+      if (['finalBet', 'wq', 'lie', 'pick', 'pguess', 'cguess', 'tguess', 'troll', 'scwrite', 'scdraw', 'scdesc', 'scvote', 'oclue', 'ovote', 'wwrite', 'wguess', 'rready', 'mdraw', 'hrate', 'xplay', 'uplay', 'jplay', 'kwrite', 'kguess'].includes(s.phase)) navigator.vibrate?.([60, 40, 60]);
       if (s.phase === 'dchoose' && s.doodle?.drawer === id) navigator.vibrate?.([100, 50, 100]);
       if (s.phase === 'wreveal' && s.wedge?.winner === myUnit) sfx.correct();
     }
@@ -147,7 +149,9 @@
     </div>
   </header>
 
+  <Backdrop lite />
   <main class="fit-box" use:fit={{ min: 0.6 }}><div class="fit-in">
+    {#key phoneScene(s) + (me ? '1' : '0') + (isHost ? 'h' : '')}<div class="scene" in:flipIn>
     {#if s === undefined}
       <p class="center-text">Connecting…</p>
 
@@ -244,7 +248,7 @@
       <OddPhone {s} {id} {avatars} {send} {now} {react} />
     {:else if game === 'scribble'}
       <ScribblePhone {s} {id} {send} {now} {react} {db} />
-    {:else if game === 'tour'}
+    {:else if game === 'tour' || game === 'mix'}
       <TourPhone {s} {myUnit} {send} {now} {react} />
     {:else if game === 'closest'}
       <ClosestPhone {s} {id} {myUnit} {send} {now} {react} />
@@ -260,12 +264,17 @@
       <BombPhone {s} {id} {send} {now} {react} />
     {:else if game === 'know'}
       <KnowPhone {s} {id} {send} {now} {react} />
+    {:else if game === 'jokes'}
+      <BuzzPickPhone {s} {id} {myUnit} {avatars} {send} {now} {react} k="jokes" p="j" icon="🤫" ask="Who? What? When?" />
     {/if}
+    </div>{/key}
   </div></main>
 </div>
 
 <style>
-  .phone { height: 100vh; height: 100dvh; display: flex; flex-direction: column; max-width: 520px; margin: 0 auto; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+  .scene { flex: 1 0 auto; display: flex; flex-direction: column; justify-content: center; }
+  main { position: relative; z-index: 1; }
+  .phone { position: relative; height: 100vh; height: 100dvh; display: flex; flex-direction: column; max-width: 520px; margin: 0 auto; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
   header { display: flex; align-items: center; justify-content: space-between; padding: max(0.7rem, env(safe-area-inset-top)) 1rem 0.4rem; gap: 0.5rem; flex-shrink: 0; }
   header a { text-decoration: none; }
   .hright { display: flex; align-items: center; gap: 0.5rem; }

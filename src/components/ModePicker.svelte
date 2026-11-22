@@ -43,8 +43,10 @@
   </div>
   {#if n < mode.min}
     <p class="warn">{mode.name} needs at least {mode.min} players.</p>
+  {:else if mode.needsPack && !Object.keys(s.pack || {}).length}
+    <p class="warn">Write at least one question first ✍️</p>
   {/if}
-  <button class="btn green big block" disabled={n < mode.min} onclick={() => send('start')}>
+  <button class="btn green big block" disabled={n < mode.min || (mode.needsPack && !Object.keys(s.pack || {}).length)} onclick={() => send('start')}>
     ▶ Start {mode.name}{n > MAX_SOLO ? ' (teams)' : ''}
   </button>
 </div>

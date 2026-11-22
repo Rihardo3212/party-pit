@@ -1,6 +1,7 @@
 <script>
   import Avatar from '../../components/Avatar.svelte';
   import ModePicker from '../../components/ModePicker.svelte';
+  import PackForm from '../../components/PackForm.svelte';
   import { MAX_SOLO, TEAMS, TEAM_KEYS } from '../../lib/room.js';
   import { MODES } from '../../lib/modes.js';
   import { sfx } from '../../lib/sound.js';
@@ -37,6 +38,10 @@
         {/each}
       </div>
     </div>
+  {/if}
+
+  {#if mode.needsPack}
+    <div class="wide"><PackForm {s} {id} {send} {isCtrl} /></div>
   {/if}
 
   {#if isCtrl}
