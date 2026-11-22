@@ -22,7 +22,12 @@
   // Phases where the host can only skip ahead: [emoji, button text]
   const SKIPPABLE = {
     mlook: ['👀', 'Start drawing now'], mdraw: ['✏️', 'Reveal now'], mreveal: ['🖼️', 'Next drawing'],
-    rready: ['⚡', 'Go now'], rgo: ['⏱️', 'End this game'], rresult: ['🏆', 'Next game']
+    rready: ['⚡', 'Go now'], rgo: ['⏱️', 'End this game'], rresult: ['🏆', 'Next game'],
+    hrate: ['🌶️', 'Reveal now'], hreveal: ['➡️', 'Next take'],
+    xplay: ['🔍', 'Reveal now'], xanswer: ['⏱️', 'Time up for the buzzer'], xreveal: ['➡️', 'Next photo'],
+    uplay: ['🎶', 'Reveal now'], uanswer: ['⏱️', 'Time up for the buzzer'], ureveal: ['➡️', 'Next tune'],
+    bboom: ['➡️', 'Next round'],
+    kwrite: ['✍️', 'Start guessing now'], kguess: ['🤝', 'Reveal now'], kreveal: ['➡️', 'Next question']
   };
 </script>
 
@@ -188,6 +193,24 @@
       {#if s.phase === 'cguess'}<p class="muted">{count(c.guesses)} / {players.length} guesses in</p>{/if}
     </div>
     <button class="btn ghost block" onclick={() => send('skip')}>{s.phase === 'cguess' ? 'Reveal now' : 'Next question'}</button>
+
+  <!-- Bomb Pass: the host decides odd words -->
+  {:else if s.phase === 'bplay' && s.bomb}
+    {@const b = s.bomb}
+    <div class="card stack center">
+      <div class="bigemoji">💣</div>
+      <h3>Round {b.round} of {b.rounds}</h3>
+      {#if b.vote}
+        <p>Does <b>“{b.vote.w}”</b> count?</p>
+        <div class="row">
+          <button class="btn green big" onclick={() => { vibe(); send('bvote', { ok: true }); }}>👍 Yes</button>
+          <button class="btn big" onclick={() => { vibe(); send('bvote', { ok: false }); }}>👎 No</button>
+        </div>
+      {:else}
+        <p class="muted">{P(b.holder)?.name || '…'} has the bomb</p>
+      {/if}
+    </div>
+    <button class="btn ghost block" onclick={() => send('skip')}>💥 Blow it up now</button>
 
   <!-- Party Tour (the board; mini games use their own sections) -->
   {:else if ['troll', 'tmove', 'tpick', 'tscore'].includes(s.phase) && s.tour}

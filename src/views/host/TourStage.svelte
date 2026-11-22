@@ -3,7 +3,7 @@
   import Timer from '../../components/Timer.svelte';
   import StepFlow from '../../components/StepFlow.svelte';
   import { MODES } from '../../lib/modes.js';
-  import { T, SPACES, POINTS } from '../../engine/tour.js';
+  import { T, POINTS, ITEMS, layoutOf, cellOf, itemsOf } from '../../engine/tour.js';
 
   let { s, avatars, now } = $props();
 
@@ -12,18 +12,15 @@
   const U = (uid) => ({ id: uid, ...s.units[uid] });
   const units = $derived(s.unitOrder.map(U));
 
-  // Space i of the loop → grid cell (7 columns × 5 rows, clockwise from the top left).
-  function cell(i) {
-    if (i <= 6) return [1, i + 1];
-    if (i <= 9) return [i - 5, 7];
-    if (i <= 16) return [5, 7 - (i - 10)];
-    return [5 - (i - 16), 1];
-  }
+  const layout = $derived(layoutOf(t));
   const SPACE = {
     start: { icon: '🏁', label: `START +${POINTS.lap}`, c: '#ffffff', fg: '#2b2240' },
     bonus: { icon: '⭐', label: `+${POINTS.bonus}`, c: '#ffc400', fg: '#2b2240' },
-    trap: { icon: '💀', label: `−${POINTS.trap}`, c: '#2b2240', fg: '#ffffff' }
+    trap: { icon: '💀', label: `−${POINTS.trap}`, c: '#2b2240', fg: '#ffffff' },
+    item: { icon: '🎁', label: 'Free item', c: '#22c55e', fg: '#ffffff' },
+    shop: { icon: '🛒', label: `Shop −${POINTS.shop}`, c: '#0ea5e9', fg: '#ffffff' }
   };
+  const fresh = (f) => f && now - f.at < 3000;
   const look = (sp) => (sp.k === 'mode' ? { icon: MODES[sp.m].icon, label: MODES[sp.m].name, c: MODES[sp.m].color, fg: '#fff' } : SPACE[sp.k]);
   const at = (i) => units.filter((u) => (t.pos[u.id] || 0) === i);
   const mover = $derived(s.phase === 'tmove' ? U(t.moveOrder[t.moveIdx]) : null);
@@ -35,7 +32,8 @@
   const pickIdx = $derived.by(() => {
     if (!t) return -1;
     const from = t.pos[t.chooser] || 0;
-    for (let k = 0; k < SPACES; k++) if (t.board[(from + k) % SPACES]?.k === 'mode') return (from + k) % SPACES;
+    const n = t.board.length;
+    for (let k = 0; k < n; k++) if (t.board[(from + k) % n]?.k === 'mode') return (from + k) % n;
     return -1;
   });
   const DICE = ['', '⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
@@ -43,10 +41,10 @@
 
 {#if t}
   <section class="main">
-    <div class="board">
+    <div class="board" style="--cols:{layout.c}; --rows:{layout.r}">
       {#each t.board as sp, i (i)}
         {@const L = look(sp)}
-        {@const [r, c] = cell(i)}
+        {@const [r, c] = cellOf(i, layout)}
         <div class="space" class:hot={ev && ev.to === i} class:pickme={s.phase === 'tpick' && i === pickIdx}
           style="grid-row:{r}; grid-column:{c}; --c:{L.c}; --fg:{L.fg}">
           <span class="si">{L.icon}</span>
@@ -59,20 +57,36 @@
         </div>
       {/each}
 
-      <div class="center">
+      <div class="center" style="grid-row:2 / {layout.r}; grid-column:2 / {layout.c}">
         <div class="qhead">
           <span class="chip" style="--c:#22c55e; --cd:#15803d">🗺️ Party Tour</span>
           <span class="chip sun">Round {t.round} of {t.rounds}</span>
+          {#if t.round === 1 && s.phase === 'troll'}<span class="chip" style="--c:#6d5bd0; --cd:#4c3ba8">🗺️ {layout.name}</span>{/if}
         </div>
 
         {#if s.phase === 'troll'}
           <div class="sticker big tilt-r">🎲 Roll the dice on your phone!</div>
           <p class="note"><b style="color:{chooser.color}">{chooser.name}</b>'s roll picks the next game</p>
+          {#if fresh(t.flash)}
+            {@const f = t.flash}
+            {@const who = U(f.uid)}
+            {@const tg = f.target ? U(f.target) : null}
+            <div class="flash pop-in">
+              {ITEMS[f.k].icon} <b style="color:{who.color}">{who.name}</b>
+              {#if f.k === 'double'}will roll two dice!
+              {:else if f.k === 'swap'}swapped spots with <b style="color:{tg?.color}">{tg?.name}</b>!
+              {:else if f.k === 'steal' && f.blocked}tried to steal from <b style="color:{tg?.color}">{tg?.name}</b>… 🛡️ Blocked!
+              {:else if f.k === 'steal'}stole {f.pts} from <b style="color:{tg?.color}">{tg?.name}</b>!{/if}
+            </div>
+          {/if}
           <div class="rolls">
             {#each units as u (u.id)}
               <div class="roll" class:on={!!t.rolls[u.id]}>
                 <Avatar src={avatars[u.id]} color={u.color} name={u.name} size={50} />
-                <span class="die">{t.rolls[u.id] ? DICE[t.rolls[u.id]] : '🎲'}</span>
+                <span class="die">{t.rolls[u.id] ? (t.dice[u.id] || [t.rolls[u.id]]).map((d) => DICE[d]).join('') : t.used[u.id]?.k === 'double' ? '🎲🎲' : '🎲'}</span>
+                {#if itemsOf(t, u.id).length}
+                  <span class="items">{#each itemsOf(t, u.id) as [k, n] (k)}{#each Array(n) as _}<span title={ITEMS[k].name}>{ITEMS[k].icon}</span>{/each}{/each}</span>
+                {/if}
               </div>
             {/each}
           </div>
@@ -87,7 +101,11 @@
                 <div class="evs">
                   {#if ev.lap}<span class="pill ok">🏁 Lap! +{POINTS.lap}</span>{/if}
                   {#if ev.kind === 'bonus'}<span class="pill sun">⭐ Bonus! +{POINTS.bonus}</span>{/if}
-                  {#if ev.kind === 'trap'}{@const loss = (ev.lap ? POINTS.lap : 0) - ev.pts}<span class="pill bad">💀 Trap! {loss ? `−${loss}` : 'Nothing to lose!'}</span>{/if}
+                  {#if ev.kind === 'trap' && ev.shield}<span class="pill ok">🛡️ Shield blocked the trap!</span>
+                  {:else if ev.kind === 'trap'}{@const loss = (ev.lap ? POINTS.lap : 0) - ev.pts}<span class="pill bad">💀 Trap! {loss ? `−${loss}` : 'Nothing to lose!'}</span>{/if}
+                  {#if ev.item}<span class="pill ok">{ev.bought ? `🛒 Bought (−${POINTS.shop})` : '🎁 Got'} {ITEMS[ev.item].icon} {ITEMS[ev.item].name}!</span>{/if}
+                  {#if ev.full}<span class="pill">🎒 Bag full!</span>{/if}
+                  {#if ev.broke}<span class="pill bad">🛒 Can't afford it!</span>{/if}
                   {#if ev.kind === 'mode'}<span class="pill" style="background:{MODES[t.board[ev.to].m].color}; color:#fff">{MODES[t.board[ev.to].m].icon} {MODES[t.board[ev.to].m].name}</span>{/if}
                   {#if mover.id === t.chooser}<span class="pill">👑 Picks the game!</span>{/if}
                 </div>
@@ -127,7 +145,7 @@
 <style>
   .main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 0.3rem 1.5rem 0.6rem 150px; /* room for Lewis on the left */ width: 100%; position: relative; z-index: 1; }
   .board {
-    display: grid; grid-template-columns: repeat(7, 1fr); grid-template-rows: repeat(5, 1fr); gap: 0.55rem;
+    display: grid; grid-template-columns: repeat(var(--cols), 1fr); grid-template-rows: repeat(var(--rows), 1fr); gap: 0.55rem;
     width: min(100%, 1500px); height: min(72vh, 760px);
   }
   .space {
@@ -142,7 +160,7 @@
   .tok { margin: 0 -4px; transition: transform 0.3s; }
   .tok.moving { transform: translateY(-8px) scale(1.25); z-index: 3; }
   .center {
-    grid-row: 2 / 5; grid-column: 2 / 7; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.8rem;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.8rem;
     padding: 0.6rem 1rem; min-height: 0; overflow: hidden;
   }
   .qhead { display: flex; gap: 0.7rem; font-size: 1.3rem; }
@@ -152,6 +170,8 @@
   .roll { display: flex; flex-direction: column; align-items: center; opacity: 0.55; transition: all 0.2s; }
   .roll.on { opacity: 1; transform: translateY(-4px); }
   .die { font-size: 2.2rem; line-height: 1.1; }
+  .items { font-size: 1.1rem; line-height: 1; }
+  .flash { background: var(--surface); border-radius: 999px; padding: 0.4rem 1.2rem; font-size: 1.25rem; font-weight: 800; box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35); }
   .tw { width: 100%; max-width: 560px; display: flex; align-items: center; gap: 1rem; }
   .secs-big { font-family: var(--font-display); font-size: 1.7rem; min-width: 2.5rem; }
   .move { display: flex; align-items: center; gap: 1.2rem; background: var(--surface); border-radius: 28px; padding: 1rem 1.6rem; box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4); }

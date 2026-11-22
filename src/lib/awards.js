@@ -4,12 +4,17 @@
 // The list is in priority order: the first awards that someone earned are the ones shown.
 
 export const AWARDS = [
+  { key: 'crowd', icon: '📣', name: 'Crowd Favourite', color: '#ff4fa3', min: 1, what: (v) => (v === 1 ? '1 fan in the audience' : `${v} fans in the audience`) },
   { key: 'spy', icon: '🕵️', name: 'Super Spy', color: '#a855f7', min: 1, what: (v) => (v === 1 ? 'Got away with it' : `Got away with it ${v} times`) },
   { key: 'fooled', icon: '🤥', name: 'Master Liar', color: '#ff4fa3', min: 2, what: (v) => `Fooled people ${v} times` },
   { key: 'art', icon: '🎨', name: 'Star Artist', color: '#ff7a1a', min: 2, what: (v) => `Wowed the crowd ${v} times` },
   { key: 'buzz', icon: '⚡', name: 'Fastest Finger', color: '#ffc400', low: true, what: (v) => `Right in ${(v / 1000).toFixed(2)} s` },
   { key: 'reflex', icon: '🏎️', name: 'Lightning Reflexes', color: '#2f8cff', min: 2, what: (v) => `Won ${v} reflex games` },
   { key: 'close', icon: '🎯', name: 'Bullseye', color: '#e0213a', min: 2, what: (v) => `Closest ${v} times` },
+  { key: 'hot', icon: '🌶️', name: 'Spice Lord', color: '#e0213a', min: 2, what: (v) => `Hottest take ${v} times` },
+  { key: 'boom', icon: '💣', name: 'Butterfingers', color: '#ff7a1a', min: 2, what: (v) => `Blew up ${v} times` },
+  { key: 'bff', icon: '🤝', name: 'Best Friend', color: '#8b5cf6', min: 2, what: (v) => `Knew a friend's answer ${v} times` },
+  { key: 'open', icon: '📖', name: 'Open Book', color: '#8b5cf6', min: 3, what: (v) => `Friends guessed them right ${v} times` },
   { key: 'eye', icon: '👀', name: 'Sharp Eye', color: '#22c55e', min: 2, what: (v) => `Saw through it ${v} times` },
   { key: 'right', icon: '🧠', name: 'Know-It-All', color: '#2f8cff', min: 3, what: (v) => `${v} right answers` },
   { key: 'gotFooled', icon: '🙈', name: 'Easily Fooled', color: '#a855f7', min: 2, what: (v) => `Fell for it ${v} times` },

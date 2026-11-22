@@ -16,6 +16,11 @@
   import ScribblePhone from '../views/phone/ScribblePhone.svelte';
   import OddPhone from '../views/phone/OddPhone.svelte';
   import WhoPhone from '../views/phone/WhoPhone.svelte';
+  import HotPhone from '../views/phone/HotPhone.svelte';
+  import BuzzPickPhone from '../views/phone/BuzzPickPhone.svelte';
+  import BombPhone from '../views/phone/BombPhone.svelte';
+  import KnowPhone from '../views/phone/KnowPhone.svelte';
+  import AudiencePhone from '../views/phone/AudiencePhone.svelte';
   import ReflexPhone from '../views/phone/ReflexPhone.svelte';
   import SketchPhone from '../views/phone/SketchPhone.svelte';
   import TimelinePhone from '../views/phone/TimelinePhone.svelte';
@@ -67,6 +72,7 @@
 
   const me = $derived(s?.players?.[id]);
   const isHost = $derived(!!s && s.hostId === id);
+  const watcher = $derived(!!s?.audience?.[id]);
   const isCtrl = $derived(!!s && controllerOf(s) === id);
   const myUnit = $derived(me?.unit || null);
   const unit = $derived(myUnit && s?.units?.[myUnit] ? s.units[myUnit] : null);
@@ -82,6 +88,16 @@
     joining = true;
     send('join', { name: n });
   }
+  function watch(e) {
+    e?.preventDefault();
+    unlockAudio();
+    const n = name.trim() || 'Fan';
+    localStorage.setItem('bb-name', n);
+    joining = true;
+    send('watch', { name: n });
+  }
+  // A late joiner becomes audience; joining from the audience back into the lobby needs the button again.
+  $effect(() => { if (watcher) joining = false; });
   function joinAsHost() {
     unlockAudio();
     const n = name.trim() || 'Host';
@@ -104,7 +120,7 @@
       if (s.phase === 'answer' && s.current?.buzzer === id) navigator.vibrate?.([80, 40, 80]);
       if (s.phase === 'reveal' && s.current?.result === 'correct' && s.current?.winner === myUnit) { sfx.correct(); navigator.vibrate?.([40, 30, 40, 30, 120]); }
       if (s.phase === 'board' && s.turn === myUnit) navigator.vibrate?.(100);
-      if (['finalBet', 'wq', 'lie', 'pick', 'pguess', 'cguess', 'tguess', 'troll', 'scwrite', 'scdraw', 'scdesc', 'scvote', 'oclue', 'ovote', 'wwrite', 'wguess', 'rready', 'mdraw'].includes(s.phase)) navigator.vibrate?.([60, 40, 60]);
+      if (['finalBet', 'wq', 'lie', 'pick', 'pguess', 'cguess', 'tguess', 'troll', 'scwrite', 'scdraw', 'scdesc', 'scvote', 'oclue', 'ovote', 'wwrite', 'wguess', 'rready', 'mdraw', 'hrate', 'xplay', 'uplay', 'kwrite', 'kguess'].includes(s.phase)) navigator.vibrate?.([60, 40, 60]);
       if (s.phase === 'dchoose' && s.doodle?.drawer === id) navigator.vibrate?.([100, 50, 100]);
       if (s.phase === 'wreveal' && s.wedge?.winner === myUnit) sfx.correct();
     }
@@ -148,11 +164,17 @@
     {:else if isHost}
       <HostRemote {s} {send} {avatars} />
 
+    {:else if !me && watcher}
+      <AudiencePhone {s} {id} {avatars} {send} {react} />
+
     {:else if !me}
-      {#if s.phase !== 'lobby'}
-        <div class="card stack center pop-in"><h2>Game in progress</h2><p class="muted">Wait for the next round, then you can join.</p></div>
-      {:else if s.order.length >= MAX_PLAYERS}
-        <div class="card stack center pop-in"><h2>Room is full</h2><p class="muted">This game already has {MAX_PLAYERS} players.</p></div>
+      {#if s.phase !== 'lobby' || s.order.length >= MAX_PLAYERS}
+        <form class="card stack center pop-in" onsubmit={watch}>
+          <h2>{s.phase !== 'lobby' ? 'Game in progress' : 'Room is full'}</h2>
+          <p class="muted">Join the audience: react, and cheer for your favourite!{s.phase !== 'lobby' ? ' You can play in the next game.' : ''}</p>
+          <input class="field" maxlength="14" autocomplete="off" bind:value={name} placeholder="Name" />
+          <button class="btn big block" disabled={!name.trim() || joining}>👀 Watch & cheer</button>
+        </form>
       {:else}
         <form class="card stack center pop-in" onsubmit={join}>
           <h2>Room {code}</h2>
@@ -163,6 +185,7 @@
             <button type="button" class="btn ghost block" disabled={joining} onclick={joinAsHost}>🎤 Be the host instead</button>
             <p class="muted tiny">The host runs the show but doesn't play.</p>
           {/if}
+          <button type="button" class="btn ghost block" disabled={joining} onclick={watch}>👀 Just watch</button>
         </form>
       {/if}
 
@@ -227,6 +250,16 @@
       <ClosestPhone {s} {id} {myUnit} {send} {now} {react} />
     {:else if game === 'timeline'}
       <TimelinePhone {s} {id} {myUnit} {send} {now} {react} />
+    {:else if game === 'hottake'}
+      <HotPhone {s} {id} {send} {now} {react} />
+    {:else if game === 'peek'}
+      <BuzzPickPhone {s} {id} {myUnit} {avatars} {send} {now} {react} k="peek" p="x" icon="🔍" ask="What is it?" />
+    {:else if game === 'hum'}
+      <BuzzPickPhone {s} {id} {myUnit} {avatars} {send} {now} {react} k="hum" p="u" icon="🎶" ask="Name that tune!" />
+    {:else if game === 'bomb'}
+      <BombPhone {s} {id} {send} {now} {react} />
+    {:else if game === 'know'}
+      <KnowPhone {s} {id} {send} {now} {react} />
     {/if}
   </div></main>
 </div>

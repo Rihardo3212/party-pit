@@ -135,6 +135,7 @@ export const sfx = {
     }
   },
   wrong: () => { tone(220, 0, 0.16, 'square', 0.1); tone(155, 0.14, 0.32, 'square', 0.1); },
+  boom: () => { tone(95, 0, 0.7, 'sine', 0.45, 30); hiss(0, 1.1, 0.45, 'lowpass', 2600, 180); },
   tick: () => tone(1250, 0, 0.04, 'sine', 0.08),
   tock: () => tone(900, 0, 0.05, 'sine', 0.08),
   stamp: () => { tone(110, 0, 0.18, 'sine', 0.35, 50); hiss(0, 0.12, 0.2, 'lowpass', 900); },

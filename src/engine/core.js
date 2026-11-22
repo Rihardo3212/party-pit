@@ -9,6 +9,7 @@
 // Solo: unit id = player id. Teams: unit id = "team-red" etc.
 
 import { PLAYER_COLORS, MAX_SOLO, MAX_PLAYERS, TEAMS, TEAM_KEYS, REACTIONS } from '../lib/room.js';
+const MAX_AUDIENCE = 40;
 import { MODES } from '../lib/modes.js';
 import { addWin } from '../lib/wins.js';
 import { pickAwards } from '../lib/awards.js';
@@ -26,8 +27,13 @@ import whowrote from './whowrote.js';
 import reflex from './reflex.js';
 import sketch from './sketch.js';
 import timeline from './timeline.js';
+import hottake from './hottake.js';
+import peek from './peek.js';
+import hum from './hum.js';
+import bomb from './bomb.js';
+import know from './know.js';
 
-export const ENGINES = { board, wedge, fakeout, doodle, pindrop, closest, timeline, tour, scribble, oddone, whowrote, reflex, sketch };
+export const ENGINES = { board, wedge, fakeout, doodle, pindrop, closest, timeline, tour, scribble, oddone, whowrote, reflex, sketch, hottake, peek, hum, bomb, know };
 setEngines(ENGINES);
 export const TEAM_DRAW_TIME = 45000;
 export const INTRO_TIME = 14000; // how-to-play screen before each game
@@ -44,6 +50,8 @@ export function normalize(s) {
   s.teamReady = s.teamReady || {};
   s.pscore = s.pscore || {}; // points per player this game (social modes show them)
   s.stats = s.stats || {}; // award stats this game: { key: { who: value } }
+  s.audience = s.audience || {}; // watchers (late joiners or "Just watch"): { id: { name, fan } }
+  for (const a of Object.values(s.audience)) a.fan = a.fan ?? null;
   for (const k of ['vip', 'turn', 'results', 'hostId', 'hostName', 'drawUntil', 'introUntil']) s[k] = s[k] ?? null;
   s.mode = s.mode || 'party';
   s.teamMode = !!s.teamMode;
@@ -201,7 +209,9 @@ export class GameHost {
         const name = String(input.name || '').trim().slice(0, 14);
         if (!name || from === s.hostId) return;
         if (p) { p.name = name; break; }
-        if (s.phase !== 'lobby' || s.order.length >= MAX_PLAYERS) return;
+        // Too late or too full to play: you join the audience instead.
+        if (s.phase !== 'lobby' || s.order.length >= MAX_PLAYERS) { this.addWatcher(from, name); break; }
+        delete s.audience[from];
         const used = s.order.map((id) => s.players[id].color);
         s.players[from] = {
           name,
@@ -228,9 +238,27 @@ export class GameHost {
         s.mode = 'party';
         break;
       case 'leave':
+        if (s.audience[from]) { delete s.audience[from]; break; }
         if (!p || s.phase !== 'lobby') return;
         this.removePlayer(from);
         break;
+      case 'watch': {
+        // "Just watch": a player in the lobby (or anyone new) moves to the audience.
+        if (from === s.hostId) return;
+        if (p) {
+          if (s.phase !== 'lobby') return;
+          this.removePlayer(from);
+        }
+        this.addWatcher(from, String(input.name || p?.name || '').trim().slice(0, 14) || 'Fan');
+        break;
+      }
+      case 'cheer': {
+        // The audience backs one player (fans count for the Crowd Favourite award).
+        const a = s.audience[from];
+        if (!a || !s.players[input.pid]) return;
+        a.fan = input.pid;
+        break;
+      }
       case 'avatarDone':
         if (!p) return;
         p.ready = true;
@@ -290,6 +318,12 @@ export class GameHost {
         return;
     }
     this.save();
+  }
+
+  addWatcher(id, name) {
+    const s = this.state;
+    if (!s.audience[id] && Object.keys(s.audience).length >= MAX_AUDIENCE) return;
+    s.audience[id] = { name, fan: s.audience[id]?.fan ?? null };
   }
 
   removePlayer(pid) {
@@ -404,6 +438,8 @@ export class GameHost {
     const ranked = [...s.unitOrder].sort(rank || byScore);
     const best = ranked[0];
     const winners = ranked.filter((u) => (rank || byScore)(u, best) === 0);
+    // Crowd Favourite: fans in the audience (only the ones still watching).
+    for (const [id, a] of Object.entries(s.audience)) if (a.fan && s.players[a.fan] && this.isHere(id)) this.stat(a.fan, 'crowd');
     let awards = [];
     try { awards = pickAwards(s.stats); } catch (e) { console.warn('awards failed', e); }
     s.results = { ranked, winners, awards };

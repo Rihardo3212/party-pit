@@ -5,6 +5,7 @@
   import QRCode from 'qrcode';
   import Logo from '../components/Logo.svelte';
   import FxLayer from '../components/FxLayer.svelte';
+  import CrowdChip from '../components/CrowdChip.svelte';
   import LobbyView from '../views/host/LobbyView.svelte';
   import TeamDrawView from '../views/host/TeamDrawView.svelte';
   import IntroView from '../views/host/IntroView.svelte';
@@ -21,6 +22,11 @@
   import ReflexStage from '../views/host/ReflexStage.svelte';
   import SketchStage from '../views/host/SketchStage.svelte';
   import TimelineStage from '../views/host/TimelineStage.svelte';
+  import HotStage from '../views/host/HotStage.svelte';
+  import PeekStage from '../views/host/PeekStage.svelte';
+  import HumStage from '../views/host/HumStage.svelte';
+  import BombStage from '../views/host/BombStage.svelte';
+  import KnowStage from '../views/host/KnowStage.svelte';
   import EndView from '../views/host/EndView.svelte';
   import ScoreBar from '../views/host/ScoreBar.svelte';
   import { getDb, isLocal } from '../lib/db.js';
@@ -153,9 +159,13 @@
     oclue: 'sneaky', ovote: 'sneaky', oguess: 'sneaky', oresult: 'sneaky',
     wwrite: 'sneaky', wguess: 'sneaky', wshow: 'sneaky',
     rready: 'board', rgo: 'think', rresult: 'board',
-    mlook: 'think', mdraw: 'chill', mreveal: 'chill'
+    mlook: 'think', mdraw: 'chill', mreveal: 'chill',
+    hrate: 'sneaky', hreveal: 'sneaky', bplay: 'think', bboom: 'think', kwrite: 'chill', kguess: 'sneaky', kreveal: 'sneaky',
+    xplay: 'think', xanswer: 'think', xreveal: 'think'
   };
-  const STAGE = new Set(['question', 'answer', 'reveal', 'finalBet', 'finalQ', 'finalJudge', 'finalReveal', 'spin', 'wq', 'wreveal', 'lie', 'pick', 'freveal', 'dchoose', 'ddraw', 'dreveal', 'pguess', 'preveal', 'cguess', 'creveal', 'tguess', 'treveal', 'troll', 'tmove', 'tpick', 'tscore', 'scwrite', 'scdraw', 'scdesc', 'scshow', 'scvote', 'oclue', 'ovote', 'oguess', 'oresult', 'wwrite', 'wguess', 'wshow', 'rready', 'rgo', 'rresult', 'mlook', 'mdraw', 'mreveal', 'tpick', 'tscore']);
+  // Phases where the background music stops (Hum Hunt plays its own tune).
+  const SILENT = new Set(['uplay', 'uanswer', 'ureveal']);
+  const STAGE = new Set(['question', 'answer', 'reveal', 'finalBet', 'finalQ', 'finalJudge', 'finalReveal', 'spin', 'wq', 'wreveal', 'lie', 'pick', 'freveal', 'dchoose', 'ddraw', 'dreveal', 'pguess', 'preveal', 'cguess', 'creveal', 'tguess', 'treveal', 'troll', 'tmove', 'tpick', 'tscore', 'scwrite', 'scdraw', 'scdesc', 'scshow', 'scvote', 'oclue', 'ovote', 'oguess', 'oresult', 'wwrite', 'wguess', 'wshow', 'rready', 'rgo', 'rresult', 'mlook', 'mdraw', 'mreveal', 'tpick', 'tscore', 'hrate', 'hreveal', 'xplay', 'xanswer', 'xreveal', 'uplay', 'uanswer', 'ureveal', 'bplay', 'bboom', 'kwrite', 'kguess', 'kreveal']);
   const count = (o) => Object.keys(o || {}).length;
 
   function react(a, b) {
@@ -163,11 +173,16 @@
     if (!a) { playMusic(MUSIC_FOR[b.phase] ?? 'lobby'); return; }
 
     if (b.order.length > a.order.length) sfx.join();
+    // The audience: someone new watching, or a cheer
+    const fansOf = (x) => Object.values(x.audience || {}).map((f) => f.fan || '').join();
+    if (count(b.audience) > count(a.audience)) sfx.bloop();
+    else if (fansOf(b) !== fansOf(a)) sfx.react();
     if (b.mode !== a.mode && b.phase === 'lobby') sfx.ding();
     if (b.settings.game !== a.settings.game && b.phase === 'lobby') sfx.pop();
 
     if (a.phase !== b.phase) {
-      if (b.phase !== 'end' && MUSIC_FOR[b.phase]) playMusic(MUSIC_FOR[b.phase]);
+      if (SILENT.has(b.phase)) stopMusic();
+      else if (b.phase !== 'end' && MUSIC_FOR[b.phase]) playMusic(MUSIC_FOR[b.phase]);
       if (a.phase === 'intro') { sfx.fanfare(); fx.stamp("LET'S PARTY!", MODES[b.settings.game].color, MODES[b.settings.game].name); }
       phaseEffects(a, b);
     }
@@ -238,6 +253,43 @@
         break;
       }
       case 'rready': sfx.whoosh(); break;
+      case 'hrate': sfx.whoosh(); break;
+      case 'kwrite': sfx.whoosh(); break;
+      case 'kguess': sfx.reveal(); break;
+      case 'kreveal': {
+        const k = b.know;
+        const knew = Object.values(k?.picks || {}).filter((i) => i === k.correct).length;
+        if (knew) { sfx.correct(); fx.confetti(40, ['#8b5cf6', '#ffffff']); } else sfx.sadTrombone();
+        break;
+      }
+      case 'bboom': {
+        sfx.boom();
+        fx.stamp('BOOM!', '#f97316', b.players[b.bomb?.boom]?.name || '');
+        fx.confetti(50, ['#f97316', '#3a3a3a', '#ffc400']);
+        break;
+      }
+      case 'xanswer': case 'uanswer': {
+        const r = b.peek && b.phase === 'xanswer' ? b.peek : b.hum;
+        sfx.buzz(Math.max(0, b.unitOrder.indexOf(r?.buzzUnit)));
+        break;
+      }
+      case 'xplay': case 'uplay': {
+        if (['xanswer', 'uanswer'].includes(a.phase)) sfx.wrong();
+        else if (b.phase === 'xplay') sfx.whoosh();
+        break;
+      }
+      case 'xreveal': case 'ureveal': {
+        const r = b.phase === 'xreveal' ? b.peek : b.hum;
+        if (r?.result === 'right') { sfx.correct(); fx.confetti(60, [b.units[r.winner]?.color || '#22c55e', '#ffffff']); }
+        else { if (['xanswer', 'uanswer'].includes(a.phase)) sfx.wrong(); else sfx.sadTrombone(); }
+        break;
+      }
+      case 'hreveal': {
+        sfx.drumroll(0.8);
+        setTimeout(() => { sfx.reveal(); fx.stamp(`Average: ${b.hot?.avg ?? '?'}`, '#e0213a', b.hot?.hot ? `🌶️ ${b.players[b.hot.hot]?.name}` : ''); }, 900);
+        if (b.hot?.hot) setTimeout(() => fx.confetti(50, ['#e0213a', '#ff7a1a']), 1500);
+        break;
+      }
       case 'rgo': if (b.reflex.game !== 'green') sfx.open(); break;
       case 'rresult': {
         const r = b.reflex;
@@ -361,7 +413,14 @@
         sfx.pop();
         if (ev?.lap) setTimeout(() => sfx.rise(), 200);
         if (ev?.kind === 'bonus') setTimeout(() => { sfx.correct(); fx.confetti(30, ['#ffc400', '#ffffff']); }, 350);
-        if (ev?.kind === 'trap') setTimeout(() => sfx.sadTrombone(), 350);
+        if (ev?.kind === 'trap') setTimeout(() => (ev.shield ? sfx.ding() : sfx.sadTrombone()), 350);
+        if (ev?.item) setTimeout(() => sfx.join(), 350);
+      }
+      // An item was used (Party Tour)
+      if (b.phase === 'troll' && t.flash && t.flash.at !== a.tour?.flash?.at) {
+        sfx.pick();
+        if (t.flash.k === 'steal' && !t.flash.blocked) setTimeout(() => sfx.correct(), 250);
+        if (t.flash.blocked) setTimeout(() => sfx.stamp(), 250);
       }
       if (b.phase === 'tpick' && a.phase !== 'tpick' && t.mode) {
         sfx.drumroll(0.8);
@@ -424,6 +483,17 @@
     if (b.odd && a.odd && ['oclue', 'ovote'].includes(b.phase) && (count(b.odd.clues) > count(a.odd.clues) || count(b.odd.votes) > count(a.odd.votes))) sfx.bloop();
     // Who Wrote That?
     if (b.who && a.who && ['wwrite', 'wguess'].includes(b.phase) && (count(b.who.answers) > count(a.who.answers) || count(b.who.guesses) > count(a.who.guesses))) sfx.bloop();
+    // Hot Take
+    if (b.hot && a.hot && b.phase === 'hrate' && count(b.hot.votes) > count(a.hot.votes)) sfx.bloop();
+    // Bomb Pass: a whoosh when the bomb moves, a pop when a vote comes in
+    if (b.bomb && a.bomb && b.phase === 'bplay') {
+      if (b.bomb.passes > a.bomb.passes) sfx.whoosh();
+      else if (b.bomb.vote && !a.bomb.vote) sfx.ding();
+      else if (b.bomb.flash && b.bomb.flash.at !== a.bomb.flash?.at) sfx.wrong();
+      else if (b.bomb.vote && a.bomb.vote && count(b.bomb.vote.yes) + count(b.bomb.vote.no) > count(a.bomb.vote.yes) + count(a.bomb.vote.no)) sfx.bloop();
+    }
+    // Who Knows Who
+    if (b.know && a.know && ['kwrite', 'kguess'].includes(b.phase) && (count(b.know.answers) > count(a.know.answers) || count(b.know.picks) > count(a.know.picks))) sfx.bloop();
     // Reflex Rumble
     if (b.reflex && a.reflex && b.phase === 'rgo' && count(b.reflex.results) > count(a.reflex.results)) sfx.bloop();
     // Memory Sketch
@@ -464,6 +534,10 @@
       case 'rready': return s.reflex?.readyUntil;
       case 'mdraw': return s.sketch?.until;
       case 'tguess': return s.line?.until;
+      case 'hrate': return s.hot?.until;
+      case 'kwrite': case 'kguess': return s.know?.until;
+      case 'xanswer': return s.peek?.until;
+      case 'uanswer': return s.hum?.until;
       default: return null;
     }
   }
@@ -484,13 +558,13 @@
   function enableSound() {
     unlockAudio();
     soundOn = true;
-    if (s) playMusic(MUSIC_FOR[s.phase] ?? 'lobby', true);
+    if (s) playMusic(SILENT.has(s.phase) ? null : MUSIC_FOR[s.phase] ?? 'lobby', true);
   }
   function toggleMusic() {
     music = !music;
     unlockAudio();
     setMusicEnabled(music);
-    if (music && s) playMusic(MUSIC_FOR[s.phase] ?? 'lobby', true);
+    if (music && s) playMusic(SILENT.has(s.phase) ? null : MUSIC_FOR[s.phase] ?? 'lobby', true);
   }
   function toggleSfx() {
     muted = !muted;
@@ -515,6 +589,7 @@
       <span class="sticker code">Room <b>{s.code}</b></span>
       <span class="pill mode">{s.mode === 'host' ? `🎤 Host: ${s.hostName}` : '🎉 Party mode'}</span>
       {#if watching}<span class="pill mode">👀 Watching</span>{/if}
+      <CrowdChip {s} />
     {/if}
     <div class="right">
       {#if !soundOn}
@@ -569,6 +644,16 @@
     <ClosestStage {s} {avatars} {now} />
   {:else if game === 'timeline'}
     <TimelineStage {s} {avatars} {now} />
+  {:else if game === 'hottake'}
+    <HotStage {s} {avatars} {now} />
+  {:else if game === 'peek'}
+    <PeekStage {s} {avatars} {now} />
+  {:else if game === 'hum'}
+    <HumStage {s} {avatars} {now} />
+  {:else if game === 'bomb'}
+    <BombStage {s} {avatars} {now} />
+  {:else if game === 'know'}
+    <KnowStage {s} {avatars} {now} />
   {/if}
   </div></div>
 
