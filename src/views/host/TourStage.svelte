@@ -3,7 +3,9 @@
   import Timer from '../../components/Timer.svelte';
   import StepFlow from '../../components/StepFlow.svelte';
   import { MODES } from '../../lib/modes.js';
-  import { T, POINTS, ITEMS, layoutOf, pathCell, itemsOf } from '../../engine/tour.js';
+  import { T, POINTS, ITEMS, layoutOf, itemsOf } from '../../engine/tour.js';
+  import { stones, smooth, islandPath, bridgeAt, curveFor } from '../../lib/island.js';
+  import { onDestroy } from 'svelte';
 
   let { s, avatars, now } = $props();
 
@@ -23,7 +25,6 @@
   };
   const fresh = (f) => f && now - f.at < 3000;
   const look = (sp) => (sp.k === 'mode' ? { icon: MODES[sp.m].icon, label: MODES[sp.m].name, c: MODES[sp.m].color, fg: '#fff' } : SPACE[sp.k]);
-  const at = (i) => units.filter((u) => (t.pos[u.id] || 0) === i);
   const mover = $derived(s.phase === 'tmove' ? U(t.moveOrder[t.moveIdx]) : null);
   const ev = $derived(mover ? t.events[mover.id] : null);
   const chooser = $derived(t ? U(t.chooser) : null);
@@ -38,6 +39,63 @@
     return -1;
   });
   const DICE = ['', '⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+
+  // ---------- Toy Island ----------
+  const geo = $derived(t && !t.mix ? stones(curveFor(layout), t.board.length) : null);
+  const road = $derived(geo ? smooth(geo.pts, geo.closed) : '');
+  const isle = $derived(geo ? islandPath(geo.W, geo.H, 3, layout.id.length) : '');
+  const bridge = $derived(geo ? bridgeAt(geo.pts, geo.cross) : null);
+  const pct = (p) => `left:${(p[0] / geo.W) * 100}%; top:${(p[1] / geo.H) * 100}%`;
+  // Palm trees and shells just outside the road, pushed away from the middle.
+  const scenery = $derived.by(() => {
+    if (!geo) return [];
+    const cx = geo.W / 2, cy = geo.H / 2;
+    const out = [];
+    const icons = ['🌴', '🌴', '🌺', '🌴', '🍄', '🌴', '🪨', '🌴'];
+    const n = geo.pts.length;
+    for (let k = 0; k < 8; k++) {
+      const p = geo.pts[Math.floor(((k + 0.5) / 8) * n) % n];
+      const dx = p[0] - cx, dy = p[1] - cy, m = Math.hypot(dx, dy) || 1;
+      const off = geo.r * 1.9;
+      out.push({ x: p[0] + (dx / m) * off, y: p[1] + (dy / m) * off, icon: icons[k] });
+    }
+    return out;
+  });
+
+  // Tokens hop space by space to where the engine put them.
+  let shown = $state({});
+  let hopping = $state({});
+  let timers = [];
+  $effect(() => {
+    if (!t || t.mix) return;
+    const n = t.board.length;
+    for (const u of s.unitOrder) {
+      const to = t.pos[u] || 0;
+      const from = shown[u];
+      if (from === undefined) { shown[u] = to; continue; }
+      if (from === to || hopping[u]) continue;
+      const ahead = (to - from + n) % n;
+      if (ahead > 12) { shown[u] = to; continue; } // swaps and teleports jump straight there
+      hopping[u] = true;
+      const hop = () => {
+        const cur = shown[u];
+        const target = t.pos[u] || 0;
+        if (cur === target) { hopping[u] = false; return; }
+        shown[u] = (cur + 1) % n;
+        timers.push(setTimeout(hop, 260));
+      };
+      timers.push(setTimeout(hop, 150));
+    }
+  });
+  onDestroy(() => timers.forEach(clearTimeout));
+  const tokenSpot = (u, i) => {
+    const here = s.unitOrder.filter((x) => (shown[x] ?? 0) === (shown[u] ?? 0));
+    const k = here.indexOf(u);
+    const p = geo.pts[(shown[u] ?? 0) % geo.pts.length];
+    if (here.length < 2) return pct([p[0], p[1] - geo.r * 0.9]);
+    const a = (k / here.length) * Math.PI * 2 - Math.PI / 2;
+    return pct([p[0] + Math.cos(a) * geo.r * 0.75, p[1] - geo.r * 0.6 + Math.sin(a) * geo.r * 0.6]);
+  };
 </script>
 
 {#if t}
@@ -45,24 +103,70 @@
     {#if t.mix}
       <div class="center solo">{@render panel()}</div>
     {:else}
-    <div class="board" class:shaped={layout.side} style="--cols:{layout.c}; --rows:{layout.r}">
+    <div class="island" class:shaped={layout.side} style="--ar:{geo.W} / {geo.H}; --sz:{(geo.r * 2 / geo.W) * 100}cqw">
+      <svg viewBox="-12 -10 {geo.W + 24} {geo.H + 20}" class="map" aria-hidden="true" style="left:{(-12 / geo.W) * 100}%; top:-10%; width:{((geo.W + 24) / geo.W) * 100}%; height:120%">
+        <defs>
+          <radialGradient id="sea" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#22b8cf" /><stop offset="0.86" stop-color="#0e7fa8" /><stop offset="0.95" stop-color="#0b5f8a" stop-opacity="0.75" /><stop offset="1" stop-color="#0b4f7a" stop-opacity="0" /></radialGradient>
+          <radialGradient id="grass" cx="50%" cy="40%" r="65%"><stop offset="0" stop-color="#6fd36a" /><stop offset="1" stop-color="#2f9a4a" /></radialGradient>
+        </defs>
+        <ellipse cx={geo.W / 2} cy={geo.H / 2} rx={geo.W / 2 + 20} ry={geo.H / 2 + 15} fill="url(#sea)" />
+        {#each [[-4, 6], [geo.W - 14, geo.H + 3], [geo.W * 0.3, geo.H + 5], [geo.W + 2, geo.H * 0.35]] as [wx, wy], i}
+          <path class="wave" style="animation-delay:{i * 0.7}s" d="M{wx},{wy} q3,-3 6,0 t6,0 t6,0" />
+        {/each}
+        <!-- the island: shadow, sand rim, grass -->
+        <path d={isle} fill="#0a3d5c" opacity="0.35" transform="translate(0 2.5)" />
+        <path d={isle} fill="#f5d38a" />
+        <path d={isle} fill="url(#grass)" transform="translate({geo.W / 2} {geo.H / 2}) scale(0.94) translate({-geo.W / 2} {-geo.H / 2})" />
+        <!-- volcano islet -->
+        <g transform="translate({geo.W - 3} 1)">
+          <ellipse cx="0" cy="7" rx="11" ry="4" fill="#f5d38a" />
+          <path d="M-9,7 L-2,-6 L2,-6 L9,7 Z" fill="#7c4a2a" />
+          <path d="M-2,-6 L2,-6 L3,-3 L0,-1 L-3,-3 Z" fill="#ff6b2c" />
+          <circle class="smoke" cx="0" cy="-9" r="2.2" fill="#e5e7eb" />
+          <circle class="smoke" style="animation-delay:1.2s" cx="1" cy="-9" r="1.8" fill="#e5e7eb" />
+        </g>
+        <text x="-2" y={geo.H + 4} font-size="7" class="boat">⛵</text>
+        <!-- river and bridge -->
+        {#if bridge && !bridge.cross}
+          <path d="M{bridge.x - 3},{bridge.y} C{bridge.x - 4},{bridge.y + 6} {bridge.x + 4},{bridge.y + 8} {bridge.x + 2},{geo.H + 10} L{bridge.x + 8},{geo.H + 10} C{bridge.x + 9},{bridge.y + 8} {bridge.x + 3},{bridge.y + 6} {bridge.x + 3},{bridge.y} Z" fill="#1aa3c8" />
+        {/if}
+        <!-- the road -->
+        <path d={road} fill="none" stroke="#7a5230" stroke-width={geo.r * 1.25} stroke-linecap="round" stroke-linejoin="round" opacity="0.55" transform="translate(0 0.8)" />
+        <path d={road} fill="none" stroke="#d9a866" stroke-width={geo.r * 1.1} stroke-linecap="round" stroke-linejoin="round" />
+        <path d={road} fill="none" stroke="#f3d39a" stroke-width="0.7" stroke-dasharray="2 2.5" stroke-linecap="round" />
+        {#if !geo.closed}
+          <path d="M{geo.pts[geo.pts.length - 1][0]},{geo.pts[geo.pts.length - 1][1]} L{geo.pts[0][0]},{geo.pts[0][1]}" stroke="#fff" stroke-width="0.6" stroke-dasharray="1 2" opacity="0.5" fill="none" />
+        {/if}
+        {#if bridge}
+          <g transform="translate({bridge.x} {bridge.y}) rotate({bridge.ang}) scale({bridge.cross ? bridge.len / (geo.r * 2.4) : 1} 1)">
+            <rect x={-geo.r * 0.9} y={-geo.r * 0.75} width={geo.r * 1.8} height={geo.r * 1.5} rx="1" fill="#a0672f" />
+            {#each [-0.6, -0.2, 0.2, 0.6] as k}<rect x={geo.r * k - 0.4} y={-geo.r * 0.75} width="0.8" height={geo.r * 1.5} fill="#7a4a1e" />{/each}
+            <rect x={-geo.r * 0.95} y={-geo.r * 0.85} width={geo.r * 1.9} height="0.8" fill="#5b3714" />
+            <rect x={-geo.r * 0.95} y={geo.r * 0.75} width={geo.r * 1.9} height="0.8" fill="#5b3714" />
+          </g>
+        {/if}
+        {#each scenery as sc}
+          <text x={sc.x} y={sc.y} font-size={geo.r * 1.3} text-anchor="middle" dominant-baseline="middle">{sc.icon}</text>
+        {/each}
+      </svg>
+
       {#each t.board as sp, i (i)}
         {@const L = look(sp)}
-        {@const [r, c] = pathCell(i, layout)}
-        <div class="space" class:hot={ev && ev.to === i} class:pickme={s.phase === 'tpick' && i === pickIdx}
-          style="grid-row:{r}; grid-column:{c}; --c:{L.c}; --fg:{L.fg}">
+        <div class="stone" class:hot={ev && ev.to === i} class:pickme={s.phase === 'tpick' && i === pickIdx} class:special={sp.k !== 'mode'}
+          style="{pct(geo.pts[i])}; --c:{L.c}; --fg:{L.fg}" title={L.label}>
           <span class="si">{L.icon}</span>
-          <span class="sl">{L.label}</span>
-          <div class="tokens">
-            {#each at(i) as u (u.id)}
-              <span class="tok" class:moving={mover?.id === u.id}><Avatar src={avatars[u.id]} color={u.color} name={u.name} size={30} /></span>
-            {/each}
-          </div>
+          {#if sp.k === 'start' || sp.k === 'goal'}<span class="sl">{sp.k === 'start' ? 'START' : 'GOAL'}</span>{/if}
         </div>
       {/each}
 
+      {#each units as u, i (u.id)}
+        <span class="tok" class:moving={mover?.id === u.id || hopping[u.id]} style={tokenSpot(u.id, i)}>
+          <Avatar src={avatars[u.id]} color={u.color} name={u.name} size={layout.side ? 30 : 36} />
+        </span>
+      {/each}
+
       {#if !layout.side}
-        <div class="center" style="grid-row:2 / {layout.r}; grid-column:2 / {layout.c}">{@render panel()}</div>
+        <div class="center inner">{@render panel()}</div>
       {/if}
     </div>
     {#if layout.side}<div class="center beside">{@render panel()}</div>{/if}
@@ -157,25 +261,42 @@
 
 <style>
   .main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 0.3rem 1.5rem 0.6rem 150px; /* room for Lewis on the left */ width: 100%; position: relative; z-index: 1; }
-  .board {
-    display: grid; grid-template-columns: repeat(var(--cols), 1fr); grid-template-rows: repeat(var(--rows), 1fr); gap: 0.55rem;
-    width: min(100%, 1500px); height: min(72vh, 760px);
+  /* Toy Island */
+  .island {
+    position: relative; container-type: inline-size; aspect-ratio: var(--ar);
+    width: min(100%, 1500px, calc(min(74vh, 800px) * 1.6)); flex: 0 1 auto;
   }
-  .space {
-    position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.1rem;
-    background: var(--c); color: var(--fg); border-radius: 18px; padding: 0.3rem; text-align: center; min-width: 0;
-    box-shadow: 0 8px 0 rgba(0, 0, 0, 0.22), 0 12px 24px -8px rgba(0, 0, 0, 0.5); transition: transform 0.25s;
+  .island.shaped { width: min(60%, calc(min(74vh, 800px) * 1.15)); }
+  .map { position: absolute; overflow: visible; filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.45)); }
+  .wave { fill: none; stroke: #bdf3ff; stroke-width: 0.8; stroke-linecap: round; opacity: 0.6; animation: wave 3.5s ease-in-out infinite; }
+  @keyframes wave { 50% { transform: translateX(3px); opacity: 0.2; } }
+  .smoke { animation: smoke 2.4s ease-out infinite; }
+  @keyframes smoke { from { transform: translateY(0) scale(0.6); opacity: 0.9; } to { transform: translateY(-8px) scale(1.6); opacity: 0; } }
+  .boat { animation: boat 4s ease-in-out infinite alternate; }
+  @keyframes boat { to { transform: translate(4px, -1px) rotate(4deg); } }
+  .stone {
+    position: absolute; width: var(--sz); height: var(--sz); transform: translate(-50%, -50%); border-radius: 50%;
+    background: var(--c); color: var(--fg); display: grid; place-items: center; z-index: 1;
+    box-shadow: 0 0.35cqw 0 rgba(0, 0, 0, 0.3), inset 0 -0.3cqw 0 rgba(0, 0, 0, 0.18), 0 0 0 0.35cqw rgba(255, 255, 255, 0.85);
+    transition: transform 0.25s;
   }
-  .space.hot, .space.pickme { transform: translateY(-6px) scale(1.06); box-shadow: 0 0 0 4px #fff, 0 0 30px var(--c), 0 8px 0 rgba(0, 0, 0, 0.22); z-index: 2; }
-  .si { font-size: clamp(1.3rem, 2.2vw, 2.1rem); line-height: 1; }
-  .sl { font-weight: 900; font-size: clamp(0.6rem, 0.85vw, 0.85rem); line-height: 1.05; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .tokens { position: absolute; bottom: -10px; left: 0; right: 0; display: flex; justify-content: center; flex-wrap: wrap; gap: 0; }
-  .tok { margin: 0 -4px; transition: transform 0.3s; }
-  .tok.moving { transform: translateY(-8px) scale(1.25); z-index: 3; }
-  .main.side { gap: 1.2rem; }
-  .board.shaped { width: auto; aspect-ratio: calc(var(--cols) * 1.05) / var(--rows); flex: 0 1 auto; max-width: 62%; gap: 0.4rem; }
-  .board.shaped .space { border-radius: 14px; }
-  .board.shaped .sl { font-size: clamp(0.5rem, 0.7vw, 0.75rem); }
+  .stone.special { box-shadow: 0 0.35cqw 0 rgba(0, 0, 0, 0.3), inset 0 -0.3cqw 0 rgba(0, 0, 0, 0.18), 0 0 0 0.35cqw #fff7d6; }
+  .stone.hot, .stone.pickme { transform: translate(-50%, -60%) scale(1.25); box-shadow: 0 0 0 0.45cqw #fff, 0 0 2.5cqw var(--c); z-index: 3; }
+  .si { font-size: calc(var(--sz) * 0.55); line-height: 1; }
+  .sl {
+    position: absolute; top: 100%; margin-top: 0.4cqw; font-family: var(--font-display); font-size: max(0.7rem, 1.1cqw);
+    color: #fff; text-shadow: 0 2px 0 rgba(0, 0, 0, 0.5); white-space: nowrap;
+  }
+  .tok { position: absolute; transform: translate(-50%, -70%); z-index: 4; transition: left 0.24s ease, top 0.24s ease; }
+  .tok.moving { z-index: 5; animation: hop 0.26s ease-in-out infinite; }
+  @keyframes hop { 50% { transform: translate(-50%, -100%); } }
+  .center.inner { position: absolute; left: 17%; right: 17%; top: 25.5%; bottom: 25.5%; z-index: 2; gap: 0.5rem; padding: 0.2rem 0.5rem; }
+  .inner .qhead { font-size: 1.05rem; }
+  .inner .sticker.big { font-size: 1.3rem; }
+  .inner .note { font-size: 1.05rem; }
+  .inner .tw { max-width: 88%; }
+  .main.side { gap: 2.4rem; }
+  @media (prefers-reduced-motion: reduce) { .wave, .smoke, .boat, .tok.moving { animation: none; } }
   .center.beside { flex: 1; min-width: 320px; max-width: 640px; align-self: stretch; }
   .beside .move { flex-direction: column; text-align: center; padding: 0.8rem 1rem; }
   .beside .mname { font-size: 1.5rem; }
@@ -206,7 +327,7 @@
   .pt { font-weight: 800; opacity: 0.9; }
   .steps { width: 100%; max-width: 900px; }
   .results { display: flex; flex-direction: column; gap: 0.4rem; min-width: 380px; }
-  .res { display: flex; align-items: center; gap: 0.7rem; background: var(--surface); border-radius: 999px; padding: 0.25rem 0.9rem 0.25rem 0.3rem; }
+  .res { display: flex; align-items: center; gap: 0.7rem; background: var(--surface); border-radius: 17px; padding: 5px 0.9rem 5px 5px; }
   .rn { font-weight: 900; flex: 1; }
   .rm { opacity: 0.75; font-weight: 800; }
   .pill.ok { background: var(--green); color: #fff; }

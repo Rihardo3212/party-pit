@@ -111,7 +111,6 @@
   .fi { display: flex; align-items: center; gap: 0.55rem; font-size: 1.15rem; }
   .fi.ok { color: var(--green); }
   .fi.close { color: var(--sun); }
-  :root[data-theme='light'] .fi.close { color: #b37a00; }
   .bubble { background: var(--surface-2); border-radius: 14px 14px 14px 4px; padding: 0.2rem 0.75rem; font-weight: 800; }
   .got { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 </style>

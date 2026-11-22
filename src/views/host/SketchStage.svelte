@@ -126,7 +126,7 @@
   .grid { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; max-width: 1050px; }
   .tile { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; animation-fill-mode: both; }
   .tile.faded { opacity: 0.6; }
-  .tag { display: flex; align-items: center; gap: 0.4rem; background: #fff; color: #2b2240; border-radius: 999px; padding: 0.15rem 0.7rem 0.15rem 0.2rem; font-weight: 900; }
+  .tag { display: flex; align-items: center; gap: 0.4rem; background: #fff; color: #2b2240; border-radius: 13px; padding: 4px 0.7rem 4px 4px; font-weight: 900; }
   .tag b { font-family: var(--font-display); font-weight: 400; color: var(--green-dark); font-size: 1.15rem; }
   .rn { max-width: 8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .nobody { font-size: 1.4rem; }

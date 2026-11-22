@@ -446,6 +446,34 @@ export const MODES = {
       tour: { label: 'Tour', detail: 'tour', rounds: 2, hidden: true }
     }
   },
+  blackjack: {
+    id: 'blackjack',
+    group: 'action',
+    steps: [
+      { icon: '🪙', label: 'Bet 100, 200 or 300' },
+      { icon: '🃏', label: 'Hit or stand on your phone' },
+      { icon: '🤖', label: 'Beat Ace, the robot dealer', tag: '2× bet' },
+      { icon: '🂡', label: 'Blackjack!', tag: '3× bet' }
+    ],
+    name: 'Blackjack',
+    icon: '🃏',
+    color: '#15803d',
+    tagline: 'Get close to 21. Beat the robot.',
+    how: [
+      'Everyone plays their own hand against Ace, the robot dealer.',
+      'Bet 100, 200 or 300 on your phone. Then tap Hit for another card or Stand to stop. Double doubles your bet for one last card.',
+      'Get closer to 21 than Ace without going over. Win = 2× your bet, Blackjack = 3×, a tie gives half back.',
+      'Going over 21 is a bust. In teams, the best hand counts for the team.'
+    ],
+    min: 1,
+    hostRole: 'The host keeps things moving and can skip ahead.',
+    lengths: {
+      quick: { label: 'Quick', detail: '5 hands · ~5 min', rounds: 5 },
+      full: { label: 'Full', detail: '8 hands · ~8 min', rounds: 8 },
+      tiny: { label: 'Tiny', detail: 'test', rounds: 1, hidden: true },
+      tour: { label: 'Tour', detail: 'tour', rounds: 2, hidden: true }
+    }
+  },
   bomb: {
     id: 'bomb',
     group: 'action',
@@ -529,6 +557,303 @@ export const MODES = {
       tiny: { label: 'Tiny', detail: 'test', rounds: 2, hidden: true }
     }
   },
+  noon: {
+    id: 'noon',
+    group: 'move',
+    move: true,
+    steps: [
+      { icon: '🔫', label: "Holster your phone" },
+      { icon: '⏳', label: "Wait for it…" },
+      { icon: '💥', label: "DRAW! Raise it and fire", tag: '+1000' }
+    ],
+    name: "High Noon",
+    icon: '🤠',
+    color: '#e8833a',
+    tagline: "Fastest draw in the room.",
+    how: [
+      "Hold your phone pointing down by your hip, like a holster.",
+      "When the big screen shouts DRAW!, raise your phone and tap to fire.",
+      "Fastest shot wins. Fire too early and you lose the round!"
+    ],
+    min: 1,
+    hostRole: 'The host keeps things moving and can skip ahead.',
+    lengths: {
+      quick: { label: 'Quick', detail: '3 rounds · ~3 min', rounds: 3 },
+      full: { label: 'Full', detail: '5 rounds · ~5 min', rounds: 5 },
+      tiny: { label: 'Tiny', detail: 'test', rounds: 1, hidden: true },
+      tour: { label: 'Tour', detail: 'tour', rounds: 1, hidden: true }
+    }
+  },
+  soda: {
+    id: 'soda',
+    group: 'move',
+    move: true,
+    steps: [
+      { icon: '🥤', label: "Grip your phone" },
+      { icon: '📳', label: "Shake shake shake!" },
+      { icon: '💦', label: "Most fizz wins", tag: '+1000' }
+    ],
+    name: "Soda Shake",
+    icon: '🥤',
+    color: '#22c55e',
+    tagline: "Shake it till it fizzes over.",
+    how: [
+      "Hold your phone tight (really tight).",
+      "Shake it like a soda can for 10 seconds. Watch your can fizz up on the big screen.",
+      "The most fizz wins!"
+    ],
+    min: 1,
+    hostRole: 'The host keeps things moving and can skip ahead.',
+    lengths: {
+      quick: { label: 'Quick', detail: '3 rounds · ~3 min', rounds: 3 },
+      full: { label: 'Full', detail: '5 rounds · ~5 min', rounds: 5 },
+      tiny: { label: 'Tiny', detail: 'test', rounds: 1, hidden: true },
+      tour: { label: 'Tour', detail: 'tour', rounds: 1, hidden: true }
+    }
+  },
+  egg: {
+    id: 'egg',
+    group: 'move',
+    move: true,
+    steps: [
+      { icon: '🥄', label: "Hold your phone flat" },
+      { icon: '🚶', label: "Do what the TV says" },
+      { icon: '🍳', label: "Tilt or bump = crack!" }
+    ],
+    name: "Egg Run",
+    icon: '🥚',
+    color: '#facc15',
+    tagline: "Don't crack the egg!",
+    how: [
+      "Hold your phone flat like a spoon with an egg on it.",
+      "Do the tasks on the big screen: walk to the door, turn around, crouch…",
+      "Tilt it or jolt it and your egg cracks. Last egg standing wins!"
+    ],
+    min: 1,
+    hostRole: 'The host keeps things moving and can skip ahead.',
+    lengths: {
+      quick: { label: 'Quick', detail: '2 rounds · ~3 min', rounds: 2 },
+      full: { label: 'Full', detail: '4 rounds · ~5 min', rounds: 4 },
+      tiny: { label: 'Tiny', detail: 'test', rounds: 1, hidden: true },
+      tour: { label: 'Tour', detail: 'tour', rounds: 1, hidden: true }
+    }
+  },
+  spin: {
+    id: 'spin',
+    group: 'move',
+    move: true,
+    steps: [
+      { icon: '📱', label: "Hold your phone out" },
+      { icon: '🌀', label: "Spin on the spot!" },
+      { icon: '🔢', label: "Most turns wins", tag: '+1000' }
+    ],
+    name: "Spin Cycle",
+    icon: '🌀',
+    color: '#06b6d4',
+    tagline: "Round and round you go.",
+    how: [
+      "Hold your phone out in front of you.",
+      "Spin around on the spot for 10 seconds. Mind the furniture!",
+      "Most full turns wins."
+    ],
+    min: 1,
+    hostRole: 'The host keeps things moving and can skip ahead.',
+    lengths: {
+      quick: { label: 'Quick', detail: '3 rounds · ~3 min', rounds: 3 },
+      full: { label: 'Full', detail: '5 rounds · ~5 min', rounds: 5 },
+      tiny: { label: 'Tiny', detail: 'test', rounds: 1, hidden: true },
+      tour: { label: 'Tour', detail: 'tour', rounds: 1, hidden: true }
+    }
+  },
+  balloon: {
+    id: 'balloon',
+    group: 'move',
+    move: true,
+    steps: [
+      { icon: '🎤', label: "Allow the microphone" },
+      { icon: '💨', label: "Blow into the phone" },
+      { icon: '💥', label: "First to pop wins", tag: '+1000' }
+    ],
+    name: "Balloon Blow",
+    icon: '🎈',
+    color: '#ec4899',
+    tagline: "Huff, puff and POP!",
+    how: [
+      "Hold the bottom of your phone (where the microphone is) near your mouth.",
+      "Blow to pump up your balloon. Keep going!",
+      "First balloon to pop wins. No mic? Tap to pump instead."
+    ],
+    min: 1,
+    hostRole: 'The host keeps things moving and can skip ahead.',
+    lengths: {
+      quick: { label: 'Quick', detail: '3 rounds · ~3 min', rounds: 3 },
+      full: { label: 'Full', detail: '5 rounds · ~5 min', rounds: 5 },
+      tiny: { label: 'Tiny', detail: 'test', rounds: 1, hidden: true },
+      tour: { label: 'Tour', detail: 'tour', rounds: 1, hidden: true }
+    }
+  },
+  reel: {
+    id: 'reel',
+    group: 'move',
+    move: true,
+    steps: [
+      { icon: '🎣', label: "Flick to cast" },
+      { icon: '🔄', label: "Wind in circles to reel" },
+      { icon: '⚠️', label: "Ease off when it tugs!" }
+    ],
+    name: "Reel It In",
+    icon: '🎣',
+    color: '#0ea5e9',
+    tagline: "The big one is out there.",
+    how: [
+      "Flick your phone forward to cast. A harder flick casts further.",
+      "Then wind your phone in circles to reel the fish in.",
+      "When your phone says TUG!, stop reeling or the line snaps. First to land a fish wins!"
+    ],
+    min: 1,
+    hostRole: 'The host keeps things moving and can skip ahead.',
+    lengths: {
+      quick: { label: 'Quick', detail: '3 rounds · ~4 min', rounds: 3 },
+      full: { label: 'Full', detail: '5 rounds · ~6 min', rounds: 5 },
+      tiny: { label: 'Tiny', detail: 'test', rounds: 1, hidden: true },
+      tour: { label: 'Tour', detail: 'tour', rounds: 1, hidden: true }
+    }
+  },
+  pong: {
+    id: 'pong',
+    group: 'move',
+    move: true,
+    steps: [
+      { icon: '🏓', label: "Hold your phone like a paddle" },
+      { icon: '👀', label: "Watch the ball on the TV" },
+      { icon: '💥', label: "Swing just in time!" }
+    ],
+    name: "Ping Pong Rally",
+    icon: '🏓',
+    color: '#f43f5e',
+    tagline: "Swing when the ball arrives!",
+    how: [
+      "The ball flies between players on the big screen.",
+      "When it comes to you, swing your phone just as it arrives (or tap SWING).",
+      "Too early or too late and you are out. Last player standing wins!"
+    ],
+    min: 2,
+    hostRole: 'The host keeps things moving and can skip ahead.',
+    lengths: {
+      quick: { label: 'Quick', detail: '3 rounds · ~4 min', rounds: 3 },
+      full: { label: 'Full', detail: '5 rounds · ~6 min', rounds: 5 },
+      tiny: { label: 'Tiny', detail: 'test', rounds: 1, hidden: true },
+      tour: { label: 'Tour', detail: 'tour', rounds: 1, hidden: true }
+    }
+  },
+  tug: {
+    id: 'tug',
+    group: 'move',
+    move: true,
+    steps: [
+      { icon: '🤝', label: "Two sides" },
+      { icon: '💪', label: "Yank your phone back again and again" },
+      { icon: '🏆', label: "Pull them over the line", tag: '+1000' }
+    ],
+    name: "Tug of War",
+    icon: '🪢',
+    color: '#a16207',
+    tagline: "Pull! Pull! PULL!",
+    how: [
+      "Players are split into two sides (alone? You pull against Lewis).",
+      "Grip your phone and yank it towards you, again and again.",
+      "Pull the rope all the way to your side to win!"
+    ],
+    min: 1,
+    hostRole: 'The host keeps things moving and can skip ahead.',
+    lengths: {
+      quick: { label: 'Quick', detail: '3 rounds · ~3 min', rounds: 3 },
+      full: { label: 'Full', detail: '5 rounds · ~5 min', rounds: 5 },
+      tiny: { label: 'Tiny', detail: 'test', rounds: 1, hidden: true },
+      tour: { label: 'Tour', detail: 'tour', rounds: 1, hidden: true }
+    }
+  },
+  flip: {
+    id: 'flip',
+    group: 'move',
+    move: true,
+    steps: [
+      { icon: '🍳', label: "Hold your phone like a pan" },
+      { icon: '⬆️', label: "Flick up to flip" },
+      { icon: '🥞', label: "Hold flat to catch!" }
+    ],
+    name: "Pancake Flip",
+    icon: '🥞',
+    color: '#f59e0b',
+    tagline: "Flip it high, catch it flat.",
+    how: [
+      "Hold your phone flat like a frying pan.",
+      "Flick it up to toss the pancake. Harder = higher.",
+      "Hold the pan flat when it comes down to catch it. 3 flips, highest total wins!"
+    ],
+    min: 1,
+    hostRole: 'The host keeps things moving and can skip ahead.',
+    lengths: {
+      quick: { label: 'Quick', detail: '2 rounds · ~3 min', rounds: 2 },
+      full: { label: 'Full', detail: '4 rounds · ~5 min', rounds: 4 },
+      tiny: { label: 'Tiny', detail: 'test', rounds: 1, hidden: true },
+      tour: { label: 'Tour', detail: 'tour', rounds: 1, hidden: true }
+    }
+  },
+  maze: {
+    id: 'maze',
+    group: 'move',
+    move: true,
+    steps: [
+      { icon: '📱', label: "Hold your phone flat" },
+      { icon: '↔️', label: "Tilt to roll the ball" },
+      { icon: '🏁', label: "First out wins", tag: '+1000' }
+    ],
+    name: "Tilt Maze",
+    icon: '🧭',
+    color: '#8b5cf6',
+    tagline: "Roll the ball to the exit.",
+    how: [
+      "A maze appears on your phone. Everyone gets the same one.",
+      "Tilt your phone to roll the ball to the 🏁.",
+      "First one out wins!"
+    ],
+    min: 1,
+    hostRole: 'The host keeps things moving and can skip ahead.',
+    lengths: {
+      quick: { label: 'Quick', detail: '3 rounds · ~4 min', rounds: 3 },
+      full: { label: 'Full', detail: '5 rounds · ~6 min', rounds: 5 },
+      tiny: { label: 'Tiny', detail: 'test', rounds: 1, hidden: true },
+      tour: { label: 'Tour', detail: 'tour', rounds: 1, hidden: true }
+    }
+  },
+  beat: {
+    id: 'beat',
+    group: 'move',
+    move: true,
+    steps: [
+      { icon: '👂', label: "Listen to the count-in" },
+      { icon: '📳', label: "Shake or tap on every beat" },
+      { icon: '🎯', label: "Best timing wins", tag: '+1000' }
+    ],
+    name: "Beat Keeper",
+    icon: '🥁',
+    color: '#6366f1',
+    tagline: "Feel the rhythm.",
+    how: [
+      "A beat plays on your phone with a bouncing ball.",
+      "Shake your phone (or tap) exactly on every beat.",
+      "The closer to the beat, the more points."
+    ],
+    min: 1,
+    hostRole: 'The host keeps things moving and can skip ahead.',
+    lengths: {
+      quick: { label: 'Quick', detail: '3 rounds · ~3 min', rounds: 3 },
+      full: { label: 'Full', detail: '5 rounds · ~5 min', rounds: 5 },
+      tiny: { label: 'Tiny', detail: 'test', rounds: 1, hidden: true },
+      tour: { label: 'Tour', detail: 'tour', rounds: 1, hidden: true }
+    }
+  },
   know: {
     id: 'know',
     group: 'social',
@@ -558,7 +883,7 @@ export const MODES = {
   }
 };
 
-export const MODE_LIST = ['tour', 'mix', 'board', 'wedge', 'fakeout', 'pindrop', 'closest', 'timeline', 'peek', 'hum', 'whowrote', 'oddone', 'hottake', 'know', 'jokes', 'doodle', 'scribble', 'sketch', 'reflex', 'bomb'];
+export const MODE_LIST = ['tour', 'mix', 'board', 'wedge', 'fakeout', 'pindrop', 'closest', 'timeline', 'peek', 'hum', 'whowrote', 'oddone', 'hottake', 'know', 'jokes', 'doodle', 'scribble', 'sketch', 'reflex', 'bomb', 'blackjack', 'noon', 'soda', 'egg', 'spin', 'balloon', 'reel', 'pong', 'tug', 'flip', 'maze', 'beat'];
 
 // Mode groups for the picker, home page and How to play page.
 export const GROUPS = [
@@ -566,7 +891,8 @@ export const GROUPS = [
   { id: 'trivia', label: 'Trivia', icon: '🧠' },
   { id: 'social', label: 'Social', icon: '💬' },
   { id: 'drawing', label: 'Drawing', icon: '✏️' },
-  { id: 'action', label: 'Action', icon: '⚡' }
+  { id: 'action', label: 'Action', icon: '⚡' },
+  { id: 'move', label: 'Move', icon: '🤸' }
 ];
 export const modesIn = (g) => MODE_LIST.filter((id) => MODES[id].group === g);
 export const GROUP_LIST = GROUPS.filter((g) => modesIn(g.id).length);
@@ -582,7 +908,7 @@ export const EXTRAS = [
   { icon: '🎽', label: '5+ players = teams' },
   { icon: '🎤', label: 'Optional host' },
   { icon: '😂', label: 'Send reactions' },
-  { icon: '🌙', label: 'Light or dark' }
+  { icon: '🎙️', label: 'Lewis hosts' }
 ];
 
 export function lengthOf(settings) {

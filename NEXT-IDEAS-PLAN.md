@@ -93,6 +93,16 @@ modes and awards until his lines batch.
   phone card flips, living backdrop pulsing with the music, scores count up and race, +points fly,
   options flip in, avatars bob, squishy buttons, Lewis waves.
 
+## Round 4 (built)
+- **Move games 🤸** (new "Move" group, `engine/move.js`): High Noon, Soda Shake, Egg Run, Spin Cycle, Balloon Blow,
+  Reel It In, Ping Pong Rally, Tug of War, Pancake Flip, Tilt Maze, Beat Keeper. Phones use motion / tilt / mic,
+  every game has a touch fallback. Motion needs HTTPS (the GitHub Pages site).
+- **Blackjack 🃏** (Action, min 1): everyone vs Ace the robot dealer.
+- **Toy Island board** for Party Tour (curvy road, stepping stones, volcano, bridge, hopping tokens) and **shake to roll**.
+- **Polish**: softer phone transitions, falling confetti, drum roll before the winner, cleaner question screen,
+  floating reaction emojis, light mode removed.
+
 ## Next
+- A real playtest of the move games on phones (tune shake/tilt thresholds).
 - Pin Drop places (needs properly licensed photos).
 - Maybe: audience votes in Fake Out, more board shapes, a real playtest with friends.

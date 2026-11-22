@@ -6,6 +6,7 @@ import { say, hush, preload, lewis } from './presenter.svelte.js';
 import { line, placeLine, bombCatLine } from '../content/presenter.js';
 import { placeById } from '../engine/pindrop.js';
 import { catOf } from '../engine/bomb.js';
+import { REVEAL_AT } from './awards.js';
 
 const count = (o) => Object.keys(o || {}).length;
 const chance = (p) => Math.random() < p;
@@ -177,6 +178,20 @@ function phase(a, b) {
     case 'rready': if (b.reflex?.game) say(line(`reflex_${b.reflex.game}`), { interrupt: true, maxWait: 1000 }); break;
     case 'rgo': hush(); break;
     case 'rresult': if (chance(0.5)) say(line('reflexWin'), { interrupt: true }); break;
+    case 'vready': if (b.move?.game && (b.move.round > 1 || b.settings.sub)) say(line(`move_${b.move.game}`), { interrupt: true, maxWait: 1500 }); break;
+    case 'vgo': hush(); break;
+    case 'vresult': if (Object.values(b.move?.points || {}).includes(1000) && chance(0.6)) say(line('moveWin'), { interrupt: true }); break;
+    case 'bjbet': if (b.bj?.round > 1 && chance(0.5)) say(line('bjBet'), { maxWait: 2000 }); break;
+    case 'bjresult': {
+      const d = b.bj?.dealer || [];
+      const vals = d.map((c) => c.slice(0, -1)).map((r) => (r === 'A' ? 11 : ['J', 'Q', 'K'].includes(r) ? 10 : Number(r)));
+      let tot = vals.reduce((x, y) => x + y, 0), aces = vals.filter((v) => v === 11).length;
+      while (tot > 21 && aces--) tot -= 10;
+      const anyWin = Object.values(b.bj?.points || {}).some((p) => p > 0);
+      if (tot > 21) say(line('bjDealerBust'), { interrupt: true });
+      else if (!anyWin) say(line('bjDealerWin'), { interrupt: true });
+      break;
+    }
 
     // Party Tour
     case 'troll': if (b.tour?.round === 1 || chance(0.4)) say(line('tourRoll'), { interrupt: true }); break;
@@ -252,6 +267,7 @@ function phase(a, b) {
       const r = b.results;
       if (!r) break;
       hush();
+      say(line('drumroll'), { interrupt: true, maxWait: 1500 });
       setTimeout(() => {
         if (r.winners.length > 1) say(line('tie'));
         else say(byUnit(b, r.winners[0], 'winner', 'winnerTeam'));
@@ -260,7 +276,7 @@ function phase(a, b) {
           say(line('awards'), { maxWait: 9000 });
           for (const aw of r.awards) say(line(`award_${aw.key}`), { maxWait: 16000 });
         }
-      }, 1200);
+      }, REVEAL_AT + 400);
       break;
     }
   }

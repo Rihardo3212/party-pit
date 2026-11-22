@@ -28,7 +28,9 @@
     uplay: ['🎶', 'Reveal now'], uanswer: ['⏱️', 'Time up for the buzzer'], ureveal: ['➡️', 'Next tune'],
     bboom: ['➡️', 'Next round'],
     jplay: ['🤫', 'Reveal now'], janswer: ['⏱️', 'Time up for the buzzer'], jreveal: ['➡️', 'Next question'],
-    kwrite: ['✍️', 'Start guessing now'], kguess: ['🤝', 'Reveal now'], kreveal: ['➡️', 'Next question']
+    kwrite: ['✍️', 'Start guessing now'], kguess: ['🤝', 'Reveal now'], kreveal: ['➡️', 'Next question'],
+    vready: ['🤸', 'Start now'], vgo: ['⏱️', 'End now'], vresult: ['➡️', 'Next round'],
+    bjbet: ['🪙', 'Deal now'], bjplay: ['🃏', 'Dealer’s turn now'], bjdealer: ['🤖', 'Show results'], bjresult: ['➡️', 'Next hand']
   };
 </script>
 

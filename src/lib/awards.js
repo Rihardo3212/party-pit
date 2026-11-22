@@ -9,6 +9,11 @@ export const AWARDS = [
   { key: 'fooled', icon: '🤥', name: 'Master Liar', color: '#ff4fa3', min: 2, what: (v) => `Fooled people ${v} times` },
   { key: 'art', icon: '🎨', name: 'Star Artist', color: '#ff7a1a', min: 2, what: (v) => `Wowed the crowd ${v} times` },
   { key: 'buzz', icon: '⚡', name: 'Fastest Finger', color: '#ffc400', low: true, what: (v) => `Right in ${(v / 1000).toFixed(2)} s` },
+  { key: 'moveTop', icon: '🤸', name: 'Mover & Shaker', color: '#06b6d4', min: 2, what: (v) => `Won ${v} move games` },
+  { key: 'pong', icon: '🏓', name: 'Rally Master', color: '#f43f5e', min: 4, what: (v) => `Returned ${v} balls` },
+  { key: 'pulls', icon: '💪', name: 'Muscles', color: '#a16207', min: 30, what: (v) => `${v} rope pulls` },
+  { key: 'bj21', icon: '🂡', name: 'Card Shark', color: '#15803d', min: 2, what: (v) => `${v} blackjacks` },
+  { key: 'bust', icon: '💥', name: 'Bust Buster', color: '#f97316', min: 3, what: (v) => `Went bust ${v} times` },
   { key: 'reflex', icon: '🏎️', name: 'Lightning Reflexes', color: '#2f8cff', min: 2, what: (v) => `Won ${v} reflex games` },
   { key: 'close', icon: '🎯', name: 'Bullseye', color: '#e0213a', min: 2, what: (v) => `Closest ${v} times` },
   { key: 'hot', icon: '🌶️', name: 'Spice Lord', color: '#e0213a', min: 2, what: (v) => `Hottest take ${v} times` },
@@ -21,8 +26,10 @@ export const AWARDS = [
   { key: 'wrong', icon: '😬', name: 'Oops!', color: '#ff7a1a', min: 2, what: (v) => `${v} wrong answers` }
 ];
 
+// The end screen: curtains close, drum roll, and the winner is revealed at REVEAL_AT (ms).
+export const REVEAL_AT = 2200;
 // When the first award card pops in on the end screen (ms), after the podium. Cards follow every 450 ms.
-export const AWARDS_AT = (s) => 300 + (s.results?.ranked?.length || 0) * 180 + 900;
+export const AWARDS_AT = (s) => REVEAL_AT + 300 + (s.results?.ranked?.length || 0) * 180 + 900;
 export const AWARD_GAP = 450;
 
 export const awardInfo =(key) => AWARDS.find((a) => a.key === key);

@@ -31,7 +31,8 @@
 
 {:else if (s.phase === 'question' || s.phase === 'answer' || s.phase === 'reveal') && cur}
   <section class="main q">
-    <div class="qhead">
+    <div class="console">
+    <div class="tab">
       <span class="chip">{cur.icon} {cur.cat}</span>
       <span class="chip sun">{cur.value}</span>
     </div>
@@ -78,6 +79,7 @@
           </div>
         </div>
       {/if}
+    </div>
     </div>
   </section>
 
@@ -174,7 +176,7 @@
     padding: 0.3rem 2.5rem 1rem; max-width: 1400px; width: 100%; margin: 0 auto; position: relative; z-index: 1;
   }
   .q { justify-content: center; }
-  .turn { padding: 0.4rem 1.6rem 0.4rem 0.45rem; }
+  .turn { padding: 7px 1.6rem 7px 7px; border-radius: 23px; }
   .turn h2 { font-size: 1.8rem; }
   .qhead { display: flex; gap: 0.7rem; align-items: center; font-size: 1.5rem; }
   .qwrap { width: 100%; max-width: 1150px; }
@@ -188,6 +190,7 @@
     text-shadow: 0 3px 0 rgba(0, 0, 0, 0.2);
     box-shadow: 0 8px 20px -6px color-mix(in srgb, var(--green) 70%, transparent), 0 0 40px rgba(34, 197, 94, 0.5);
   }
+  .console .status { min-height: 5.2rem; }
   .status { min-height: 6.5rem; display: flex; flex-direction: column; align-items: center; gap: 0.8rem; width: 100%; max-width: 640px; }
   .spill {
     font-family: var(--font-display); font-size: 1.85rem;

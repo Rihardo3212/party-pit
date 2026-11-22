@@ -127,7 +127,7 @@
   .tick { z-index: 1; }
 
   .ranks { display: flex; gap: 0.6rem; flex-wrap: wrap; justify-content: center; max-width: 1100px; }
-  .rk { display: flex; align-items: center; gap: 0.5rem; background: var(--surface-hi); border-radius: 999px; padding: 0.25rem 0.9rem 0.25rem 0.3rem; }
+  .rk { display: flex; align-items: center; gap: 0.5rem; background: var(--surface-hi); border-radius: 15px; padding: 5px 0.9rem 5px 5px; }
   .rk.first { box-shadow: 0 0 0 3px var(--sun); }
   .nm { font-weight: 900; }
   .pts { font-family: var(--font-display); color: var(--green); font-size: 1.2rem; }

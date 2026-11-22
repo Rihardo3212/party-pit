@@ -120,6 +120,54 @@ export const LINES = {
     "This is Reflex Rumble! Quick little challenges. Fingers at the ready!",
     "Reflex Rumble! Tap, mash and shake your way to glory."
   ],
+  intro_noon: [
+    "High Noon! Holster your phones, partners. When I say draw, you'd better be quick.",
+    "It's High Noon! Fastest draw wins. Shoot too early and you're out, cowboy."
+  ],
+  intro_soda: [
+    "Soda Shake! Grip your phone and shake it like a fizzy drink. Hold on tight!",
+    "It's Soda Shake! Shake, shake, shake! Please don't throw your phone at the telly."
+  ],
+  intro_egg: [
+    "Egg Run! Hold your phone flat like a spoon with an egg on it. Don't crack it!",
+    "It's Egg Run! Steady hands, everyone. One wobble and it's scrambled eggs."
+  ],
+  intro_spin: [
+    "Spin Cycle! Hold your phone out and spin around. Mind the furniture!",
+    "It's Spin Cycle! Round and round you go. Try not to fall over."
+  ],
+  intro_balloon: [
+    "Balloon Blow! Blow into your phone to pump up your balloon. First to pop wins!",
+    "It's Balloon Blow! Huff and puff, everybody. Mind the spit."
+  ],
+  intro_reel: [
+    "Reel It In! Flick to cast, wind in circles to reel. And when it tugs, ease off!",
+    "It's Reel It In! There's a big one out there. Go and get it."
+  ],
+  intro_pong: [
+    "Ping Pong Rally! Swing your phone when the ball comes to you. Miss it and you're out!",
+    "It's Ping Pong Rally! Watch the ball, swing on time, and please hold on to your phone."
+  ],
+  intro_tug: [
+    "Tug of War! Yank your phone back, again and again. Pull them over the line!",
+    "It's Tug of War! Pull! Pull! Pull! Muscles at the ready."
+  ],
+  intro_flip: [
+    "Pancake Flip! Flick your phone up to toss, then hold it flat to catch.",
+    "It's Pancake Flip! Highest flips win. Dropped pancakes don't count."
+  ],
+  intro_maze: [
+    "Tilt Maze! Tilt your phone to roll the ball to the flag. First one out wins!",
+    "It's Tilt Maze! Gentle tilts, everyone. Gentle!"
+  ],
+  intro_beat: [
+    "Beat Keeper! Shake or tap on every beat. Feel the rhythm!",
+    "It's Beat Keeper! Listen to the count-in, then stay on the beat."
+  ],
+  intro_blackjack: [
+    "Blackjack! Get close to twenty-one without going over, and beat Ace, our robot dealer.",
+    "It's Blackjack! Place your bets. Ace the robot is feeling lucky tonight."
+  ],
 
   // ---------- Brain Board ----------
   pick: [
@@ -450,6 +498,34 @@ export const LINES = {
     "What reflexes! Are you even human?",
     "And we have a winner!"
   ],
+  move_noon: ["Holster those phones. Steady now."],
+  move_soda: ["Grip it tight. Get ready to shake!"],
+  move_egg: ["Phones flat, everyone. Eggs on spoons."],
+  move_spin: ["Find some space. Ready to spin?"],
+  move_balloon: ["Phones to your mouths. Deep breath!"],
+  move_reel: ["Rods at the ready. Get set to cast!"],
+  move_pong: ["Paddles up! Watch the ball."],
+  move_tug: ["Grab the rope. Both hands!"],
+  move_flip: ["Pans ready. Let's flip some pancakes!"],
+  move_maze: ["Phones flat. Here comes the maze."],
+  move_beat: ["Listen closely. Here comes the beat."],
+  moveWin: [
+    "What a performance!",
+    "Look at you go! Superstar.",
+    "That's how it's done!"
+  ],
+  bjBet: [
+    "Place your bets, everyone!",
+    "How brave are we feeling? Place your bets."
+  ],
+  bjDealerBust: [
+    "Ace has gone bust! Everyone still standing wins.",
+    "Oh dear, the robot is bust. Pay up, Ace!"
+  ],
+  bjDealerWin: [
+    "Ace wins this one. Beep boop.",
+    "The house wins! The robot looks very smug."
+  ],
 
   // ---------- Party Tour ----------
   tourRoll: [
@@ -460,6 +536,11 @@ export const LINES = {
   tourBonus: [
     "A bonus space! Lucky you!",
     "Ooh, free points! Don't spend them all at once."
+  ],
+  drumroll: [
+    "Drum roll, please!",
+    "And the winner is...",
+    "The moment of truth! Drum roll!"
   ],
   tourGoal: [
     "Right in the middle of the spiral! That's the goal! Five hundred points!",

@@ -148,6 +148,18 @@ export const sfx = {
       hiss(t, 0.06, 0.05 + 0.18 * (i / hits), 'bandpass', 1800, null, 0.8);
     }
   },
+  // A snare roll that swells, with low tom hits under it (for the winner reveal).
+  bigDrumroll: (dur = 2) => {
+    const c = ac();
+    if (!c || muted) return;
+    const hits = Math.floor(dur * 26);
+    for (let i = 0; i < hits; i++) {
+      const t = (i / hits) * dur;
+      hiss(t, 0.05, 0.05 + 0.22 * Math.pow(i / hits, 1.5), 'bandpass', 2200, null, 0.9);
+    }
+    for (let i = 0; i < Math.floor(dur * 2); i++) tone(95, i * 0.5, 0.18, 'sine', 0.12 + i * 0.03, 60);
+  },
+  crash: () => { hiss(0, 1.6, 0.26, 'highpass', 5000, 3000, 0.5); tone(70, 0, 0.3, 'sine', 0.3, 40); },
   rise: () => tone(220, 0, 0.9, 'sawtooth', 0.07, 880),
   reveal: () => { tone(330, 0, 0.12, 'triangle', 0.14); tone(494, 0.1, 0.12, 'triangle', 0.14); tone(659, 0.2, 0.4, 'triangle', 0.14); },
   fanfare: () => {

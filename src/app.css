@@ -1,7 +1,7 @@
 /* Party Pit look: "toy box 3D".
    Glossy plastic buttons with real depth, chunky display type, sticker badges,
    candy-colored tiles and controller-colored answer buttons (A red, B blue, C yellow, D green).
-   Dark mode is the default; [data-theme="light"] switches to light. */
+   Dark mode only. */
 
 :root {
   --font-display: 'Lilita One', 'Nunito', 'Arial Rounded MT Bold', system-ui, sans-serif;
@@ -48,25 +48,6 @@
   font-weight: 700;
   color: var(--ink);
   color-scheme: dark;
-}
-
-:root[data-theme='light'] {
-  --bg: #f6f0e3;
-  --blob1: rgba(255, 59, 79, 0.16);
-  --blob2: rgba(47, 140, 255, 0.16);
-  --blob3: rgba(255, 196, 0, 0.2);
-  --blob4: rgba(34, 197, 94, 0.14);
-  --dots: rgba(70, 40, 10, 0.07);
-  --surface: #ffffff;
-  --surface-hi: #ffffff;
-  --surface-2: #f1ebdf;
-  --well: #e8e0cf;
-  --edge: #d3c8b2;
-  --ink: #2b2240;
-  --muted: #847a95;
-  --lift: 0 7px 0 var(--edge), 0 14px 26px rgba(80, 50, 10, 0.16);
-  --shine: 0 0 0 transparent;
-  color-scheme: light;
 }
 
 * { box-sizing: border-box; }
@@ -158,7 +139,6 @@ button { font: inherit; cursor: pointer; border: none; color: inherit; backgroun
 .btn.sun { --c: var(--sun); color: #3a2a00; }
 .btn.purple { --c: var(--purple); }
 .btn.ghost { --c: var(--surface-hi); color: var(--ink); box-shadow: 0 10px 22px -10px rgba(0, 0, 0, 0.55); }
-:root[data-theme='light'] .btn.ghost { --c: #ffffff; box-shadow: 0 10px 22px -10px rgba(80, 50, 10, 0.3); }
 .btn.big { font-size: 1.45rem; padding: 0.82em 1.8em 0.88em; }
 .btn.small { font-size: 0.95rem; padding: 0.5em 1.1em 0.56em; }
 .btn.block { width: 100%; }
@@ -253,6 +233,25 @@ button.opt:active:not(:disabled) { transform: scale(0.97); }
 .opt.wrong { background: var(--red); color: #fff; box-shadow: 0 10px 22px -8px rgba(255, 59, 79, 0.6); }
 .opt.faded:not(.wrong):not(.correct) { opacity: 0.35; }
 
+/* ---------- game console ---------- */
+/* One shared surface for a question: label tab on top, the question, the options and the timer
+   all live together, so the screen reads as one thing instead of a pile of cards. */
+.console {
+  position: relative; width: 100%; max-width: 1200px;
+  display: flex; flex-direction: column; align-items: center; gap: 1rem;
+  padding: 2.3rem 1.6rem 1.3rem;
+  border-radius: 40px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.035));
+  border: 2px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 34px 70px -24px rgba(0, 0, 0, 0.7);
+}
+.console > .tab {
+  position: absolute; top: 0; left: 50%; transform: translate(-50%, -50%);
+  display: flex; gap: 0.6rem; align-items: center; font-size: 1.35rem; white-space: nowrap;
+}
+.console .opt { box-shadow: none; }
+.console .options { width: 100%; }
+
 /* ---------- inputs ---------- */
 
 input.field {
@@ -304,7 +303,6 @@ input.field:focus { border-color: var(--ring); }
 .muted { color: var(--muted); }
 .footer { text-align: center; color: var(--muted); font-size: 0.9rem; padding: 1rem; }
 .notice { background: rgba(255, 196, 0, 0.15); color: var(--sun); border-radius: 14px; padding: 0.6rem 0.9rem; font-size: 0.95rem; }
-:root[data-theme='light'] .notice { color: #8a5d00; }
 
 .timer { width: 100%; height: 16px; border-radius: 99px; overflow: hidden; background: var(--well); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.35); }
 .timer > div {

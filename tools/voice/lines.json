@@ -224,6 +224,102 @@
   "text": "Reflex Rumble! Tap, mash and shake your way to glory."
  },
  {
+  "id": "47fad84e4ec54f57",
+  "text": "High Noon! Holster your phones, partners. When I say draw, you'd better be quick."
+ },
+ {
+  "id": "d7e84c69decd2abe",
+  "text": "It's High Noon! Fastest draw wins. Shoot too early and you're out, cowboy."
+ },
+ {
+  "id": "bde301b740a71822",
+  "text": "Soda Shake! Grip your phone and shake it like a fizzy drink. Hold on tight!"
+ },
+ {
+  "id": "0d35766c46f5d7e5",
+  "text": "It's Soda Shake! Shake, shake, shake! Please don't throw your phone at the telly."
+ },
+ {
+  "id": "38dd877078399b46",
+  "text": "Egg Run! Hold your phone flat like a spoon with an egg on it. Don't crack it!"
+ },
+ {
+  "id": "e193feee6efadf42",
+  "text": "It's Egg Run! Steady hands, everyone. One wobble and it's scrambled eggs."
+ },
+ {
+  "id": "9e40ce385ccfca20",
+  "text": "Spin Cycle! Hold your phone out and spin around. Mind the furniture!"
+ },
+ {
+  "id": "fbcb4317ed574fdd",
+  "text": "It's Spin Cycle! Round and round you go. Try not to fall over."
+ },
+ {
+  "id": "1679f4f6e0b1a5f2",
+  "text": "Balloon Blow! Blow into your phone to pump up your balloon. First to pop wins!"
+ },
+ {
+  "id": "738930cbb065aa2f",
+  "text": "It's Balloon Blow! Huff and puff, everybody. Mind the spit."
+ },
+ {
+  "id": "370ac0cdc2e30148",
+  "text": "Reel It In! Flick to cast, wind in circles to reel. And when it tugs, ease off!"
+ },
+ {
+  "id": "ff1cd4eab347ca73",
+  "text": "It's Reel It In! There's a big one out there. Go and get it."
+ },
+ {
+  "id": "6e658cd04e3288f7",
+  "text": "Ping Pong Rally! Swing your phone when the ball comes to you. Miss it and you're out!"
+ },
+ {
+  "id": "934522ef6614220e",
+  "text": "It's Ping Pong Rally! Watch the ball, swing on time, and please hold on to your phone."
+ },
+ {
+  "id": "d2db7ef252ab8a1a",
+  "text": "Tug of War! Yank your phone back, again and again. Pull them over the line!"
+ },
+ {
+  "id": "407b172319bdc5eb",
+  "text": "It's Tug of War! Pull! Pull! Pull! Muscles at the ready."
+ },
+ {
+  "id": "839ea9b77cd6c9ba",
+  "text": "Pancake Flip! Flick your phone up to toss, then hold it flat to catch."
+ },
+ {
+  "id": "c92e270285075169",
+  "text": "It's Pancake Flip! Highest flips win. Dropped pancakes don't count."
+ },
+ {
+  "id": "e6f0fc9c7d81637f",
+  "text": "Tilt Maze! Tilt your phone to roll the ball to the flag. First one out wins!"
+ },
+ {
+  "id": "f0651f15699637f2",
+  "text": "It's Tilt Maze! Gentle tilts, everyone. Gentle!"
+ },
+ {
+  "id": "3594df7e6ac91e0d",
+  "text": "Beat Keeper! Shake or tap on every beat. Feel the rhythm!"
+ },
+ {
+  "id": "7b357449d006b37f",
+  "text": "It's Beat Keeper! Listen to the count-in, then stay on the beat."
+ },
+ {
+  "id": "769046be114aa4c0",
+  "text": "Blackjack! Get close to twenty-one without going over, and beat Ace, our robot dealer."
+ },
+ {
+  "id": "6fe0bb8a6540401f",
+  "text": "It's Blackjack! Place your bets. Ace the robot is feeling lucky tonight."
+ },
+ {
   "id": "a96ca422401fa72c",
   "text": "Pick a tile, any tile!"
  },
@@ -1096,6 +1192,86 @@
   "text": "And we have a winner!"
  },
  {
+  "id": "c141248ccf87561f",
+  "text": "Holster those phones. Steady now."
+ },
+ {
+  "id": "100800996ab09dbf",
+  "text": "Grip it tight. Get ready to shake!"
+ },
+ {
+  "id": "e0dc720fd5ade98e",
+  "text": "Phones flat, everyone. Eggs on spoons."
+ },
+ {
+  "id": "160252f7eef8460a",
+  "text": "Find some space. Ready to spin?"
+ },
+ {
+  "id": "0d03ff5191a3dee4",
+  "text": "Phones to your mouths. Deep breath!"
+ },
+ {
+  "id": "8a7952bd9897227c",
+  "text": "Rods at the ready. Get set to cast!"
+ },
+ {
+  "id": "e86a31478e6e3683",
+  "text": "Paddles up! Watch the ball."
+ },
+ {
+  "id": "3cf6bd52eaa28154",
+  "text": "Grab the rope. Both hands!"
+ },
+ {
+  "id": "55313c8532e4fd88",
+  "text": "Pans ready. Let's flip some pancakes!"
+ },
+ {
+  "id": "fb9cab5a913a5274",
+  "text": "Phones flat. Here comes the maze."
+ },
+ {
+  "id": "aa7bb0ddd3d75302",
+  "text": "Listen closely. Here comes the beat."
+ },
+ {
+  "id": "9b331ed1bb680d1c",
+  "text": "What a performance!"
+ },
+ {
+  "id": "9109a71860adfd79",
+  "text": "Look at you go! Superstar."
+ },
+ {
+  "id": "010eef34097bc6b3",
+  "text": "That's how it's done!"
+ },
+ {
+  "id": "b1c6bdbf2473ec17",
+  "text": "Place your bets, everyone!"
+ },
+ {
+  "id": "119f13c085de48dc",
+  "text": "How brave are we feeling? Place your bets."
+ },
+ {
+  "id": "7367ac9420f1fe6b",
+  "text": "Ace has gone bust! Everyone still standing wins."
+ },
+ {
+  "id": "3052f8fc605d23fc",
+  "text": "Oh dear, the robot is bust. Pay up, Ace!"
+ },
+ {
+  "id": "47eb30b12ebded81",
+  "text": "Ace wins this one. Beep boop."
+ },
+ {
+  "id": "40a018d5a10c2b77",
+  "text": "The house wins! The robot looks very smug."
+ },
+ {
   "id": "a0f2800762f59a20",
   "text": "Dice at the ready! Everybody roll!"
  },
@@ -1114,6 +1290,18 @@
  {
   "id": "df02b97c929b6307",
   "text": "Ooh, free points! Don't spend them all at once."
+ },
+ {
+  "id": "a1d73a41e9b7dcc8",
+  "text": "Drum roll, please!"
+ },
+ {
+  "id": "56f6e3f2ebf494ac",
+  "text": "And the winner is..."
+ },
+ {
+  "id": "fda7a4cb5cebebe5",
+  "text": "The moment of truth! Drum roll!"
  },
  {
   "id": "1e62e78e3b77c349",

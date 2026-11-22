@@ -63,7 +63,6 @@
   }
   .shape { width: var(--sz); height: var(--sz); opacity: 0.16; transform: rotate(var(--rot)); }
   .stage .shape { opacity: 0.2; }
-  :global(:root[data-theme='light']) .shape { opacity: 0.22; }
   .pulse .shape { animation: thump var(--beat) ease-out infinite; }
   @keyframes thump { 0% { scale: 1.12; } 40%, 100% { scale: 1; } }
 

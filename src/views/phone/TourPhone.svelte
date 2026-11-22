@@ -4,6 +4,8 @@
   import { MODES } from '../../lib/modes.js';
   import { POINTS, ITEMS, itemsOf } from '../../engine/tour.js';
   import { sfx } from '../../lib/sound.js';
+  import { onDestroy } from 'svelte';
+  import { sensors, askMotion, onShake } from '../../lib/sensors.svelte.js';
 
   let { s, myUnit, send, now, react } = $props();
 
@@ -33,6 +35,24 @@
     send('troll');
     setTimeout(() => (rolling = false), 1500);
   }
+
+  // Shake the phone to roll: a few shakes rattle the dice, then it rolls.
+  let shakes = $state(0);
+  let offShake = null;
+  $effect(() => {
+    const on = s.phase === 'troll' && !mine;
+    if (on && !offShake) {
+      shakes = 0;
+      offShake = onShake(() => {
+        if (rolling || mine) return;
+        shakes += 1;
+        sfx.tick();
+        navigator.vibrate?.(25);
+        if (shakes >= 3) roll();
+      }, { threshold: 13, cooldown: 180 });
+    } else if (!on && offShake) { offShake(); offShake = null; }
+  });
+  onDestroy(() => offShake?.());
 </script>
 
 {#if t}
@@ -60,7 +80,11 @@
           </div>
           <p class="muted tip">Use an item before you roll (one per turn).</p>
         {/if}
-        <button class="btn sun huge" class:shake={rolling} onclick={roll}>🎲<br />Roll!</button>
+        {#if sensors.ask}
+          <button class="btn sun block" onclick={askMotion}>📳 Allow motion to shake the dice</button>
+        {/if}
+        <button class="btn sun huge" class:shake={rolling || shakes > 0} onclick={roll}>🎲<br />{sensors.live ? 'Shake!' : 'Roll!'}</button>
+        <p class="muted">{sensors.live ? 'Shake your phone to roll (or tap)' : 'Tap to roll, or shake your phone'}</p>
         {#if s.teamMode}<p class="muted">Anyone in your team can roll.</p>{/if}
       {/if}
     </div>

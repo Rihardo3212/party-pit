@@ -32,9 +32,12 @@ import peek from './peek.js';
 import hum from './hum.js';
 import bomb from './bomb.js';
 import know from './know.js';
+import move from './move.js';
+import blackjack from './blackjack.js';
 import jokes, { MAX_PACK, MAX_Q, MAX_A } from './jokes.js';
 
-export const ENGINES = { board, wedge, fakeout, doodle, pindrop, closest, timeline, tour, scribble, oddone, whowrote, reflex, sketch, hottake, peek, hum, bomb, know, jokes, mix: tour };
+export const ENGINES = { board, wedge, fakeout, doodle, pindrop, closest, timeline, tour, scribble, oddone, whowrote, reflex, sketch, hottake, peek, hum, bomb, know, jokes, mix: tour,
+  blackjack, noon: move, soda: move, egg: move, spin: move, balloon: move, reel: move, pong: move, tug: move, flip: move, maze: move, beat: move };
 setEngines(ENGINES);
 export const TEAM_DRAW_TIME = 45000;
 export const INTRO_TIME = 14000; // how-to-play screen before each game

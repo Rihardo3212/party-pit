@@ -28,6 +28,8 @@
   import BombStage from '../views/host/BombStage.svelte';
   import KnowStage from '../views/host/KnowStage.svelte';
   import JokesStage from '../views/host/JokesStage.svelte';
+  import MoveStage from '../views/host/MoveStage.svelte';
+  import BlackjackStage from '../views/host/BlackjackStage.svelte';
   import Backdrop from '../components/Backdrop.svelte';
   import TransitionLayer from '../components/TransitionLayer.svelte';
   import { hostScene, sceneIn } from '../lib/motion.js';
@@ -40,11 +42,10 @@
   import { TOUR_PHASES } from '../engine/tour.js';
   import { WEDGES } from '../content/wedges.js';
   import { topWins } from '../lib/wins.js';
-  import { AWARDS_AT, AWARD_GAP } from '../lib/awards.js';
+  import { AWARDS_AT, AWARD_GAP, REVEAL_AT } from '../lib/awards.js';
   import { sfx, isMuted, setMuted, unlockAudio, audioReady } from '../lib/sound.js';
   import { play as playMusic, stopMusic, musicEnabled, setMusicEnabled } from '../lib/music.js';
   import { fx } from '../lib/fx.js';
-  import { getTheme, toggleTheme } from '../lib/theme.js';
   import { DEVELOPER } from '../lib/brand.js';
   import Lewis from '../components/Lewis.svelte';
   import { lewis, setLewisOn, hush } from '../lib/presenter.svelte.js';
@@ -64,7 +65,6 @@
   let now = $state(Date.now());
   let muted = $state(isMuted());
   let music = $state(musicEnabled());
-  let theme = $state(getTheme());
   let wins = $state(topWins());
   let soundOn = $state(audioReady());
   let db = $state(null);
@@ -167,11 +167,15 @@
     mlook: 'think', mdraw: 'chill', mreveal: 'chill',
     hrate: 'sneaky', hreveal: 'sneaky', bplay: 'think', bboom: 'think', kwrite: 'chill', kguess: 'sneaky', kreveal: 'sneaky',
     xplay: 'think', xanswer: 'think', xreveal: 'think',
-    jplay: 'sneaky', janswer: 'sneaky', jreveal: 'sneaky'
+    jplay: 'sneaky', janswer: 'sneaky', jreveal: 'sneaky',
+    vready: 'board', vgo: 'think', vresult: 'board',
+    bjbet: 'sneaky', bjplay: 'sneaky', bjdealer: 'sneaky', bjresult: 'sneaky'
   };
   // Phases where the background music stops (Hum Hunt plays its own tune).
   const SILENT = new Set(['uplay', 'uanswer', 'ureveal']);
-  const STAGE = new Set(['question', 'answer', 'reveal', 'finalBet', 'finalQ', 'finalJudge', 'finalReveal', 'spin', 'wq', 'wreveal', 'lie', 'pick', 'freveal', 'dchoose', 'ddraw', 'dreveal', 'pguess', 'preveal', 'cguess', 'creveal', 'tguess', 'treveal', 'troll', 'tmove', 'tpick', 'tscore', 'scwrite', 'scdraw', 'scdesc', 'scshow', 'scvote', 'oclue', 'ovote', 'oguess', 'oresult', 'wwrite', 'wguess', 'wshow', 'rready', 'rgo', 'rresult', 'mlook', 'mdraw', 'mreveal', 'tpick', 'tscore', 'hrate', 'hreveal', 'xplay', 'xanswer', 'xreveal', 'uplay', 'uanswer', 'ureveal', 'bplay', 'bboom', 'kwrite', 'kguess', 'kreveal', 'jplay', 'janswer', 'jreveal']);
+  // Move games that listen (mic) or play their own beat: no music while playing.
+  const quietGo = (x) => x?.phase === 'vgo' && ['balloon', 'beat', 'noon'].includes(x.move?.game);
+  const STAGE = new Set(['question', 'answer', 'reveal', 'finalBet', 'finalQ', 'finalJudge', 'finalReveal', 'spin', 'wq', 'wreveal', 'lie', 'pick', 'freveal', 'dchoose', 'ddraw', 'dreveal', 'pguess', 'preveal', 'cguess', 'creveal', 'tguess', 'treveal', 'troll', 'tmove', 'tpick', 'tscore', 'scwrite', 'scdraw', 'scdesc', 'scshow', 'scvote', 'oclue', 'ovote', 'oguess', 'oresult', 'wwrite', 'wguess', 'wshow', 'rready', 'rgo', 'rresult', 'mlook', 'mdraw', 'mreveal', 'tpick', 'tscore', 'hrate', 'hreveal', 'xplay', 'xanswer', 'xreveal', 'uplay', 'uanswer', 'ureveal', 'bplay', 'bboom', 'kwrite', 'kguess', 'kreveal', 'jplay', 'janswer', 'jreveal', 'vready', 'vgo', 'vresult', 'bjbet', 'bjplay', 'bjdealer', 'bjresult']);
   const count = (o) => Object.keys(o || {}).length;
 
   function react(a, b) {
@@ -187,7 +191,7 @@
     if (b.settings.game !== a.settings.game && b.phase === 'lobby') sfx.pop();
 
     if (a.phase !== b.phase) {
-      if (SILENT.has(b.phase)) stopMusic();
+      if (SILENT.has(b.phase) || quietGo(b)) stopMusic();
       else if (b.phase !== 'end' && MUSIC_FOR[b.phase]) playMusic(MUSIC_FOR[b.phase]);
       if (a.phase === 'intro') { sfx.fanfare(); fx.stamp("LET'S PARTY!", MODES[b.settings.game].color, MODES[b.settings.game].name); }
       phaseEffects(a, b);
@@ -297,6 +301,23 @@
         break;
       }
       case 'rgo': if (b.reflex.game !== 'green') sfx.open(); break;
+      case 'vready': sfx.whoosh(); break;
+      case 'bjplay': sfx.whoosh(); break;
+      case 'bjresult': {
+        const bj = b.bj;
+        const win = Object.entries(bj.points).filter(([, p]) => p > 0).length;
+        if (win) { sfx.correct(); fx.confetti(40, ['#15803d', '#ffc400', '#ffffff']); } else sfx.sadTrombone();
+        break;
+      }
+      case 'vgo': if (b.move.game !== 'noon') { sfx.open(); fx.stamp('GO!', MODES[b.move.game]?.color || '#f97316'); } break;
+      case 'vresult': {
+        const v = b.move;
+        const win = Object.entries(v.points).filter(([, p]) => p === 1000).map(([pid]) => b.players[pid]?.name);
+        const col = MODES[v.game]?.color || '#f97316';
+        if (win.length) { sfx.correct(); fx.stamp('WINNER!', col, win.join(' & ')); fx.confetti(70, [col, '#ffc400', '#ffffff']); }
+        else sfx.sadTrombone();
+        break;
+      }
       case 'rresult': {
         const r = b.reflex;
         const win = Object.entries(r.points).filter(([, p]) => p === 1000).map(([pid]) => b.players[pid]?.name);
@@ -396,12 +417,16 @@
       }
       case 'end':
         stopMusic();
-        sfx.fanfare();
-        setTimeout(() => sfx.applause(2.4), 400);
-        fx.confetti(260);
-        setTimeout(() => fx.confetti(200), 900);
+        // Drum roll behind the curtains, then a crash and the winner.
+        sfx.bigDrumroll(REVEAL_AT / 1000);
+        setTimeout(() => {
+          sfx.crash();
+          sfx.fanfare();
+          fx.confetti(260);
+        }, REVEAL_AT);
+        setTimeout(() => sfx.applause(2.4), REVEAL_AT + 400);
         (b.results?.awards || []).forEach((_, i) => setTimeout(() => sfx.ding(), AWARDS_AT(b) + i * AWARD_GAP));
-        setTimeout(() => playMusic('lobby'), 4500);
+        setTimeout(() => playMusic('lobby'), REVEAL_AT + 4500);
         wins = topWins();
         break;
     }
@@ -538,6 +563,8 @@
       case 'wwrite': return s.who?.until;
       case 'wguess': return s.who?.until;
       case 'rready': return s.reflex?.readyUntil;
+      case 'vready': return s.move?.readyUntil;
+      case 'bjbet': case 'bjplay': return s.bj?.until;
       case 'mdraw': return s.sketch?.until;
       case 'tguess': return s.line?.until;
       case 'hrate': return s.hot?.until;
@@ -601,7 +628,6 @@
       {#if !soundOn}
         <button class="btn sun small" onclick={enableSound}>🔊 Turn on sound</button>
       {/if}
-      <button class="icon-btn" onclick={() => (theme = toggleTheme())} aria-label="Theme" title="Light / dark">{theme === 'dark' ? '☀️' : '🌙'}</button>
       <button class="icon-btn" class:off={!lewis.on} onclick={() => { unlockAudio(); setLewisOn(!lewis.on); }} aria-label="Lewis the presenter" title="Lewis, the presenter">🎙️</button>
       <button class="icon-btn" class:off={!music} onclick={toggleMusic} aria-label="Music" title="Music">🎵</button>
       <button class="icon-btn" onclick={toggleSfx} aria-label="Sound effects" title="Sound effects">{muted ? '🔇' : '🔊'}</button>
@@ -663,6 +689,10 @@
     <KnowStage {s} {avatars} {now} />
   {:else if game === 'jokes'}
     <JokesStage {s} {avatars} {now} />
+  {:else if MODES[game]?.move}
+    <MoveStage {s} {avatars} {now} />
+  {:else if game === 'blackjack'}
+    <BlackjackStage {s} {avatars} {now} />
   {/if}
   </div>{/key}
   </div></div>
@@ -705,6 +735,10 @@
   .lost { text-align: center; display: grid; gap: 0.8rem; justify-items: center; }
   .fit-box { overflow: hidden; } /* nobody scrolls a TV: content is zoomed to fit instead */
   .stage .pill { background: rgba(255, 255, 255, 0.12); color: #fff; box-shadow: none; }
+  .stage header .mode, .stage header :global(.crowd) { display: none; }
+  .stage header .icon-btn { opacity: 0.3; transition: opacity 0.3s; }
+  .stage header .right:hover .icon-btn, .stage header .icon-btn:focus-visible { opacity: 1; }
+  .stage header .code { font-size: 1rem; }
   .stage .footer { color: rgba(255, 255, 255, 0.6); }
 
   /* Lewis lives in the bottom-left corner, above the score bar during rounds. */

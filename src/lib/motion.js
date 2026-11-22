@@ -1,5 +1,5 @@
 // Shared motion helpers: scene keys and the springy Svelte transitions used between screens.
-import { backOut, elasticOut } from 'svelte/easing';
+import { backOut, cubicOut, elasticOut } from 'svelte/easing';
 
 export const reduced = () => typeof matchMedia !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -40,15 +40,15 @@ export function sceneIn(node, { delay = 0 } = {}) {
   };
 }
 
-// Phone card flip: swings in like a card turning over.
-export function flipIn(node, { delay = 0 } = {}) {
+// Phones: a soft slide up and fade (calm, so it never feels like too much on a small screen).
+export function slideIn(node, { delay = 0 } = {}) {
   if (reduced()) return { duration: 0 };
   return {
     delay,
-    duration: 560,
+    duration: 320,
     css: (t) => {
-      const e = backOut(t);
-      return `transform: perspective(900px) rotateY(${(1 - e) * -70}deg) translateX(${(1 - e) * 24}px) scale(${0.9 + 0.1 * e}); opacity: ${Math.min(1, t * 2.5)}`;
+      const e = cubicOut(t);
+      return `transform: translateY(${(1 - e) * 14}px); opacity: ${t}`;
     }
   };
 }

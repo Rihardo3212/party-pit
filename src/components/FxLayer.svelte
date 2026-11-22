@@ -13,18 +13,23 @@
   let uid = 0;
   let off;
 
+  // Confetti: a light shower of paper that flutters down from the top (fewer pieces, softer motion).
   function confetti(amount, colors) {
     const w = canvas.width, h = canvas.height;
-    for (let i = 0; i < amount; i++) {
-      const left = i % 2 === 0;
+    const n = Math.min(110, Math.round(amount * 0.45));
+    const k = h / 900;
+    for (let i = 0; i < n; i++) {
       parts.push({
-        x: left ? -10 : w + 10,
-        y: h * (0.55 + Math.random() * 0.3),
-        vx: (left ? 1 : -1) * (6 + Math.random() * 10) * (w / 1400),
-        vy: -(12 + Math.random() * 14) * (h / 900),
+        x: Math.random() * w,
+        y: -20 - Math.random() * h * 0.5, // staggered, so it keeps falling for a moment
+        vx: (Math.random() - 0.5) * 1.2 * k,
+        vy: (1.5 + Math.random() * 2) * k,
+        sway: 0.6 + Math.random() * 1.4,
+        ph: Math.random() * Math.PI * 2,
         r: Math.random() * Math.PI,
-        vr: (Math.random() - 0.5) * 0.4,
-        s: 7 + Math.random() * 9,
+        vr: (Math.random() - 0.5) * 0.12,
+        s: (8 + Math.random() * 7) * Math.max(0.7, k),
+        round: Math.random() < 0.25,
         c: (colors || COLORS)[Math.floor(Math.random() * (colors || COLORS).length)],
         life: 0
       });
@@ -35,15 +40,27 @@
   function frame() {
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const g = 0.45 * (canvas.height / 900);
-    parts = parts.filter((p) => p.y < canvas.height + 40 && p.life < 400);
+    const k = canvas.height / 900;
+    parts = parts.filter((p) => p.y < canvas.height + 30 && p.life < 900);
     for (const p of parts) {
-      p.vy += g; p.vx *= 0.99; p.x += p.vx; p.y += p.vy; p.r += p.vr; p.life++;
+      p.life++;
+      p.vy = Math.min(p.vy + 0.03 * k, 3.6 * k); // gentle, like paper in the air
+      p.x += p.vx + Math.sin(p.ph + p.life / 22) * p.sway * k;
+      p.y += p.vy;
+      p.r += p.vr;
+      const flip = Math.cos(p.ph + p.life / 9); // the piece turns over as it falls
       ctx.save();
+      ctx.globalAlpha = Math.min(1, (canvas.height + 30 - p.y) / 120);
       ctx.translate(p.x, p.y);
       ctx.rotate(p.r);
       ctx.fillStyle = p.c;
-      ctx.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2 * (0.4 + Math.abs(Math.sin(p.life / 6))));
+      if (p.round) {
+        ctx.beginPath();
+        ctx.ellipse(0, 0, p.s * 0.35, p.s * 0.35 * Math.abs(flip) + 0.5, 0, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        ctx.fillRect(-p.s / 2, (-p.s / 3) * Math.abs(flip), p.s, (p.s / 1.5) * Math.abs(flip) + 0.5);
+      }
       ctx.restore();
     }
     raf = parts.length ? requestAnimationFrame(frame) : null;
@@ -90,7 +107,7 @@
   {/each}
   {#each floats as f (f.id)}
     <div class="float" style="left:{f.x}%; --d:{f.d}s; --sway:{f.sway}px; --c:{f.color}">
-      <span>{f.e}</span>
+      <div class="wig"><span>{f.e}</span></div>
     </div>
   {/each}
 </div>
@@ -129,19 +146,24 @@
     80% { transform: translate(-50%, -50%) rotate(var(--rot)) scale(1); opacity: 1; }
     100% { transform: translate(-50%, -50%) rotate(var(--rot)) scale(1.1); opacity: 0; }
   }
+  /* Reactions: the emoji bubbles up from the bottom with a soft glow in the player's color,
+     swaying gently like a balloon, then fades out. */
   .float {
-    position: absolute; bottom: -80px;
-    animation: rise var(--d) ease-out forwards;
+    position: absolute; bottom: 40px;
+    animation: rise var(--d) cubic-bezier(0.25, 0.6, 0.35, 1) forwards;
   }
+  .wig { animation: wig 1.6s ease-in-out infinite alternate; }
   .float span {
-    display: grid; place-items: center;
-    width: 76px; height: 76px; font-size: 48px;
-    background: #fff; border-radius: 50%;
-    box-shadow: 0 0 0 6px var(--c), 0 6px 0 6px rgba(0, 0, 0, 0.25);
+    display: block; font-size: 64px; line-height: 1;
+    filter: drop-shadow(0 0 14px var(--c)) drop-shadow(0 4px 0 rgba(0, 0, 0, 0.25));
+    animation: popin 0.45s cubic-bezier(0.2, 1.8, 0.4, 1) both;
   }
+  @keyframes popin { from { transform: scale(0.2); } to { transform: scale(1); } }
+  @keyframes wig { from { transform: translateX(calc(var(--sway) * -0.4)) rotate(-10deg); } to { transform: translateX(calc(var(--sway) * 0.4)) rotate(10deg); } }
   @keyframes rise {
-    0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
-    12% { opacity: 1; transform: translate(0, -80px) scale(1.1); }
-    100% { transform: translate(var(--sway), -75vh) scale(0.9); opacity: 0; }
+    0% { transform: translateY(0); opacity: 0; }
+    8% { opacity: 1; }
+    70% { opacity: 1; }
+    100% { transform: translateY(-58vh); opacity: 0; }
   }
 </style>

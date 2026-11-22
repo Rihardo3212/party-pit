@@ -22,6 +22,8 @@
   import KnowPhone from '../views/phone/KnowPhone.svelte';
   import AudiencePhone from '../views/phone/AudiencePhone.svelte';
   import ReflexPhone from '../views/phone/ReflexPhone.svelte';
+  import MovePhone from '../views/phone/MovePhone.svelte';
+  import BlackjackPhone from '../views/phone/BlackjackPhone.svelte';
   import SketchPhone from '../views/phone/SketchPhone.svelte';
   import TimelinePhone from '../views/phone/TimelinePhone.svelte';
   import EndPhone from '../views/phone/EndPhone.svelte';
@@ -31,10 +33,9 @@
   import { myId, cleanCode, MAX_PLAYERS } from '../lib/room.js';
   import { normalize, controllerOf } from '../engine/core.js';
   import { sfx, unlockAudio } from '../lib/sound.js';
-  import { getTheme, toggleTheme } from '../lib/theme.js';
   import { fit } from '../lib/fit.js';
   import Backdrop from '../components/Backdrop.svelte';
-  import { phoneScene, flipIn } from '../lib/motion.js';
+  import { phoneScene, slideIn } from '../lib/motion.js';
 
   let { code: rawCode = '' } = $props();
   // svelte-ignore state_referenced_locally
@@ -48,7 +49,6 @@
   let joining = $state(false);
   let redraw = $state(false);
   let codeInput = $state('');
-  let theme = $state(getTheme());
   let now = $state(Date.now());
   let clock;
   const unsubs = [];
@@ -122,7 +122,7 @@
       if (s.phase === 'answer' && s.current?.buzzer === id) navigator.vibrate?.([80, 40, 80]);
       if (s.phase === 'reveal' && s.current?.result === 'correct' && s.current?.winner === myUnit) { sfx.correct(); navigator.vibrate?.([40, 30, 40, 30, 120]); }
       if (s.phase === 'board' && s.turn === myUnit) navigator.vibrate?.(100);
-      if (['finalBet', 'wq', 'lie', 'pick', 'pguess', 'cguess', 'tguess', 'troll', 'scwrite', 'scdraw', 'scdesc', 'scvote', 'oclue', 'ovote', 'wwrite', 'wguess', 'rready', 'mdraw', 'hrate', 'xplay', 'uplay', 'jplay', 'kwrite', 'kguess'].includes(s.phase)) navigator.vibrate?.([60, 40, 60]);
+      if (['finalBet', 'wq', 'lie', 'pick', 'pguess', 'cguess', 'tguess', 'troll', 'scwrite', 'scdraw', 'scdesc', 'scvote', 'oclue', 'ovote', 'wwrite', 'wguess', 'rready', 'mdraw', 'hrate', 'xplay', 'uplay', 'jplay', 'kwrite', 'kguess', 'vready', 'vgo', 'bjbet', 'bjplay'].includes(s.phase)) navigator.vibrate?.([60, 40, 60]);
       if (s.phase === 'dchoose' && s.doodle?.drawer === id) navigator.vibrate?.([100, 50, 100]);
       if (s.phase === 'wreveal' && s.wedge?.winner === myUnit) sfx.correct();
     }
@@ -145,13 +145,12 @@
           <span class="mscore">{unit ? unit.score : 0}</span>
         </div>
       {/if}
-      <button class="icon-btn sm" onclick={() => (theme = toggleTheme())} aria-label="Theme">{theme === 'dark' ? '☀️' : '🌙'}</button>
     </div>
   </header>
 
   <Backdrop lite />
   <main class="fit-box" use:fit={{ min: 0.6 }}><div class="fit-in">
-    {#key phoneScene(s) + (me ? '1' : '0') + (isHost ? 'h' : '')}<div class="scene" in:flipIn>
+    {#key phoneScene(s) + (me ? '1' : '0') + (isHost ? 'h' : '')}<div class="scene" in:slideIn>
     {#if s === undefined}
       <p class="center-text">Connecting…</p>
 
@@ -242,6 +241,10 @@
       <SketchPhone {s} {id} {myUnit} {send} {now} {react} {db} />
     {:else if game === 'reflex'}
       <ReflexPhone {s} {id} {myUnit} {send} {react} />
+    {:else if MODES[game]?.move}
+      <MovePhone {s} {id} {myUnit} {send} {react} {db} />
+    {:else if game === 'blackjack'}
+      <BlackjackPhone {s} {id} {myUnit} {send} {react} />
     {:else if game === 'whowrote'}
       <WhoPhone {s} {id} {avatars} {send} {now} {react} />
     {:else if game === 'oddone'}

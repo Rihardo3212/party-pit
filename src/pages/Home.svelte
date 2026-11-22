@@ -5,10 +5,8 @@
   import { DEVELOPER } from '../lib/brand.js';
   import { MODES, MODE_LIST, GROUP_LIST, modesIn } from '../lib/modes.js';
   import { unlockAudio } from '../lib/sound.js';
-  import { getTheme, toggleTheme } from '../lib/theme.js';
 
   let code = $state('');
-  let theme = $state(getTheme());
 
   function join(e) {
     e.preventDefault();
@@ -21,7 +19,6 @@
   }
 </script>
 
-<button class="icon-btn theme" onclick={() => (theme = toggleTheme())} aria-label="Theme">{theme === 'dark' ? '☀️' : '🌙'}</button>
 <main>
   <div class="hero pop-in"><Logo size={1.35} /></div>
   <p class="tag">The party game where your phone is the controller.</p>
@@ -73,7 +70,6 @@
 </main>
 
 <style>
-  .theme { position: absolute; top: 1rem; right: 1rem; z-index: 2; }
   main { max-width: 900px; margin: 0 auto; padding: 3.2rem 1.2rem 1rem; display: flex; flex-direction: column; align-items: center; gap: 1.5rem; text-align: center; }
   .hero { margin-bottom: 0.4rem; }
   @media (max-width: 520px) { main { padding-top: 4.4rem; } }

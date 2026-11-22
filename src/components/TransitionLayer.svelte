@@ -17,7 +17,7 @@
     if (reduced()) return;
     clearTimeout(timer);
     show = { ...x, id: ++seq };
-    timer = setTimeout(() => (show = null), x.kind === 'curtain' ? 2300 : x.big ? 1500 : 1050);
+    timer = setTimeout(() => (show = null), x.kind === 'curtain' ? 2900 : x.big ? 1500 : 1050);
     try { sfx.whoosh(); } catch { /* sound is optional */ }
   }
 
@@ -92,7 +92,7 @@
         <div class="cur left"></div>
         <div class="cur right"></div>
         <div class="valance"></div>
-        <div class="ctitle">🏆 And the winner is…</div>
+        <div class="ctitle"><span class="drum">🥁</span>And the winner is…</div>
       </div>
     {/if}
   {/key}
@@ -130,6 +130,8 @@
   .wipe:not(.big) .ic { font-size: clamp(3rem, 7vw, 6rem); }
   .wipe:not(.big) .tt { font-size: clamp(2rem, 5vw, 4.4rem); }
 
+  .drum { display: block; text-align: center; font-size: 1.3em; animation: drum 0.12s ease-in-out infinite alternate; }
+  @keyframes drum { from { transform: rotate(-8deg) translateY(0); } to { transform: rotate(8deg) translateY(-6px); } }
   .curtains { position: fixed; inset: 0; z-index: 60; pointer-events: none; overflow: hidden; }
   .cur {
     position: absolute; top: 0; bottom: 0; width: 52%;
@@ -138,20 +140,20 @@
       linear-gradient(180deg, #e0213a, #9e0f24);
     box-shadow: 0 0 60px rgba(0, 0, 0, 0.6);
   }
-  .left { left: 0; transform-origin: left; animation: cl 2.3s cubic-bezier(0.6, 0, 0.3, 1) both; }
-  .right { right: 0; transform-origin: right; animation: cr 2.3s cubic-bezier(0.6, 0, 0.3, 1) both; }
-  @keyframes cl { 0% { transform: translateX(-100%); } 28%, 66% { transform: translateX(0); } 100% { transform: translateX(-100%) scaleX(0.6); } }
-  @keyframes cr { 0% { transform: translateX(100%); } 28%, 66% { transform: translateX(0); } 100% { transform: translateX(100%) scaleX(0.6); } }
+  .left { left: 0; transform-origin: left; animation: cl 2.9s cubic-bezier(0.6, 0, 0.3, 1) both; }
+  .right { right: 0; transform-origin: right; animation: cr 2.9s cubic-bezier(0.6, 0, 0.3, 1) both; }
+  @keyframes cl { 0% { transform: translateX(-100%); } 16%, 76% { transform: translateX(0); } 100% { transform: translateX(-100%) scaleX(0.6); } }
+  @keyframes cr { 0% { transform: translateX(100%); } 16%, 76% { transform: translateX(0); } 100% { transform: translateX(100%) scaleX(0.6); } }
   .valance {
     position: absolute; top: 0; left: 0; right: 0; height: 9vh;
     background: radial-gradient(circle at 50% 0, #ffd84d 0 30%, transparent 31%) 0 100% / 6vw 3vh repeat-x, linear-gradient(#b80f27, #7d0a1b);
-    border-bottom: 6px solid #ffc400; animation: val 2.3s ease both;
+    border-bottom: 6px solid #ffc400; animation: val 2.9s ease both;
   }
-  @keyframes val { 0% { transform: translateY(-100%); } 20%, 80% { transform: none; } 100% { transform: translateY(-100%); } }
+  @keyframes val { 0% { transform: translateY(-100%); } 12%, 86% { transform: none; } 100% { transform: translateY(-100%); } }
   .ctitle {
     position: absolute; inset: 0; display: grid; place-items: center; color: #fff;
     font-family: var(--font-display); font-size: clamp(2.4rem, 6vw, 5rem); text-shadow: 0 6px 0 rgba(0, 0, 0, 0.35);
-    animation: ct 2.3s cubic-bezier(0.2, 1.5, 0.4, 1) both;
+    animation: ct 2.9s cubic-bezier(0.2, 1.5, 0.4, 1) both;
   }
-  @keyframes ct { 0%, 26% { transform: scale(0.3); opacity: 0; } 38%, 62% { transform: scale(1); opacity: 1; } 72%, 100% { transform: scale(1.3); opacity: 0; } }
+  @keyframes ct { 0%, 14% { transform: scale(0.3); opacity: 0; } 24%, 68% { transform: scale(1); opacity: 1; } 76%, 100% { transform: scale(1.3); opacity: 0; } }
 </style>

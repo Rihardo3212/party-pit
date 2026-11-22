@@ -12,7 +12,7 @@
 import { MODES } from '../lib/modes.js';
 import { shuffle } from './util.js';
 
-export const TOUR_MODES = ['closest', 'timeline', 'pindrop', 'reflex', 'sketch', 'oddone', 'wedge', 'board', 'hottake', 'peek', 'hum', 'bomb', 'know'];
+export const TOUR_MODES = ['closest', 'timeline', 'pindrop', 'reflex', 'sketch', 'oddone', 'wedge', 'board', 'hottake', 'peek', 'hum', 'bomb', 'know', 'noon', 'soda', 'spin', 'egg', 'tug', 'flip', 'pong', 'blackjack'];
 // Hourglass: a loop pinched in the middle (9 × 6), so it looks like an 8.
 function hourglass() {
   const out = [];

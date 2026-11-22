@@ -3,7 +3,7 @@
   import Pie from '../../components/Pie.svelte';
   import AwardCards from '../../components/AwardCards.svelte';
   import { MODES } from '../../lib/modes.js';
-  import { AWARDS_AT } from '../../lib/awards.js';
+  import { AWARDS_AT, REVEAL_AT } from '../../lib/awards.js';
 
   let { s, avatars } = $props();
   const U = (id) => (id && s.units[id] ? { id, ...s.units[id] } : null);
@@ -13,14 +13,14 @@
 
 <section class="main">
   <div class="sticker modename">{MODES[s.settings.game].icon} {MODES[s.settings.game].name}</div>
-  <h1 class="win-title pop-in">
+  <h1 class="win-title pop-in" style="animation-delay:{REVEAL_AT}ms">
     {#if s.results.winners.length > 1}It's a tie!{:else}{U(s.results.winners[0])?.name} {s.teamMode ? 'win' : 'wins'}!{/if}
   </h1>
   <div class="podium">
     {#each s.results.ranked as id, i (id)}
       {@const u = U(id)}
       {@const won = s.results.winners.includes(id)}
-      <div class="place card pop-in" class:won style="animation-delay:{300 + i * 180}ms">
+      <div class="place card pop-in" class:won style="animation-delay:{REVEAL_AT + 300 + i * 180}ms">
         {#if won}<div class="trophy">🏆</div>{:else}<div class="rank">#{i + 1}</div>{/if}
         <Avatar src={avatars[id]} color={u.color} name={u.name} size={won ? (hasAwards ? 120 : 150) : hasAwards ? 80 : 96} />
         <div class="pname">{u.name}</div>
