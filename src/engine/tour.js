@@ -102,7 +102,8 @@ export function modeAt(board, from) {
 }
 
 function makeBoard(players, spaces, goal = false) {
-  const modes = TOUR_MODES.filter((m) => players >= (MODES[m].min || 1));
+  const ok = TOUR_MODES.filter((m) => players >= (MODES[m].min || 1));
+  const modes = ok.length ? ok : ['closest']; // never empty, or the loop below never ends
   const extra = spaces > 26 ? ['bonus', 'trap', 'item'] : [];
   const specials = ['bonus', 'bonus', 'bonus', 'trap', 'trap', 'item', 'item', 'shop', ...extra].map((k) => ({ k }));
   const nModes = spaces - 1 - (goal ? 1 : 0) - specials.length;
@@ -356,7 +357,7 @@ export default {
     const layout = LAYOUTS[Math.floor(Math.random() * LAYOUTS.length)];
     s.tour = {
       rounds: len.rounds, round: 0, mix, played: [], layout: layout.id, items: {},
-      board: mix ? [] : makeBoard(g.playersHere().length, spacesOf(layout), !!layout.goal),
+      board: mix ? [] : makeBoard(g.playersHere().length || s.order.length, spacesOf(layout), !!layout.goal),
       pos: Object.fromEntries(s.unitOrder.map((u) => [u, 0])), rolls: {}, rolledBy: {}, events: {}, moveOrder: [], moveIdx: -1
     };
     startRound(g);

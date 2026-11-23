@@ -155,7 +155,7 @@
   }
   .txt {
     font-family: var(--font-display);
-    font-size: clamp(4rem, 10vw, 9rem);
+    font-size: clamp(4rem, calc(10 * var(--vw)), 9rem);
     color: #fff;
     background: var(--c);
     padding: 0.08em 0.5em 0.14em;
@@ -196,6 +196,6 @@
     0% { transform: translateY(0); opacity: 0; }
     8% { opacity: 1; }
     70% { opacity: 1; }
-    100% { transform: translateY(-58vh); opacity: 0; }
+    100% { transform: translateY(calc(-58 * var(--vh))); opacity: 0; }
   }
 </style>

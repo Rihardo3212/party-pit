@@ -41,7 +41,7 @@
   }
   .qhead { display: flex; gap: 0.7rem; font-size: 1.45rem; }
   .qcard { width: min(100%, 1000px); padding: 1.6rem 2rem; text-align: center; display: flex; flex-direction: column; gap: 0.8rem; align-items: center; }
-  .q { margin: 0; font-family: var(--font-display); font-size: clamp(2rem, 3.6vw, 3.4rem); line-height: 1.12; }
+  .q { margin: 0; font-family: var(--font-display); font-size: clamp(2rem, calc(3.6 * var(--vw)), 3.4rem); line-height: 1.12; }
   .hush { margin: 0; opacity: 0.65; font-weight: 800; }
   .by { display: flex; align-items: center; gap: 0.6rem; font-size: 1.25rem; font-weight: 800; }
 </style>

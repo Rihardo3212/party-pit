@@ -4,6 +4,13 @@
    Dark mode only. */
 
 :root {
+  /* TV scale: the host screen zooms up on big screens (4K). Host styles use these instead of
+     vw/vh, which the zoom would otherwise double. --tvz stays 1 on phones. */
+  --tvz: 1;
+  --vw: calc(1vw / var(--tvz));
+  --vh: calc(1vh / var(--tvz));
+  --dvh: calc(1dvh / var(--tvz));
+
   --font-display: 'Lilita One', 'Nunito', 'Arial Rounded MT Bold', system-ui, sans-serif;
   --font-body: 'Nunito', 'Arial Rounded MT Bold', 'Trebuchet MS', system-ui, sans-serif;
 

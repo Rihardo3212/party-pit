@@ -617,6 +617,19 @@
     unlockAudio();
   }
 
+  // TV scale: the layout is made for a 1920×1080 screen. Bigger screens (a 4K TV with no
+  // display scaling) zoom everything up so it fills the TV instead of looking tiny.
+  $effect(() => {
+    const root = document.documentElement;
+    const set = () => {
+      const z = Math.max(1, Math.min(innerWidth / 1920, innerHeight / 1080));
+      root.style.setProperty('--tvz', String(Math.round(z * 100) / 100));
+    };
+    set();
+    addEventListener('resize', set);
+    return () => { removeEventListener('resize', set); root.style.removeProperty('--tvz'); };
+  });
+
   const here = (pid) => isLocal || !!presence[pid];
   const stage = $derived(!!s && STAGE.has(s.phase));
   const game = $derived(s?.settings.sub || s?.settings.game); // Party Tour: the running mini game
@@ -713,30 +726,29 @@
   </div></div>
 
   <!-- Bottom dock: Lewis has his own corner, the scores (or footer) sit in the middle,
-       so neither ever covers the game above. Outside rounds his subtitle uses the middle too. -->
+       so neither ever covers the game above. -->
   <div class="dock" class:host={showLewis} class:round>
     {#if showLewis}
       <div class="presenter" class:quiet={!lewis.speaking}>
-        <Lewis level={lewis.level} talking={lewis.speaking} size={round ? 96 : 110} />
+        <Lewis level={lewis.level} talking={lewis.speaking} size={round ? 140 : 172} />
       </div>
     {/if}
     <div class="mid">
-      {#if showLewis && lewis.speaking && !round}
-        {#key lewis.text}<div class="says">{lewis.text}</div>{/key}
-      {:else if round}
+      {#if round}
         <ScoreBar {s} {avatars} {here} />
-      {:else}
+      {:else if !(showLewis && lewis.speaking)}
         <footer class="footer">a {DEVELOPER} game</footer>
       {/if}
     </div>
-    {#if showLewis && lewis.speaking && round}
-      {#key lewis.text}<div class="says float">{lewis.text}</div>{/key}
+    <!-- His subtitle is always a speech bubble right beside him. -->
+    {#if showLewis && lewis.speaking}
+      {#key lewis.text}<div class="says">{lewis.text}</div>{/key}
     {/if}
   </div>
 </div>
 
 <style>
-  .screen { height: 100vh; height: 100dvh; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+  .screen { zoom: var(--tvz); height: calc(100 * var(--vh)); height: calc(100 * var(--dvh)); display: flex; flex-direction: column; position: relative; overflow: hidden; }
 
   /* Game-show stage for questions and rounds */
   .screen.stage {
@@ -770,10 +782,10 @@
     display: grid; grid-template-columns: var(--lw) 1fr var(--lw); align-items: end;
     padding: 0 14px;
   }
-  .dock.host { --lw: 122px; }
-  .dock.host.round { --lw: 106px; }
+  .dock.host { --lw: 184px; }
+  .dock.host.round { --lw: 152px; }
   .mid { grid-column: 2; min-width: 0; display: flex; justify-content: center; align-items: end; min-height: 2.6rem; }
-  .dock.host .mid { min-height: 118px; }
+  .dock.host .mid { min-height: 180px; }
   .dock.host.round .mid { min-height: 0; }
   .presenter {
     grid-column: 1; grid-row: 1; padding-bottom: 8px; pointer-events: none;
@@ -781,15 +793,20 @@
     transform-origin: bottom left;
   }
   .presenter.quiet { transform: scale(0.9); opacity: 0.92; }
+  /* The bubble sits just right of Lewis at mouth height, its tail pointing at him. */
   .says {
-    align-self: center; max-width: min(640px, 60vw); margin-bottom: 1rem;
+    position: absolute; left: calc(var(--lw) + 6px); bottom: 70px; z-index: 6;
+    max-width: min(620px, calc(52 * var(--vw)));
     background: #fff; color: #2b2240; font-weight: 700;
-    border-radius: 20px 20px 20px 6px; padding: 0.7rem 1.2rem;
-    font-size: 1.25rem; line-height: 1.3; box-shadow: var(--lift);
-    animation: says-in 0.3s cubic-bezier(0.2, 1.6, 0.4, 1) both;
+    border-radius: 22px 22px 22px 6px; padding: 0.7rem 1.2rem;
+    font-size: 1.3rem; line-height: 1.3; box-shadow: var(--lift);
+    animation: says-in 0.3s cubic-bezier(0.2, 1.6, 0.4, 1) both; transform-origin: bottom left;
   }
-  /* During rounds the scores own the middle, so the subtitle floats just above Lewis's head. */
-  .says.float { position: absolute; left: 118px; bottom: 100%; margin: 0 0 -26px; max-width: min(460px, 36vw); font-size: 1.1rem; }
-  @keyframes says-in { from { transform: translateY(10px); opacity: 0; } }
+  .says::before {
+    content: ''; position: absolute; left: -12px; bottom: 6px; width: 22px; height: 18px;
+    background: #fff; clip-path: polygon(100% 0, 0 100%, 100% 70%);
+  }
+  .round .says { bottom: 58px; font-size: 1.2rem; max-width: min(520px, calc(42 * var(--vw))); }
+  @keyframes says-in { from { transform: scale(0.6); opacity: 0; } }
   @media (prefers-reduced-motion: reduce) { .says { animation: none; } }
 </style>

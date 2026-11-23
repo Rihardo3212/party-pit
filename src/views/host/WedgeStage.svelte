@@ -130,7 +130,7 @@
   .landed.dim { background: none; box-shadow: none; opacity: 0.85; }
   .qhead { display: flex; gap: 0.7rem; align-items: center; font-size: 1.45rem; }
   .qwrap { width: 100%; max-width: 1150px; }
-  .qtext { font-size: clamp(2rem, 3.4vw, 3.2rem); line-height: 1.15; padding: 1.9rem 2.2rem; text-align: center; }
+  .qtext { font-size: clamp(2rem, calc(3.4 * var(--vw)), 3.2rem); line-height: 1.15; padding: 1.9rem 2.2rem; text-align: center; }
   .options { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; width: 100%; max-width: 1150px; }
   .opt.big { font-size: 1.55rem; }
   .pickers { margin-left: auto; display: flex; gap: 0.25rem; }

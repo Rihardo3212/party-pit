@@ -124,11 +124,11 @@
     52%, 64% { transform: skewX(14deg) scale(1) rotate(0); opacity: 1; }
     80%, 100% { transform: skewX(14deg) scale(1.2); opacity: 0; }
   }
-  .ic { font-size: clamp(4rem, 11vw, 9rem); line-height: 1; filter: drop-shadow(0 10px 0 rgba(0, 0, 0, 0.2)); }
-  .tt { font-family: var(--font-display); font-size: clamp(2.6rem, 7vw, 6rem); line-height: 1; text-shadow: 0 6px 0 rgba(0, 0, 0, 0.2); }
-  .st { font-weight: 900; font-size: clamp(1rem, 2vw, 1.6rem); opacity: 0.9; margin-top: 0.4rem; }
-  .wipe:not(.big) .ic { font-size: clamp(3rem, 7vw, 6rem); }
-  .wipe:not(.big) .tt { font-size: clamp(2rem, 5vw, 4.4rem); }
+  .ic { font-size: clamp(4rem, calc(11 * var(--vw)), 9rem); line-height: 1; filter: drop-shadow(0 10px 0 rgba(0, 0, 0, 0.2)); }
+  .tt { font-family: var(--font-display); font-size: clamp(2.6rem, calc(7 * var(--vw)), 6rem); line-height: 1; text-shadow: 0 6px 0 rgba(0, 0, 0, 0.2); }
+  .st { font-weight: 900; font-size: clamp(1rem, calc(2 * var(--vw)), 1.6rem); opacity: 0.9; margin-top: 0.4rem; }
+  .wipe:not(.big) .ic { font-size: clamp(3rem, calc(7 * var(--vw)), 6rem); }
+  .wipe:not(.big) .tt { font-size: clamp(2rem, calc(5 * var(--vw)), 4.4rem); }
 
   .drum { display: block; text-align: center; font-size: 1.3em; animation: drum 0.12s ease-in-out infinite alternate; }
   @keyframes drum { from { transform: rotate(-8deg) translateY(0); } to { transform: rotate(8deg) translateY(-6px); } }
@@ -136,7 +136,7 @@
   .cur {
     position: absolute; top: 0; bottom: 0; width: 52%;
     background:
-      repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.28) 0 2.2vw, rgba(255, 255, 255, 0.06) 2.2vw 3.2vw, rgba(0, 0, 0, 0) 3.2vw 5.4vw),
+      repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.28) 0 calc(2.2 * var(--vw)), rgba(255, 255, 255, 0.06) calc(2.2 * var(--vw)) calc(3.2 * var(--vw)), rgba(0, 0, 0, 0) calc(3.2 * var(--vw)) calc(5.4 * var(--vw))),
       linear-gradient(180deg, #e0213a, #9e0f24);
     box-shadow: 0 0 60px rgba(0, 0, 0, 0.6);
   }
@@ -145,14 +145,14 @@
   @keyframes cl { 0% { transform: translateX(-100%); } 16%, 76% { transform: translateX(0); } 100% { transform: translateX(-100%) scaleX(0.6); } }
   @keyframes cr { 0% { transform: translateX(100%); } 16%, 76% { transform: translateX(0); } 100% { transform: translateX(100%) scaleX(0.6); } }
   .valance {
-    position: absolute; top: 0; left: 0; right: 0; height: 9vh;
-    background: radial-gradient(circle at 50% 0, #ffd84d 0 30%, transparent 31%) 0 100% / 6vw 3vh repeat-x, linear-gradient(#b80f27, #7d0a1b);
+    position: absolute; top: 0; left: 0; right: 0; height: calc(9 * var(--vh));
+    background: radial-gradient(circle at 50% 0, #ffd84d 0 30%, transparent 31%) 0 100% / calc(6 * var(--vw)) calc(3 * var(--vh)) repeat-x, linear-gradient(#b80f27, #7d0a1b);
     border-bottom: 6px solid #ffc400; animation: val 2.9s ease both;
   }
   @keyframes val { 0% { transform: translateY(-100%); } 12%, 86% { transform: none; } 100% { transform: translateY(-100%); } }
   .ctitle {
     position: absolute; inset: 0; display: grid; place-items: center; color: #fff;
-    font-family: var(--font-display); font-size: clamp(2.4rem, 6vw, 5rem); text-shadow: 0 6px 0 rgba(0, 0, 0, 0.35);
+    font-family: var(--font-display); font-size: clamp(2.4rem, calc(6 * var(--vw)), 5rem); text-shadow: 0 6px 0 rgba(0, 0, 0, 0.35);
     animation: ct 2.9s cubic-bezier(0.2, 1.5, 0.4, 1) both;
   }
   @keyframes ct { 0%, 14% { transform: scale(0.3); opacity: 0; } 24%, 68% { transform: scale(1); opacity: 1; } 76%, 100% { transform: scale(1.3); opacity: 0; } }

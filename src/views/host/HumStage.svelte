@@ -78,6 +78,6 @@
   .eq.on span { animation: bounce-eq 0.55s ease-in-out infinite alternate; }
   @keyframes bounce-eq { from { height: 15%; } to { height: 100%; } }
   .ask { font-family: var(--font-display); font-size: 2.2rem; }
-  .title { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3.4rem); text-align: center; }
+  .title { font-family: var(--font-display); font-size: clamp(2rem, calc(4 * var(--vw)), 3.4rem); text-align: center; }
   .by { color: #eafff6; font-size: 1.2rem; }
 </style>

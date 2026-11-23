@@ -186,7 +186,7 @@
   .turn h2 { font-size: 1.8rem; }
   .qhead { display: flex; gap: 0.7rem; align-items: center; font-size: 1.5rem; }
   .qwrap { width: 100%; max-width: 1150px; }
-  .qtext { font-size: clamp(2rem, 3.5vw, 3.3rem); line-height: 1.15; padding: 2rem 2.2rem; text-align: center; }
+  .qtext { font-size: clamp(2rem, calc(3.5 * var(--vw)), 3.3rem); line-height: 1.15; padding: 2rem 2.2rem; text-align: center; }
   .options { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; width: 100%; max-width: 1150px; }
   .opt.big { font-size: 1.6rem; }
   .by { margin-left: auto; }
@@ -216,7 +216,7 @@
   @keyframes glow { from { box-shadow: 0 0 0 0 var(--c); } to { box-shadow: 0 0 34px 12px var(--c); } }
 
   .final-title {
-    font-size: clamp(3rem, 7vw, 6.2rem); color: var(--sun);
+    font-size: clamp(3rem, calc(7 * var(--vw)), 6.2rem); color: var(--sun);
     text-shadow: 0 3px 0 #ff8a00, 0 6px 0 #d96800, 0 10px 30px -8px rgba(224, 33, 58, 0.6), 0 0 40px rgba(255, 196, 0, 0.5);
   }
   .final-cat { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }

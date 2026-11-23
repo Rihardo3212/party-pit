@@ -46,8 +46,8 @@
     min-height: 5.6rem;
     box-shadow: 0 10px 22px -8px color-mix(in srgb, var(--red) 75%, transparent);
   }
-  .icon { font-size: clamp(1.9rem, calc(10vw / var(--cols)), 3rem); filter: drop-shadow(0 3px 0 rgba(0, 0, 0, 0.25)); }
-  .name { font-family: var(--font-display); font-size: clamp(1.15rem, calc(7vw / var(--cols)), 1.9rem); line-height: 1.05; text-shadow: 0 2px 0 rgba(0, 0, 0, 0.25); }
+  .icon { font-size: clamp(1.9rem, calc(calc(10 * var(--vw)) / var(--cols)), 3rem); filter: drop-shadow(0 3px 0 rgba(0, 0, 0, 0.25)); }
+  .name { font-family: var(--font-display); font-size: clamp(1.15rem, calc(calc(7 * var(--vw)) / var(--cols)), 1.9rem); line-height: 1.05; text-shadow: 0 2px 0 rgba(0, 0, 0, 0.25); }
 
   /* flat blue tiles with a soft glow */
   .cell {
@@ -75,9 +75,9 @@
   @keyframes flip-in { from { transform: rotateX(-95deg) scale(0.8); opacity: 0; } to { transform: none; opacity: 1; } }
 
   .compact { gap: 0.4rem; }
-  .compact .cat { min-height: clamp(3.6rem, calc(34vw / var(--cols)), 5rem); border-radius: 13px; padding: 0.3rem 0.15rem; box-shadow: 0 8px 20px -6px color-mix(in srgb, var(--red) 70%, transparent); }
-  .compact .icon { font-size: clamp(1.1rem, calc(26vw / var(--cols)), 1.8rem); }
-  .compact .name { font-size: clamp(0.68rem, calc(18vw / var(--cols)), 1.05rem); }
-  .compact .cell { min-height: clamp(3.3rem, calc(40vw / var(--cols)), 5.5rem); border-radius: 13px; box-shadow: 0 8px 20px -6px color-mix(in srgb, var(--blue) 70%, transparent); }
-  .compact .cell span { font-size: clamp(1.2rem, calc(34vw / var(--cols)), 2rem); }
+  .compact .cat { min-height: clamp(3.6rem, calc(calc(34 * var(--vw)) / var(--cols)), 5rem); border-radius: 13px; padding: 0.3rem 0.15rem; box-shadow: 0 8px 20px -6px color-mix(in srgb, var(--red) 70%, transparent); }
+  .compact .icon { font-size: clamp(1.1rem, calc(calc(26 * var(--vw)) / var(--cols)), 1.8rem); }
+  .compact .name { font-size: clamp(0.68rem, calc(calc(18 * var(--vw)) / var(--cols)), 1.05rem); }
+  .compact .cell { min-height: clamp(3.3rem, calc(calc(40 * var(--vw)) / var(--cols)), 5.5rem); border-radius: 13px; box-shadow: 0 8px 20px -6px color-mix(in srgb, var(--blue) 70%, transparent); }
+  .compact .cell span { font-size: clamp(1.2rem, calc(calc(34 * var(--vw)) / var(--cols)), 2rem); }
 </style>

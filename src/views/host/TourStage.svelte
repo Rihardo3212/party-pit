@@ -241,7 +241,7 @@
               <div class="pt">{mode.tagline}</div>
             </div>
           </div>
-          <div class="steps"><StepFlow steps={mode.steps} color={mode.color} size="small" animate /></div>
+          <div class="steps"><StepFlow steps={mode.steps} color={mode.color} size={t.mix || layout.side ? 'small' : 'mini'} animate /></div>
           <div class="tw"><Timer until={t.until} total={T.pick} {now} /><span class="secs-big">{secs(t.until)}</span></div>
 
         {:else if s.phase === 'tscore'}
@@ -260,13 +260,13 @@
 {/snippet}
 
 <style>
-  .main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 0.3rem 1.5rem 0.6rem 150px; /* room for Lewis on the left */ width: 100%; position: relative; z-index: 1; }
+  .main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 0.3rem 1.5rem 0.6rem 170px; /* room for Lewis on the left */ width: 100%; position: relative; z-index: 1; }
   /* Toy Island */
   .island {
     position: relative; container-type: inline-size; aspect-ratio: var(--ar);
-    width: min(100%, 1500px, calc(min(74vh, 800px) * 1.6)); flex: 0 1 auto;
+    width: min(100%, 1500px, calc(min(calc(74 * var(--vh)), 800px) * 1.6)); flex: 0 1 auto;
   }
-  .island.shaped { width: min(60%, calc(min(74vh, 800px) * 1.15)); }
+  .island.shaped { width: min(60%, calc(min(calc(74 * var(--vh)), 800px) * 1.15)); }
   .map { position: absolute; overflow: visible; filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.45)); }
   .wave { fill: none; stroke: #bdf3ff; stroke-width: 0.8; stroke-linecap: round; opacity: 0.6; animation: wave 3.5s ease-in-out infinite; }
   @keyframes wave { 50% { transform: translateX(3px); opacity: 0.2; } }
@@ -294,14 +294,23 @@
   .inner .qhead { font-size: 1.05rem; }
   .inner .sticker.big { font-size: 1.3rem; }
   .inner .note { font-size: 1.05rem; }
-  .inner .tw { max-width: 88%; }
+  .inner .tw { max-width: 72%; }
+  /* The next-game card inside the island: one compact sign, rules as a row of solid icon tiles. */
+  .inner .pick { padding: 0.6rem 1.4rem; gap: 0.9rem; border-radius: 24px; }
+  .inner .pi { font-size: 2.8rem; }
+  .inner .pn { font-size: clamp(1.5rem, 2.4cqw, 2.3rem); }
+  .inner .steps { max-width: 100%; }
+  .inner .steps :global(.step) { background: var(--surface); box-shadow: 0 10px 22px -10px rgba(0, 0, 0, 0.6); padding: 0.9rem 0.5rem 0.7rem; }
+  .inner .steps :global(.step .icon-tile) { --sz: clamp(40px, 4.2cqw, 58px); }
+  .inner .steps :global(.label) { font-size: clamp(0.85rem, 1.25cqw, 1.05rem); }
+  .inner .steps :global(.arrow) { color: #fff; text-shadow: 0 2px 0 rgba(0, 0, 0, 0.35); }
   .main.side { gap: 2.4rem; }
   @media (prefers-reduced-motion: reduce) { .wave, .smoke, .boat, .tok.moving { animation: none; } }
   .center.beside { flex: 1; min-width: 320px; max-width: 640px; align-self: stretch; }
   .beside .move { flex-direction: column; text-align: center; padding: 0.8rem 1rem; }
   .beside .mname { font-size: 1.5rem; }
   .beside .evs { justify-content: center; }
-  .center.solo { width: min(100%, 1100px); min-height: 60vh; }
+  .center.solo { width: min(100%, 1100px); min-height: calc(60 * var(--vh)); }
   .center {
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.8rem;
     padding: 0.6rem 1rem; min-height: 0; overflow: hidden;
@@ -323,7 +332,7 @@
   .evs { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.4rem; font-size: 1.15rem; }
   .pick { display: flex; align-items: center; gap: 1.2rem; background: var(--mc); color: #fff; border-radius: 28px; padding: 0.9rem 1.8rem; box-shadow: 0 18px 46px -10px var(--mc); }
   .pi { font-size: 4rem; }
-  .pn { font-family: var(--font-display); font-size: clamp(1.8rem, 3vw, 2.8rem); }
+  .pn { font-family: var(--font-display); font-size: clamp(1.8rem, calc(3 * var(--vw)), 2.8rem); }
   .pt { font-weight: 800; opacity: 0.9; }
   .steps { width: 100%; max-width: 900px; }
   .results { display: flex; flex-direction: column; gap: 0.4rem; min-width: 380px; }

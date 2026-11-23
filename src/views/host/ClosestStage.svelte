@@ -122,9 +122,9 @@
     background: #fff; color: #2b2240; border-radius: 30px; padding: 1.6rem 2.4rem 1.9rem; max-width: 1100px;
     text-align: center; box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45); position: relative;
   }
-  .qcard h1 { margin: 0; font-size: clamp(2rem, 3.6vw, 3.4rem); line-height: 1.15; }
+  .qcard h1 { margin: 0; font-size: clamp(2rem, calc(3.6 * var(--vw)), 3.4rem); line-height: 1.15; }
   .qcard.small { padding: 1rem 1.8rem 1.4rem; }
-  .qcard.small h1 { font-size: clamp(1.5rem, 2.4vw, 2.2rem); }
+  .qcard.small h1 { font-size: clamp(1.5rem, calc(2.4 * var(--vw)), 2.2rem); }
   .unit { position: absolute; bottom: -0.9rem; right: 1.6rem; font-size: 1.15rem; background: #06b6d4; color: #fff; }
   .locks { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; margin-top: 0.8rem; }
   .lock { display: flex; flex-direction: column; align-items: center; gap: 0.1rem; opacity: 0.5; transition: all 0.2s; }

@@ -58,8 +58,8 @@
   .drift { position: absolute; animation: drift var(--dur) ease-in-out infinite alternate; }
   @keyframes drift {
     0% { transform: translate(0, 0) rotate(0deg); }
-    50% { transform: translate(4vw, -3vh) rotate(40deg); }
-    100% { transform: translate(-3vw, 4vh) rotate(-30deg); }
+    50% { transform: translate(calc(4 * var(--vw)), calc(-3 * var(--vh))) rotate(40deg); }
+    100% { transform: translate(calc(-3 * var(--vw)), calc(4 * var(--vh))) rotate(-30deg); }
   }
   .shape { width: var(--sz); height: var(--sz); opacity: 0.16; transform: rotate(var(--rot)); }
   .stage .shape { opacity: 0.2; }
@@ -83,14 +83,14 @@
   @keyframes rise {
     0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
     10% { opacity: 0.45; }
-    50% { transform: translate(var(--sway), -55vh) rotate(260deg); }
+    50% { transform: translate(var(--sway), calc(-55 * var(--vh))) rotate(260deg); }
     90% { opacity: 0.35; }
-    100% { transform: translate(calc(var(--sway) * -0.5), -112vh) rotate(520deg); opacity: 0; }
+    100% { transform: translate(calc(var(--sway) * -0.5), calc(-112 * var(--vh))) rotate(520deg); opacity: 0; }
   }
 
   .beams { position: absolute; inset: 0; }
   .beams span {
-    position: absolute; top: -20%; width: 34vw; height: 140%;
+    position: absolute; top: -20%; width: calc(34 * var(--vw)); height: 140%;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0) 75%);
     clip-path: polygon(45% 0, 55% 0, 100% 100%, 0 100%);
     transform-origin: 50% 0; filter: blur(6px);

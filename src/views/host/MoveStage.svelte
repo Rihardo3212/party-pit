@@ -187,7 +187,7 @@
 
   /* High Noon */
   .noon {
-    position: relative; width: 100%; max-width: 1100px; height: min(60vh, 520px); border-radius: 32px; overflow: hidden;
+    position: relative; width: 100%; max-width: 1100px; height: min(calc(60 * var(--vh)), 520px); border-radius: 32px; overflow: hidden;
     background: linear-gradient(#f59e0b 0%, #fb923c 55%, #b45309 56%, #78350f 100%);
     display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 2rem 1rem 1.5rem;
   }
@@ -204,7 +204,7 @@
 
   /* Ping Pong */
   .table {
-    position: relative; width: min(900px, 90%); height: min(58vh, 520px); border-radius: 50%;
+    position: relative; width: min(900px, 90%); height: min(calc(58 * var(--vh)), 520px); border-radius: 50%;
     background: radial-gradient(#1d7a4f, #145c3b); box-shadow: inset 0 0 0 10px #f1f5f9, 0 20px 40px -20px #000;
   }
   .net { position: absolute; left: 50%; top: 8%; bottom: 8%; width: 6px; margin-left: -3px; background: rgba(255, 255, 255, 0.7); }
@@ -257,6 +257,6 @@
   .rv { color: #5b5270; }
   .rp { font-family: var(--font-display); color: var(--green-dark); min-width: 4rem; text-align: right; font-size: 1.5rem; }
   .nobody { font-size: 1.6rem; text-align: center; }
-  @media (max-height: 760px) { h1 { font-size: 3rem; } .noon, .table { height: 48vh; } .word { font-size: 5rem; } }
+  @media (max-height: 760px) { h1 { font-size: 3rem; } .noon, .table { height: calc(48 * var(--vh)); } .word { font-size: 5rem; } }
   @media (prefers-reduced-motion: reduce) { .noon.drawn, .seat.target { animation: none; } }
 </style>

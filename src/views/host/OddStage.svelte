@@ -97,7 +97,7 @@
   }
   .ci { font-size: 3rem; }
   .cl { font-weight: 900; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.6; }
-  .cn { font-family: var(--font-display); font-size: clamp(2rem, 3.6vw, 3.4rem); }
+  .cn { font-family: var(--font-display); font-size: clamp(2rem, calc(3.6 * var(--vw)), 3.4rem); }
   .word { font-size: 1.6rem; background: #8b5cf6; color: #fff; border-radius: 18px; padding: 0.3rem 1rem; }
   .word b { font-family: var(--font-display); font-weight: 400; font-size: 2rem; }
   .sticker.big { font-size: 1.7rem; }
@@ -110,7 +110,7 @@
   .clue.caught .bubble { background: #ff3b4f; color: #fff; }
   .clue.spy .bubble { background: #8b5cf6; color: #fff; }
   .bubble {
-    font-family: var(--font-display); font-size: clamp(1.4rem, 2.2vw, 2.1rem); background: var(--surface-hi); border-radius: 18px;
+    font-family: var(--font-display); font-size: clamp(1.4rem, calc(2.2 * var(--vw)), 2.1rem); background: var(--surface-hi); border-radius: 18px;
     padding: 0.35rem 1rem; max-width: 260px; text-align: center; word-break: break-word; box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.5);
   }
   .cn2 { font-weight: 900; }

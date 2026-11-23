@@ -99,7 +99,7 @@
   .qhead { display: flex; gap: 0.7rem; font-size: 1.45rem; }
   .photo { margin: 0; position: relative; max-width: 100%; display: flex; flex-direction: column; align-items: center; }
   .photo img {
-    max-height: max(200px, calc(100vh - 480px)); max-width: min(100%, 1150px); border-radius: 26px; display: block; object-fit: contain;
+    max-height: max(200px, calc(calc(100 * var(--vh)) - 480px)); max-width: min(100%, 1150px); border-radius: 26px; display: block; object-fit: contain;
     border: 6px solid #fff; box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5);
   }
   figcaption { font-size: 0.8rem; opacity: 0.6; margin-top: 0.35rem; text-align: center; }
@@ -115,7 +115,7 @@
   @keyframes rush-beat { to { transform: scale(1.18); } }
   .secs-big { font-family: var(--font-display); font-size: 1.8rem; min-width: 2.5rem; }
 
-  .reveal { display: grid; grid-template-columns: 1fr 380px; gap: 1.2rem; width: 100%; height: max(320px, calc(100vh - 250px)); }
+  .reveal { display: grid; grid-template-columns: 1fr 380px; gap: 1.2rem; width: 100%; height: max(320px, calc(calc(100 * var(--vh)) - 250px)); }
   .mapcard { border-radius: 26px; border: 6px solid #fff; box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5); overflow: hidden; }
   .side {
     background: #fff; color: #2b2240; border-radius: 26px; padding: 1rem; display: flex; flex-direction: column; gap: 0.45rem;

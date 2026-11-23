@@ -79,12 +79,12 @@
   .qhead { display: flex; gap: 0.7rem; font-size: 1.45rem; }
   .prompt {
     background: #fff; color: #2b2240; border-radius: 30px; padding: 1.4rem 2.4rem; max-width: 1100px; text-align: center;
-    font-family: var(--font-display); font-size: clamp(2rem, 3.8vw, 3.6rem); line-height: 1.15; box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+    font-family: var(--font-display); font-size: clamp(2rem, calc(3.8 * var(--vw)), 3.6rem); line-height: 1.15; box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
   }
-  .prompt.small { font-size: clamp(1.3rem, 2vw, 1.9rem); padding: 0.7rem 1.6rem; opacity: 0.9; }
+  .prompt.small { font-size: clamp(1.3rem, calc(2 * var(--vw)), 1.9rem); padding: 0.7rem 1.6rem; opacity: 0.9; }
   .sticker.big { font-size: 1.7rem; }
   .answer {
-    font-family: var(--font-display); font-size: clamp(2.2rem, 4.5vw, 4.4rem); text-align: center; max-width: 1100px; line-height: 1.15;
+    font-family: var(--font-display); font-size: clamp(2.2rem, calc(4.5 * var(--vw)), 4.4rem); text-align: center; max-width: 1100px; line-height: 1.15;
     color: #fff; background: #14b8a6; border-radius: 30px; padding: 1.2rem 2.4rem; box-shadow: 0 18px 46px -10px rgba(20, 184, 166, 0.8);
   }
   .locks, .suspects { display: flex; gap: 1.1rem; flex-wrap: wrap; justify-content: center; }

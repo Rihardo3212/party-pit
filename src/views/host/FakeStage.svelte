@@ -107,7 +107,7 @@
   }
   .qhead { display: flex; gap: 0.7rem; font-size: 1.45rem; }
   .qwrap { width: 100%; max-width: 1150px; }
-  .qtext { font-size: clamp(1.9rem, 3.2vw, 3rem); line-height: 1.2; padding: 1.9rem 2.2rem; text-align: center; }
+  .qtext { font-size: clamp(1.9rem, calc(3.2 * var(--vw)), 3rem); line-height: 1.2; padding: 1.9rem 2.2rem; text-align: center; }
   .blank {
     display: inline-block; min-width: 3.5em; color: var(--purple);
     border-bottom: 0.1em dashed var(--purple); padding: 0 0.2em; margin: 0 0.1em;

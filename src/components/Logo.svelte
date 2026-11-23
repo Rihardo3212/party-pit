@@ -14,7 +14,7 @@
     align-items: center;
     gap: 0.12em;
     font-family: var(--font-display);
-    font-size: min(calc(3.4rem * var(--s)), 9.6vw);
+    font-size: min(calc(3.4rem * var(--s)), calc(9.6 * var(--vw)));
     line-height: 1;
     transform: rotate(-4deg);
     user-select: none;

@@ -20,8 +20,10 @@
     const i = groups.indexOf(g);
     return i === 0 ? revealAt(s) : placeAt(groups.length - 1 - i);
   };
-  const STEP_H = { 1: 160, 2: 112, 3: 80 };
-  const MEDAL = { 1: '🥇', 2: '🥈', 3: '🥉' };
+  const STEP_H = { 1: 210, 2: 150, 3: 110 };
+  // Toy-block colors per place: face, darker side.
+  const BLOCK = { 1: ['#ffc400', '#c98a00'], 2: ['#cfd8ea', '#8e9bb8'], 3: ['#f08a4b', '#b4552a'] };
+  const SUFFIX = { 1: 'st', 2: 'nd', 3: 'rd' };
 
   // A clock from the moment the end screen shows; it drives the step-by-step reveal.
   let t = $state(0);
@@ -59,7 +61,8 @@
     {#each order as g (g.place)}
       {@const top = g.place === 1}
       {@const shown = t >= showAt(g)}
-      <div class="col" class:top class:shown style="--h:{STEP_H[g.place] || 56}px">
+      {@const bc = BLOCK[g.place] || ['#4a3d7a', '#2f2556']}
+      <div class="col" class:top class:shown class:low={g.place > 3} style="--h:{STEP_H[g.place] || 60}px; --bc:{bc[0]}; --bd:{bc[1]}">
         <div class="people">
           {#if top && shown}<div class="rays" aria-hidden="true"></div>{/if}
           {#if shown}
@@ -67,7 +70,7 @@
               {@const u = U(id)}
               <div class="who drop" style="animation-delay:{j * 120}ms">
                 {#if top}<div class="crown">👑</div>{/if}
-                <Avatar src={avatars[id]} color={u.color} name={u.name} size={top ? (hasAwards ? 116 : 160) : hasAwards ? 70 : 92} />
+                <Avatar src={avatars[id]} color={u.color} name={u.name} size={top ? (hasAwards ? 116 : 160) : hasAwards ? 78 : 108} />
                 <div class="pname">{u.name}</div>
                 {#if s.teamMode}<div class="mem muted">{u.members.map((m) => s.players[m]?.name).join(', ')}</div>{/if}
                 {#if s.settings.game === 'wedge'}<Pie wedges={u.wedges} size={top ? 64 : 46} />{/if}
@@ -79,7 +82,7 @@
           {/if}
         </div>
         <div class="step" class:up={shown || top}>
-          <span class="num">{MEDAL[g.place] || `#${g.place}`}</span>
+          <span class="num">{g.place}<small>{SUFFIX[g.place] || 'th'}</small></span>
         </div>
       </div>
     {/each}
@@ -99,11 +102,11 @@
   .main { flex: 1; position: relative; display: flex; flex-direction: column; gap: 0.5rem; align-items: center; justify-content: center; text-align: center; padding: 0.4rem 2rem; }
   .modename { font-size: 1.3rem; }
   .head { min-height: 4.5rem; display: grid; place-items: center; }
-  .soon { font-size: clamp(1.8rem, 3.4vw, 2.8rem); color: var(--muted); }
-  .drum-line { font-size: clamp(2.2rem, 4.5vw, 3.6rem); display: flex; align-items: center; gap: 0.6rem; animation: throb 0.3s ease-in-out infinite alternate; }
+  .soon { font-size: clamp(1.8rem, calc(3.4 * var(--vw)), 2.8rem); color: var(--muted); }
+  .drum-line { font-size: clamp(2.2rem, calc(4.5 * var(--vw)), 3.6rem); display: flex; align-items: center; gap: 0.6rem; animation: throb 0.3s ease-in-out infinite alternate; }
   .drum { display: inline-block; font-size: 1.3em; animation: hop 0.18s ease-in-out infinite alternate; }
   .win-title {
-    font-size: clamp(3rem, 5.6vw, 5.4rem); color: var(--sun); margin: 0; line-height: 1.05;
+    font-size: clamp(3rem, calc(5.6 * var(--vw)), 5.4rem); color: var(--sun); margin: 0; line-height: 1.05;
     text-shadow: 0 3px 0 #ff8a00, 0 6px 0 #d96800, 0 10px 30px -8px rgba(224, 33, 58, 0.6), 0 14px 22px rgba(0, 0, 0, 0.35);
   }
 
@@ -111,10 +114,15 @@
   .stage { display: flex; align-items: flex-end; justify-content: center; gap: 2rem; width: 100%; }
   .stage.side .podium { width: auto; }
   .awards-side { width: 290px; flex: none; align-self: center; }
-  .podium { display: flex; align-items: flex-end; justify-content: center; gap: 0.9rem; width: 100%; }
-  .col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; min-width: clamp(150px, 17vw, 230px); }
+  .podium { position: relative; isolation: isolate; display: flex; align-items: flex-end; justify-content: center; gap: 8px; width: 100%; }
+  /* a soft floor shadow so the blocks stand on something */
+  .podium::after {
+    content: ''; position: absolute; left: 50%; bottom: -16px; width: min(110%, 1100px); height: 34px; transform: translateX(-50%);
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.45), transparent 70%); pointer-events: none; z-index: -1;
+  }
   .people { padding-inline: 0.5rem; }
-  .col.top { min-width: clamp(200px, 24vw, 330px); overflow: clip; border-radius: 0 0 6px 6px; }
+  .col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; min-width: clamp(170px, calc(16 * var(--vw)), 250px); }
+  .col.top { min-width: clamp(190px, calc(18 * var(--vw)), 280px); }
   .top .people { padding-top: 2.5rem; }
   .people { position: relative; display: flex; gap: 0.6rem; justify-content: center; align-items: flex-end; min-height: 4rem; padding-bottom: 0.6rem; }
   .who { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; position: relative; z-index: 1; }
@@ -130,26 +138,29 @@
   .crown { position: absolute; top: -2.6rem; font-size: 3rem; z-index: 2; animation: crown 0.9s ease-in-out infinite alternate; filter: drop-shadow(0 4px 0 rgba(0, 0, 0, 0.3)); }
   @keyframes crown { from { transform: translateY(0) rotate(-8deg); } to { transform: translateY(-8px) rotate(8deg); } }
 
+  /* Toy blocks: flat face color with a darker bottom side for depth (no gloss). */
   .step {
     position: relative; width: 100%; height: 0; overflow: hidden;
-    border-radius: 18px 18px 6px 6px;
-    background: var(--surface-hi);
-    box-shadow: 0 -2px 0 rgba(255, 255, 255, 0.06) inset, 0 12px 0 -4px color-mix(in srgb, var(--surface-hi) 60%, #000);
-    display: grid; place-items: center;
+    border-radius: 18px 18px 10px 10px;
+    background: var(--bc);
+    box-shadow: inset 0 -12px 0 var(--bd), 0 18px 30px -14px rgba(0, 0, 0, 0.7);
+    display: grid; place-items: center; padding-bottom: 12px;
     transition: height 0.6s cubic-bezier(0.25, 1.5, 0.45, 1);
   }
   .step.up { height: var(--h); }
-  .top .step { height: 70px; background: color-mix(in srgb, var(--sun) 28%, var(--surface-hi)); }
-  .top.shown .step { height: var(--h); background: var(--sun); box-shadow: 0 0 60px -6px color-mix(in srgb, var(--sun) 80%, transparent), 0 12px 0 -4px #b07a00; }
-  .num { position: relative; font-family: var(--font-display); font-size: 2.6rem; color: var(--muted); }
-  .top.shown .num { font-size: 4rem; color: #3a2a00; }
-  .col:not(.top) .step.up .num { font-size: 2.8rem; }
+  .top:not(.shown) .step { height: 70px; background: var(--surface-hi); box-shadow: inset 0 -12px 0 color-mix(in srgb, var(--surface-hi) 60%, #000); }
+  .top.shown .step { box-shadow: inset 0 -12px 0 var(--bd), 0 0 70px -8px color-mix(in srgb, var(--sun) 75%, transparent); }
+  .num { position: relative; font-family: var(--font-display); font-size: 3.4rem; line-height: 1; color: rgba(43, 34, 64, 0.85); }
+  .num small { font-size: 0.42em; vertical-align: top; margin-left: 2px; }
+  .top.shown .num { font-size: 4.8rem; }
+  .top:not(.shown) .num, .low .num { color: rgba(255, 255, 255, 0.75); }
+  .low .num { font-size: 2.2rem; }
   /* Sun rays turning slowly behind the winner. */
   .rays {
     position: absolute; left: 50%; top: 55%; width: 460px; height: 460px; margin: -230px 0 0 -230px;
     background: repeating-conic-gradient(from 0deg, color-mix(in srgb, var(--sun) 40%, transparent) 0 9deg, transparent 9deg 22deg);
     -webkit-mask: radial-gradient(circle, #000 15%, transparent 68%); mask: radial-gradient(circle, #000 15%, transparent 68%);
-    border-radius: 50%; pointer-events: none;
+    border-radius: 50%; pointer-events: none; z-index: -1;
     animation: spin 14s linear infinite, fade-in 0.8s ease both;
   }
   @keyframes spin { to { transform: rotate(1turn); } }
@@ -169,11 +180,13 @@
   @keyframes rise { from { transform: scale(0.2) rotate(-12deg); opacity: 0; } to { transform: none; opacity: 1; } }
   @keyframes hop { to { transform: translateY(-8px) rotate(8deg); } }
 
-  .podium.small .col { min-width: clamp(130px, 14vw, 190px); }
-  .podium.small .col.top { min-width: clamp(180px, 20vw, 270px); }
-  .podium.small .step.up, .podium.small.podium .top.shown .step { height: calc(var(--h) * 0.5); }
-  .podium.small .num { font-size: 2rem; }
-  .podium.small .top.shown .num { font-size: 2.8rem; }
+  .podium.small .col { min-width: clamp(140px, calc(13 * var(--vw)), 200px); }
+  .podium.small .col.top { min-width: clamp(160px, calc(15 * var(--vw)), 230px); }
+  .podium.small .step.up { height: calc(var(--h) * 0.72); }
+  .podium.small .top:not(.shown) .step { height: 56px; }
+  .podium.small .num { font-size: 2.6rem; }
+  .podium.small .top.shown .num { font-size: 3.6rem; }
+  .podium.small .low .num { font-size: 1.8rem; }
   .hint { margin: 0; }
 
   @media (prefers-reduced-motion: reduce) {

@@ -91,9 +91,9 @@
   .qhead { display: flex; gap: 0.7rem; font-size: 1.45rem; }
   .take {
     background: #fff; color: #2b2240; border-radius: 30px; padding: 1.4rem 2.4rem; max-width: 1100px; text-align: center;
-    font-family: var(--font-display); font-size: clamp(2rem, 3.8vw, 3.6rem); line-height: 1.15; box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+    font-family: var(--font-display); font-size: clamp(2rem, calc(3.8 * var(--vw)), 3.6rem); line-height: 1.15; box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
   }
-  .take.small { font-size: clamp(1.3rem, 2vw, 1.9rem); padding: 0.7rem 1.6rem; }
+  .take.small { font-size: clamp(1.3rem, calc(2 * var(--vw)), 1.9rem); padding: 0.7rem 1.6rem; }
   .sticker.big { font-size: 1.6rem; }
   .locks { display: flex; gap: 1.1rem; flex-wrap: wrap; justify-content: center; }
   .lock { display: flex; flex-direction: column; align-items: center; gap: 0.1rem; opacity: 0.5; transition: all 0.2s; }

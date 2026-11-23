@@ -89,11 +89,11 @@
   }
   .qhead { display: flex; gap: 0.7rem; font-size: 1.45rem; }
   .cat {
-    font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3.2rem); background: #f97316; color: #fff;
+    font-family: var(--font-display); font-size: clamp(2rem, calc(4 * var(--vw)), 3.2rem); background: #f97316; color: #fff;
     padding: 0.3rem 1.6rem; border-radius: 24px; box-shadow: 0 16px 40px -12px rgba(249, 115, 22, 0.8);
   }
   .ic { display: inline-block; transform: translateY(2px); }
-  .arena { position: relative; width: min(100%, 760px); height: min(48vh, 440px); }
+  .arena { position: relative; width: min(100%, 760px); height: min(calc(48 * var(--vh)), 440px); }
   .seat {
     position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center;
     gap: 0.2rem; transition: all 0.35s cubic-bezier(.3, 1.4, .5, 1);

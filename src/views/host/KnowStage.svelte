@@ -92,11 +92,11 @@
   .qhead { display: flex; gap: 0.7rem; font-size: 1.45rem; }
   .prompts { display: flex; flex-direction: column; gap: 0.6rem; align-items: center; }
   .prompt {
-    font-family: var(--font-display); font-size: clamp(1.4rem, 2.6vw, 2.2rem); background: #8b5cf6; color: #fff;
+    font-family: var(--font-display); font-size: clamp(1.4rem, calc(2.6 * var(--vw)), 2.2rem); background: #8b5cf6; color: #fff;
     padding: 0.4rem 1.4rem; border-radius: 20px;
   }
   .ask { display: flex; align-items: center; gap: 1.2rem; max-width: 1100px; }
-  .ask h1 { margin: 0; font-size: clamp(1.8rem, 3.6vw, 3rem); line-height: 1.15; }
+  .ask h1 { margin: 0; font-size: clamp(1.8rem, calc(3.6 * var(--vw)), 3rem); line-height: 1.15; }
   .options { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; width: 100%; max-width: 1000px; }
   .opt { font-size: 1.35rem; position: relative; }
   .pickers { margin-left: auto; display: flex; gap: 0.2rem; }
