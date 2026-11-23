@@ -37,7 +37,7 @@
     {/each}
   </div>
   <AwardCards {s} {avatars} delay={AWARDS_AT(s)} />
-  <p class="muted">{ctrlName} can start a new round from their phone.</p>
+  <p class="muted pop-in" style="animation-delay:{REVEAL_AT + 600}ms">{ctrlName} can start a new round from their phone.</p>
 </section>
 
 <style>
