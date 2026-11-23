@@ -50,6 +50,15 @@
   .small .arrow { display: none; }
   .small.animate .step { animation-delay: calc(var(--d) / 3); }
 
+  /* mini: one tight row of icons for the TV lobby card */
+  .mini { gap: 0.5rem; }
+  .mini .step { padding: 1rem 0.6rem 0.8rem; border-radius: 20px; gap: 0.45rem; background: rgba(255, 255, 255, 0.06); box-shadow: none; }
+  .mini .num { width: 28px; height: 28px; font-size: 0.95rem; top: -8px; left: -6px; }
+  .mini .step .icon-tile { --sz: 58px; }
+  .mini .label { font-size: 1.05rem; }
+  .mini .tag { font-size: 0.85rem; }
+  .mini .arrow { font-size: 1.3rem; }
+
   @media (max-width: 760px) {
     .big { flex-wrap: wrap; }
     .big .step { flex: 1 1 40%; }

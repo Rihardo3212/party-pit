@@ -41,7 +41,7 @@
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const k = canvas.height / 900;
-    parts = parts.filter((p) => p.y < canvas.height + 30 && p.life < 900);
+    parts = parts.filter((p) => p.y < canvas.height + 30 && p.life < 900 && !(p.fade !== undefined && p.fade <= 0));
     for (const p of parts) {
       p.life++;
       p.vy = Math.min(p.vy + 0.03 * k, 3.6 * k); // gentle, like paper in the air
@@ -50,7 +50,8 @@
       p.r += p.vr;
       const flip = Math.cos(p.ph + p.life / 9); // the piece turns over as it falls
       ctx.save();
-      ctx.globalAlpha = Math.min(1, (canvas.height + 30 - p.y) / 120);
+      if (p.fade !== undefined) p.fade -= 0.05; // fading after a calm
+      ctx.globalAlpha = Math.max(0, Math.min(1, (canvas.height + 30 - p.y) / 120, p.fade ?? 1));
       ctx.translate(p.x, p.y);
       ctx.rotate(p.r);
       ctx.fillStyle = p.c;
@@ -78,6 +79,8 @@
     window.addEventListener('resize', resize);
     off = onFx((e) => {
       if (e.type === 'confetti') confetti(e.amount, e.colors);
+      // Fresh confetti (fired for this very moment) stays; older pieces fade out in ~1/3 s.
+      if (e.type === 'calm') for (const p of parts) if (p.life > 30 && p.fade === undefined) p.fade = 1;
       if (e.type === 'stamp') {
         const id = ++uid;
         stamps = [{ id, ...e, rot: (Math.random() * 14 - 7).toFixed(1) }]; // newest stamp replaces the old one

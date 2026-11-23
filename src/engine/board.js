@@ -8,7 +8,7 @@ export const T = {
   buzz: 10000,          // buzzers stay open
   answerParty: 10000,   // pick an option after buzzing
   answerHost: 30000,    // safety timeout while the host judges
-  reveal: 3800,         // answer stays on screen
+  reveal: 4600,         // answer stays on screen (long enough to read it on the phone too)
   bet: 30000,           // final round: time to bet
   finalParty: 30000,    // final round: time to answer (options)
   finalHost: 45000,     // final round: time to type an answer

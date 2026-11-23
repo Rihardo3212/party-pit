@@ -157,7 +157,7 @@
     </div>
   {:else}
     <div class="stack">
-      <p class="qmini">⚡ {fin.icon} {fin.cat} · ⏱ {secs(fin.until)}</p>
+      <p class="qmini">{fin.icon} {fin.cat} · ⏱ {secs(fin.until)}</p>
       <h3 class="center-text">{fin.q}</h3>
       {#if s.mode === 'party'}
         {#each fin.options as o, i}

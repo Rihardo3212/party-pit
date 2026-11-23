@@ -110,7 +110,11 @@
 
 {:else if (s.phase === 'finalQ' || s.phase === 'finalJudge') && fin}
   <section class="main q">
-    <div class="qhead"><span class="chip">⚡ Final · {fin.icon} {fin.cat}</span></div>
+    <div class="console">
+    <div class="tab">
+      <span class="chip sun">⚡ Final</span>
+      <span class="chip">{fin.icon} {fin.cat}</span>
+    </div>
     <div class="qwrap pop-in">
       <Marquee color="#ff3b4f"><h1 class="qtext">{fin.q}</h1></Marquee>
     </div>
@@ -126,6 +130,7 @@
         <div class="ucard card row" class:locked={!!fin.answers[u.id]}>
           <Avatar src={avatars[u.id]} color={u.color} name={u.name} size={46} />
           <div class="uname">{u.name}</div>
+          <div class="uscore">{u.score}</div>
           <div class="ustate">{fin.answers[u.id] ? '🔒' : '✍️'}</div>
         </div>
       {/each}
@@ -138,11 +143,12 @@
         <div class="spill dim">🎤 {s.hostName} is judging the answers…</div>
       {/if}
     </div>
+    </div>
   </section>
 
 {:else if s.phase === 'finalReveal' && fin}
   <section class="main q">
-    <div class="qhead"><span class="chip">⚡ Final · {fin.icon} {fin.cat}</span></div>
+    <div class="qhead"><span class="chip sun">⚡ Final</span><span class="chip">{fin.icon} {fin.cat}</span></div>
     <h2 class="fq">{fin.q}</h2>
     {#if fin.revealIdx >= 0}
       <div class="answer-reveal pop-in">✅ {fin.answer}</div>

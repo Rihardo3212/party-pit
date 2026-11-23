@@ -42,3 +42,17 @@
 @keyframes ready { to { box-shadow: 0 0 0 14px rgba(63, 224, 255, 0.5), 0 16px 0 #8a0a1e, 0 0 70px rgba(255, 59, 79, 0.75), inset 0 -10px 0 rgba(0, 0, 0, 0.2); } }
 
 .phone .opt { font-size: 1.2rem; }
+
+/* Status screens ("X is picking…", "Locked out", results): one shared toy panel, so every
+   waiting/result moment looks the same instead of text floating on the background.
+   Screens that are already a .card, or hold the buzzer, keep their own look. */
+.phone .scene > .stack.center:not(.card):not(:has(.buzzer)) {
+  background: var(--surface); border-radius: 32px; padding: 1.6rem 1.2rem 1.3rem;
+  box-shadow: 0 22px 44px -18px rgba(0, 0, 0, 0.65);
+}
+.phone .scene > .stack.center > h2 { font-size: 1.75rem; line-height: 1.15; }
+.phone .scene > .stack > .center-text { font-size: 1.75rem; }
+.phone .bigemoji { font-size: 5.2rem; line-height: 1; animation: emoji-pop 0.55s cubic-bezier(0.2, 1.8, 0.4, 1) both; }
+@keyframes emoji-pop { from { transform: scale(0.3) rotate(-20deg); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .phone .bigemoji { animation: none; } }
+.phone .scene > .stack.center .flow .step { background: var(--surface-hi); }

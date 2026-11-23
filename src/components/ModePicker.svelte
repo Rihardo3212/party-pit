@@ -30,17 +30,17 @@
       <button class="mode" class:on={s.settings.game === id} style="--mc:{m.color}" onclick={() => { sfx.pop(); send('settings', { game: id }); }}>
         <span class="mi">{m.icon}</span>
         <span class="mn">{m.name}</span>
-        <span class="mt">{m.tagline}</span>
       </button>
     {/each}
   </div>
+  <!-- One line about the chosen game, instead of a tagline on every tile -->
+  {#key s.settings.game}<p class="about pop-in" style="--mc:{mode.color}"><b>{mode.icon} {mode.name}</b> {mode.tagline}</p>{/key}
   <div class="lengths">
     {#each lengths as [key, l]}
-      <button class="len" class:on={s.settings.length === key} onclick={() => send('settings', { length: key })}>
-        <b>{l.label}</b><span>{l.detail}</span>
-      </button>
+      <button class="len" class:on={s.settings.length === key} onclick={() => { sfx.pop(); send('settings', { length: key }); }}>{l.label}</button>
     {/each}
   </div>
+  {#if lengths.find(([k]) => k === s.settings.length)}<p class="ldetail">{lengths.find(([k]) => k === s.settings.length)[1].detail}</p>{/if}
   {#if n < mode.min}
     <p class="warn">{mode.name} needs at least {mode.min} players.</p>
   {:else if mode.needsPack && !Object.keys(s.pack || {}).length}
@@ -60,41 +60,38 @@
   }
   .tab span { font-size: 1.1rem; }
   .tab.on { background: var(--surface-hi); color: inherit; box-shadow: 0 4px 10px -4px rgba(0, 0, 0, 0.5); }
-  .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 0.55rem; }
+  .modes { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
   .mode {
-    display: flex; flex-direction: column; align-items: center; gap: 0.1rem;
-    padding: 0.7rem 0.4rem; border-radius: 20px;
+    display: flex; align-items: center; gap: 0.55rem; text-align: left;
+    padding: 0.5rem 0.6rem; border-radius: 18px; min-height: 3.4rem;
     background: var(--surface-hi);
     box-shadow: 0 6px 16px -6px rgba(0, 0, 0, 0.5);
-    border: 3px solid transparent; transition: transform 0.1s;
+    transition: transform 0.12s cubic-bezier(0.3, 1.6, 0.5, 1), background 0.2s, box-shadow 0.2s;
   }
-  .mode:active { transform: translateY(3px); }
+  .mode:active { transform: scale(0.95); }
   .mode.on {
-    border-color: #fff;
-    background: var(--mc);
-    color: #fff; box-shadow: 0 8px 20px -6px color-mix(in srgb, var(--mc) 70%, transparent), 0 0 0 3px var(--mc);
+    background: var(--mc); color: #fff;
+    box-shadow: 0 8px 20px -6px color-mix(in srgb, var(--mc) 70%, transparent), 0 0 0 3px #fff;
   }
-  .mi { font-size: 1.9rem; }
-  .mn { font-family: var(--font-display); font-size: 1.15rem; }
-  .mt { font-size: 0.72rem; opacity: 0.85; line-height: 1.2; }
-  .lengths { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
-  .len {
-    background: var(--well); border-radius: 16px; padding: 0.55rem; display: flex; flex-direction: column;
-    border: 3px solid transparent; box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.25);
+  /* icon tile: the mode colour lives here, not on a strip */
+  .mi {
+    flex: none; width: 2.3rem; height: 2.3rem; border-radius: 12px; display: grid; place-items: center;
+    font-size: 1.35rem; background: color-mix(in srgb, var(--mc) 30%, transparent);
   }
-  .len b { font-family: var(--font-display); font-weight: 400; font-size: 1.1rem; }
-  .len span { font-size: 0.75rem; color: var(--muted); }
-  .len.on { border-color: var(--ring); }
+  .mode.on .mi { background: rgba(255, 255, 255, 0.25); }
+  .mn { font-family: var(--font-display); font-size: 1.05rem; line-height: 1.1; }
+  .about { margin: 0; font-size: 0.92rem; color: var(--muted); min-height: 2.4em; }
+  .about b { color: var(--mc); font-family: var(--font-display); font-weight: 400; }
+  .lengths { display: flex; gap: 0.3rem; background: var(--well); padding: 0.3rem; border-radius: 16px; box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.25); }
+  .len { flex: 1; padding: 0.5rem; border-radius: 12px; font-family: var(--font-display); font-size: 1.1rem; color: var(--muted); }
+  .len.on { background: var(--surface-hi); color: inherit; box-shadow: 0 4px 10px -4px rgba(0, 0, 0, 0.5); }
+  .ldetail { margin: -0.35rem 0 0; font-size: 0.8rem; color: var(--muted); }
   .warn { color: var(--sun); margin: 0; font-weight: 900; }
 
-  /* Shorter phones: icon next to the name, no tagline, so the whole picker fits without scrolling. */
-  @media (max-height: 800px) {
-    .picker { gap: 0.6rem; padding: 0.9rem; }
-    .mode { flex-direction: row; justify-content: center; gap: 0.4rem; padding: 0.55rem 0.3rem; border-radius: 16px; }
-    .mi { font-size: 1.35rem; }
-    .mn { font-size: 1rem; }
-    .mt { display: none; }
-    .len { padding: 0.35rem; border-radius: 14px; }
-    .len b { font-size: 1rem; }
+  @media (max-height: 700px) {
+    .picker { gap: 0.55rem; padding: 0.9rem; }
+    .mode { min-height: 2.9rem; padding: 0.4rem 0.5rem; }
+    .mi { width: 2rem; height: 2rem; font-size: 1.15rem; }
+    .about { min-height: 0; }
   }
 </style>

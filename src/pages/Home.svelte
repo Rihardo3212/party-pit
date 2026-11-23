@@ -3,7 +3,7 @@
   import { cleanCode } from '../lib/room.js';
   import { isLocal } from '../lib/db.js';
   import { DEVELOPER } from '../lib/brand.js';
-  import { MODES, MODE_LIST, GROUP_LIST, modesIn } from '../lib/modes.js';
+  import { MODES, GROUP_LIST, modesIn } from '../lib/modes.js';
   import { unlockAudio } from '../lib/sound.js';
 
   let code = $state('');
@@ -49,12 +49,11 @@
   {#each GROUP_LIST as g}
     <h3 class="ghead"><span>{g.icon}</span> {g.label}</h3>
     <div class="modes">
-      {#each modesIn(g.id) as id}
+      {#each modesIn(g.id) as id, i}
         {@const m = MODES[id]}
-        <div class="mode card slide-up" style="--mc:{m.color}; animation-delay:{MODE_LIST.indexOf(id) * 70}ms">
-          <span class="icon-tile" style="--sz:58px">{m.icon}</span>
-          <b>{m.name}</b>
-          <span class="muted">{m.tagline}</span>
+        <div class="mode card slide-up" style="--mc:{m.color}; animation-delay:{Math.min(i, 5) * 60}ms">
+          <span class="icon-tile" style="--sz:52px">{m.icon}</span>
+          <span class="mtext"><b>{m.name}</b><span class="muted">{m.tagline}</span></span>
         </div>
       {/each}
     </div>
@@ -83,8 +82,18 @@
   .code { letter-spacing: 0.4em; text-transform: uppercase; }
   .hint { font-size: 0.85rem; margin: 0; }
   .ghead { margin: 0.4rem 0 -0.6rem; font-size: 1.5rem; width: 100%; text-align: left; }
-  .modes { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.9rem; width: 100%; }
-  .mode { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1.1rem 0.8rem; }
-  .mode b { font-family: var(--font-display); font-weight: 400; font-size: 1.3rem; color: var(--mc); }
-  .mode .muted { font-size: 0.9rem; }
+  .modes { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.8rem; width: 100%; }
+  .mode { display: flex; align-items: center; gap: 0.9rem; padding: 0.8rem 1rem; text-align: left; }
+  .mtext { display: flex; flex-direction: column; gap: 0.1rem; min-width: 0; }
+  .mode b { font-family: var(--font-display); font-weight: 400; font-size: 1.25rem; color: var(--mc); line-height: 1.1; }
+  .mode .muted { font-size: 0.88rem; line-height: 1.25; }
+  /* Phones: two small tiles per row, name only, so the list is short to scroll */
+  @media (max-width: 520px) {
+    .modes { grid-template-columns: 1fr 1fr; gap: 0.55rem; }
+    .mode { padding: 0.6rem 0.7rem; gap: 0.55rem; border-radius: 18px; }
+    .mode .icon-tile { --sz: 38px !important; }
+    .mode b { font-size: 1.02rem; }
+    .mode .muted { display: none; }
+    .ghead { font-size: 1.25rem; }
+  }
 </style>

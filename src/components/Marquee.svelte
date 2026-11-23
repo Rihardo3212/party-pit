@@ -1,18 +1,27 @@
 <script>
   // Game-show marquee: a plastic frame with chasing light bulbs around the edge.
   let { children, color = '#ffc400', lit = true } = $props();
-  const TOP = 22, SIDE = 6;
+  // The bulb track is the frame inset by 12px, so its corners are rounded with
+  // radius R (36px frame radius - 12px). Straight rows stop where the curve starts,
+  // and each corner gets one bulb on the arc so nothing pokes out of the frame.
+  const TOP = 20, SIDE = 5, R = 24, C = Math.round(R * (1 - Math.SQRT1_2)); // C ≈ 7px
+  const at = (pct, px) => `calc(${pct}% + ${px}px)`;
+  const along = (i, n) => [(i / (n - 1)) * 100, R - (i / (n - 1)) * 2 * R]; // R..(100% - R)
   const bulbs = [];
-  for (let i = 0; i < TOP; i++) bulbs.push({ x: (i / (TOP - 1)) * 100, y: 0 });
-  for (let i = 1; i < SIDE; i++) bulbs.push({ x: 100, y: (i / SIDE) * 100 });
-  for (let i = TOP - 1; i >= 0; i--) bulbs.push({ x: (i / (TOP - 1)) * 100, y: 100 });
-  for (let i = SIDE - 1; i >= 1; i--) bulbs.push({ x: 0, y: (i / SIDE) * 100 });
+  bulbs.push({ x: at(0, C), y: at(0, C) });
+  for (let i = 0; i < TOP; i++) { const [p, o] = along(i, TOP); bulbs.push({ x: at(p, o), y: at(0, 0) }); }
+  bulbs.push({ x: at(100, -C), y: at(0, C) });
+  for (let i = 0; i < SIDE; i++) { const [p, o] = along(i, SIDE); bulbs.push({ x: at(100, 0), y: at(p, o) }); }
+  bulbs.push({ x: at(100, -C), y: at(100, -C) });
+  for (let i = TOP - 1; i >= 0; i--) { const [p, o] = along(i, TOP); bulbs.push({ x: at(p, o), y: at(100, 0) }); }
+  bulbs.push({ x: at(0, C), y: at(100, -C) });
+  for (let i = SIDE - 1; i >= 0; i--) { const [p, o] = along(i, SIDE); bulbs.push({ x: at(0, 0), y: at(p, o) }); }
 </script>
 
 <div class="marquee" class:lit style="--b:{color}">
   <div class="lights">
     {#each bulbs as b, i}
-      <span class="bulb" class:odd={i % 2} style="left:{b.x}%; top:{b.y}%"></span>
+      <span class="bulb" class:odd={i % 2} style="left:{b.x}; top:{b.y}"></span>
     {/each}
   </div>
   <div class="inner">{@render children()}</div>

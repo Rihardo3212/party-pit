@@ -3,6 +3,7 @@
   import { MAX_SOLO, TEAMS, TEAM_KEYS } from '../../lib/room.js';
   import { MODES, lengthOf } from '../../lib/modes.js';
   import { isLocal } from '../../lib/db.js';
+  import StepFlow from '../../components/StepFlow.svelte';
 
   let { s, avatars, qr, url, wins, here, watching = false } = $props();
 
@@ -12,18 +13,20 @@
   const ctrlName = $derived(s.mode === 'host' ? s.hostName : s.players[s.vip]?.name);
   const teamCount = (k) => players.filter((p) => p.team === k).length;
   const many = $derived(players.length > MAX_SOLO);
+  // The address people type, without http(s):// so it reads short on the TV.
+  const site = $derived(url.split('#')[0].replace(/^https?:\/\//, '').replace(/\/$/, ''));
 </script>
 
 <section class="lobby">
   <div class="join card pop-in">
     <h2>Join on your phone</h2>
     {#if qr}<div class="qrwrap"><img class="qr" src={qr} alt="QR code to join" /></div>{/if}
-    <p class="muted small">or open <b>{url.split('#')[0]}</b> and type</p>
+    <p class="site">or go to <b>{site}</b></p>
     <div class="bigcode">{s.code}</div>
     {#if isLocal}
       <p class="notice">Local test mode: open the join link in another tab of this browser.</p>
     {:else if !watching}
-      <p class="muted small remote">Playing from far away? Open <b>{url.split('#')[0]}#/watch/{s.code}</b> to get this screen on your own computer.</p>
+      <p class="remote">🖥️ Far away? <b>{site}/#/watch/{s.code}</b></p>
     {/if}
   </div>
 
@@ -38,9 +41,7 @@
           </div>
           <span class="sticker tilt-r len">{len.label}</span>
         </div>
-        <ol class="how">
-          {#each mode.how as line, i}<li style="animation-delay:{150 + i * 80}ms" class="slide-up">{line}</li>{/each}
-        </ol>
+        <div class="how"><StepFlow steps={mode.steps} color={mode.color} size="mini" /></div>
         {#if mode.needsPack}
           {#key Object.keys(s.pack || {}).length}<p class="packn pop-in">✍️ <b>{Object.keys(s.pack || {}).length}</b> secret questions written</p>{/key}
         {/if}
@@ -82,10 +83,9 @@
         <span class="muted">{mode.hostRole} The host starts the game.</span>
       {:else if players.length === 0}
         <span class="sticker">Waiting for players…</span>
-        <span class="muted">First to join is the VIP 👑 and picks the game. Want a host? Tap "Be the host" when joining.</span>
+        <span class="muted">First to join is the VIP 👑 and picks the game.</span>
       {:else}
         <span class="sticker">👑 {ctrlName} is the VIP</span>
-        <span class="muted">The VIP picks the game and presses Start.</span>
       {/if}
       {#if players.length > 0 && players.length < mode.min}
         <span class="warn">{mode.name} needs at least {mode.min} players.</span>
@@ -111,8 +111,9 @@
   .join h2 { font-size: 1.8rem; }
   .qrwrap { background: #fff; padding: 12px; border-radius: 22px; box-shadow: 0 6px 0 #c9c2d9; }
   .qr { width: 100%; max-width: 250px; display: block; }
-  .small { margin: 0; font-size: 0.95rem; word-break: break-all; }
-  .remote { font-size: 0.85rem; max-width: 330px; }
+  .site { margin: 0; font-size: 1.05rem; color: var(--muted); }
+  .site b { color: var(--ink); }
+  .remote { margin: 0; font-size: 0.85rem; color: var(--muted); max-width: 340px; overflow-wrap: anywhere; }
   .bigcode {
     font-family: var(--font-display); font-size: 4.8rem; letter-spacing: 0.14em; line-height: 1; color: #fff;
     background: var(--red); border-radius: 22px; padding: 0.08em 0.3em 0.14em 0.44em;
@@ -124,8 +125,7 @@
   .mhead h1 { font-size: 2.4rem; color: var(--mc); text-shadow: 0 3px 0 rgba(0, 0, 0, 0.25); }
   .tag { margin: 0; color: var(--muted); font-size: 1.05rem; }
   .len { margin-left: auto; font-size: 1.2rem; }
-  .how { margin: 0.8rem 0 0; padding-left: 1.4rem; display: grid; gap: 0.3rem; }
-  .how li { font-size: 1.05rem; }
+  .how { margin-top: 1.1rem; }
   .slots { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.9rem; }
   .slots.many { grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: 0.7rem; }
   .slot { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; text-align: center; padding: 1.1rem 0.5rem 0.8rem; }

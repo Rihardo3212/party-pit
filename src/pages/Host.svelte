@@ -190,6 +190,8 @@
     if (b.mode !== a.mode && b.phase === 'lobby') sfx.ding();
     if (b.settings.game !== a.settings.game && b.phase === 'lobby') sfx.pop();
 
+    // Leftover confetti must not rain over the next question (fresh confetti for this moment stays).
+    if (a.phase !== b.phase && b.phase !== 'end') fx.calm();
     if (a.phase !== b.phase) {
       if (SILENT.has(b.phase) || quietGo(b)) stopMusic();
       else if (b.phase !== 'end' && MUSIC_FOR[b.phase]) playMusic(MUSIC_FOR[b.phase]);
@@ -609,6 +611,10 @@
   const here = (pid) => isLocal || !!presence[pid];
   const stage = $derived(!!s && STAGE.has(s.phase));
   const game = $derived(s?.settings.sub || s?.settings.game); // Party Tour: the running mini game
+  // Phases with their own player cards (scores included), so the score bar would show everyone twice.
+  const OWN_CARDS = new Set(['lobby', 'end', 'teamdraw', 'intro', 'finalBet', 'finalQ', 'finalJudge', 'finalReveal']);
+  const round = $derived(!!s && !OWN_CARDS.has(s.phase)); // score bar showing
+  const showLewis = $derived(lewis.on && !!s); // Lewis is on screen
 </script>
 
 <div class="screen" class:stage>
@@ -697,20 +703,27 @@
   </div>{/key}
   </div></div>
 
-  {#if s && !['lobby', 'end', 'teamdraw', 'intro'].includes(s.phase)}
-    <ScoreBar {s} {avatars} {here} />
-  {:else}
-    <footer class="footer">a {DEVELOPER} game</footer>
-  {/if}
-
-  {#if lewis.on && s}
-    <div class="presenter" class:low={!['lobby', 'end', 'teamdraw', 'intro'].includes(s.phase)} class:quiet={!lewis.speaking}>
-      <Lewis level={lewis.level} talking={lewis.speaking} size={130} />
-      {#if lewis.speaking}
-        <div class="says">{lewis.text}</div>
+  <!-- Bottom dock: Lewis has his own corner, the scores (or footer) sit in the middle,
+       so neither ever covers the game above. Outside rounds his subtitle uses the middle too. -->
+  <div class="dock" class:host={showLewis} class:round>
+    {#if showLewis}
+      <div class="presenter" class:quiet={!lewis.speaking}>
+        <Lewis level={lewis.level} talking={lewis.speaking} size={round ? 96 : 110} />
+      </div>
+    {/if}
+    <div class="mid">
+      {#if showLewis && lewis.speaking && !round}
+        {#key lewis.text}<div class="says">{lewis.text}</div>{/key}
+      {:else if round}
+        <ScoreBar {s} {avatars} {here} />
+      {:else}
+        <footer class="footer">a {DEVELOPER} game</footer>
       {/if}
     </div>
-  {/if}
+    {#if showLewis && lewis.speaking && round}
+      {#key lewis.text}<div class="says float">{lewis.text}</div>{/key}
+    {/if}
+  </div>
 </div>
 
 <style>
@@ -741,19 +754,33 @@
   .stage header .code { font-size: 1rem; }
   .stage .footer { color: rgba(255, 255, 255, 0.6); }
 
-  /* Lewis lives in the bottom-left corner, above the score bar during rounds. */
+  /* Bottom dock: [Lewis] [scores / subtitle / footer] [same width spacer], so the middle stays centred. */
+  .dock {
+    --lw: 0px;
+    position: relative; z-index: 5; flex: none;
+    display: grid; grid-template-columns: var(--lw) 1fr var(--lw); align-items: end;
+    padding: 0 14px;
+  }
+  .dock.host { --lw: 122px; }
+  .dock.host.round { --lw: 106px; }
+  .mid { grid-column: 2; min-width: 0; display: flex; justify-content: center; align-items: end; min-height: 2.6rem; }
+  .dock.host .mid { min-height: 118px; }
+  .dock.host.round .mid { min-height: 0; }
   .presenter {
-    position: fixed; left: 14px; bottom: 10px; z-index: 5;
-    display: flex; align-items: flex-end; gap: 0.6rem; pointer-events: none;
+    grid-column: 1; grid-row: 1; padding-bottom: 8px; pointer-events: none;
     transition: transform 0.35s cubic-bezier(0.2, 1.4, 0.4, 1), opacity 0.3s;
+    transform-origin: bottom left;
   }
-  .presenter.low { bottom: 104px; }
-  .presenter.quiet { transform: scale(0.86); transform-origin: bottom left; opacity: 0.92; }
+  .presenter.quiet { transform: scale(0.9); opacity: 0.92; }
   .says {
-    max-width: min(420px, 40vw); margin-bottom: 70px;
-    background: var(--surface); color: var(--ink);
-    border-radius: 20px 20px 20px 6px; padding: 0.7rem 1rem;
-    font-size: 1.1rem; line-height: 1.3; box-shadow: var(--lift);
-    animation: pop-in 0.3s cubic-bezier(0.2, 1.6, 0.4, 1) both;
+    align-self: center; max-width: min(640px, 60vw); margin-bottom: 1rem;
+    background: #fff; color: #2b2240; font-weight: 700;
+    border-radius: 20px 20px 20px 6px; padding: 0.7rem 1.2rem;
+    font-size: 1.25rem; line-height: 1.3; box-shadow: var(--lift);
+    animation: says-in 0.3s cubic-bezier(0.2, 1.6, 0.4, 1) both;
   }
+  /* During rounds the scores own the middle, so the subtitle floats just above Lewis's head. */
+  .says.float { position: absolute; left: 118px; bottom: 100%; margin: 0 0 -26px; max-width: min(460px, 36vw); font-size: 1.1rem; }
+  @keyframes says-in { from { transform: translateY(10px); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .says { animation: none; } }
 </style>
