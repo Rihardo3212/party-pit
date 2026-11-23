@@ -1,93 +1,113 @@
 <script>
-  // Lewis, the presenter: an original cartoon game-show host.
-  // level (0..1) opens the mouth; talking makes him bob; idle he breathes and blinks.
+  // Lewis, the presenter: a posh blue alien blob with a top hat, a monocle and a grand moustache.
+  // level (0..1) opens the mouth; talking makes him wobble like jelly; idle he breathes and blinks.
   let { level = 0, talking = false, size = 160 } = $props();
 
   const open = $derived(talking ? Math.min(1, level * 1.3) : 0);
-  // Mouth: a grin when quiet, an open "O" that grows with the voice.
-  const mouthH = $derived(3 + open * 15);
-  const mouthW = $derived(22 - open * 5);
+  // Mouth: a small smile when quiet, an open "O" that grows with the voice.
+  const mouthH = $derived(3 + open * 10);
+  const mouthW = $derived(15 - open * 3);
 </script>
 
 <div class="lewis" class:talking style="--size:{size}px; --bob:{open}">
   <svg viewBox="0 0 200 220" aria-hidden="true">
     <!-- shadow -->
-    <ellipse cx="100" cy="212" rx="62" ry="7" fill="rgba(0,0,0,0.28)" />
+    <ellipse cx="100" cy="212" rx="66" ry="7" fill="rgba(0,0,0,0.28)" />
 
-    <!-- jacket -->
-    <path d="M30 216 C30 168 58 146 100 146 C142 146 170 168 170 216 Z" fill="#7b3fe4" />
-    <path d="M30 216 C30 176 54 156 80 150 L100 196 L120 150 C146 156 170 176 170 216 Z" fill="#6a2fd0" />
-    <!-- sparkles on the jacket -->
-    <g fill="#ffd84d" class="spark">
-      <circle cx="52" cy="186" r="2.2" /><circle cx="66" cy="200" r="1.6" /><circle cx="146" cy="184" r="2.2" />
-      <circle cx="136" cy="202" r="1.6" /><circle cx="158" cy="204" r="1.4" /><circle cx="44" cy="206" r="1.4" />
-    </g>
-    <!-- shirt and lapels -->
-    <path d="M80 150 L100 196 L120 150 Z" fill="#fff" />
-    <path d="M80 150 L92 178 L78 172 Z" fill="#5521b5" />
-    <path d="M120 150 L108 178 L122 172 Z" fill="#5521b5" />
-    <!-- bow tie -->
-    <g transform="translate(100 158)">
-      <path d="M0 0 L-17 -9 L-17 9 Z" fill="#ff3b4f" />
-      <path d="M0 0 L17 -9 L17 9 Z" fill="#ff3b4f" />
-      <circle r="4.5" fill="#d61f37" />
-    </g>
-
-    <!-- his free hand: waves about while he talks -->
-    <g class="hand">
-      <circle cx="40" cy="184" r="12" fill="#f2b48a" />
-      <path d="M33 176 q-3 -10 2 -12 q4 0 4 8 M41 172 q0 -11 5 -11 q4 1 2 11" fill="#f2b48a" stroke="#e29c72" stroke-width="1.5" />
-    </g>
-
-    <!-- microphone in his hand -->
-    <g class="mic">
-      <rect x="163" y="140" width="6" height="42" rx="3" fill="#2b2240" transform="rotate(8 166 160)" />
-      <circle cx="166" cy="134" r="11" fill="#c9c4ea" />
-      <circle cx="166" cy="134" r="11" fill="url(#grill)" />
-      <circle cx="162" cy="182" r="12" fill="#f2b48a" />
-    </g>
-
-    <!-- head -->
-    <g class="head">
-      <ellipse cx="100" cy="92" rx="54" ry="58" fill="#f6c39b" />
-      <!-- ears -->
-      <ellipse cx="46" cy="98" rx="9" ry="13" fill="#eeb088" />
-      <ellipse cx="154" cy="98" rx="9" ry="13" fill="#eeb088" />
-      <!-- the quiff -->
-      <path d="M46 84 C42 46 70 26 104 28 C136 30 160 48 154 82 C146 66 132 58 112 58 C90 58 70 64 58 86 Z" fill="#4a2c1d" />
-      <path d="M70 40 C84 14 128 12 146 34 C128 26 102 26 82 44 Z" fill="#5d3825" />
-      <path d="M96 30 C112 22 132 26 140 36" stroke="#7a4b31" stroke-width="3" fill="none" stroke-linecap="round" />
-      <!-- eyebrows: up when talking -->
-      <g class="brows" style="transform: translateY({-open * 4}px)">
-        <path d="M66 76 Q78 68 90 75" stroke="#4a2c1d" stroke-width="5" fill="none" stroke-linecap="round" />
-        <path d="M110 75 Q122 68 134 76" stroke="#4a2c1d" stroke-width="5" fill="none" stroke-linecap="round" />
+    <g class="blob">
+      <!-- the jelly body, with drippy blobs along the bottom -->
+      <path
+        d="M38 208 C26 206 26 188 30 170 C34 142 40 112 54 94 C66 78 82 70 100 70 C120 70 136 78 148 94 C162 112 166 142 170 170 C174 190 172 206 160 208 C150 212 142 204 132 209 C120 214 112 206 100 210 C88 214 80 206 68 210 C56 214 48 206 38 208 Z"
+        fill="#3d8bff"
+      />
+      <!-- soft shade on one side and a lighter tummy, so he looks round (flat colors, no gloss) -->
+      <path d="M150 98 C164 118 168 146 170 170 C172 190 170 204 160 208 C152 186 156 140 150 98 Z" fill="#2f74e6" />
+      <path d="M62 206 C60 184 74 168 100 168 C126 168 140 184 138 206 C126 212 114 206 100 210 C86 213 74 206 62 206 Z" fill="#7db8ff" />
+      <ellipse cx="68" cy="100" rx="10" ry="6" fill="#ffffff" opacity="0.22" transform="rotate(-30 68 100)" />
+      <!-- little spots, because he is from somewhere far away -->
+      <g fill="#2f74e6">
+        <circle cx="46" cy="150" r="4" /><circle cx="54" cy="134" r="2.6" /><circle cx="152" cy="132" r="3.2" />
       </g>
-      <!-- eyes -->
-      <g class="eyes">
-        <ellipse cx="79" cy="91" rx="7" ry="8" fill="#2b2240" />
-        <ellipse cx="121" cy="91" rx="7" ry="8" fill="#2b2240" />
-        <circle cx="81.5" cy="88" r="2.4" fill="#fff" />
-        <circle cx="123.5" cy="88" r="2.4" fill="#fff" />
+
+      <!-- bow tie -->
+      <g transform="translate(100 171)">
+        <path d="M0 0 L-16 -9 L-16 9 Z" fill="#ff3b4f" />
+        <path d="M0 0 L16 -9 L16 9 Z" fill="#ff3b4f" />
+        <circle r="4.5" fill="#d61f37" />
       </g>
-      <!-- cheeks and nose -->
-      <circle cx="64" cy="112" r="9" fill="#ff8a7a" opacity="0.45" />
-      <circle cx="136" cy="112" r="9" fill="#ff8a7a" opacity="0.45" />
-      <ellipse cx="100" cy="106" rx="7" ry="5.5" fill="#e9a57c" />
-      <!-- moustache -->
-      <path d="M100 116 C92 112 78 114 72 122 C82 121 92 122 100 119 C108 122 118 121 128 122 C122 114 108 112 100 116 Z" fill="#4a2c1d" />
-      <!-- mouth -->
-      {#if open > 0.05}
-        <ellipse cx="100" cy={128 + mouthH / 2} rx={mouthW} ry={mouthH} fill="#5a1530" />
-        <ellipse cx="100" cy={128 + mouthH * 1.1} rx={mouthW * 0.55} ry={mouthH * 0.45} fill="#ff6b81" />
-        <rect x={100 - mouthW * 0.7} y="126" width={mouthW * 1.4} height="4" rx="2" fill="#fff" />
-      {:else}
-        <path d="M76 126 Q100 146 124 126 Q100 134 76 126 Z" fill="#5a1530" />
-        <path d="M80 127 Q100 133 120 127 L119 130 Q100 135 81 130 Z" fill="#fff" />
-      {/if}
+
+      <!-- the face -->
+      <g class="face">
+        <!-- eyebrows: up when talking -->
+        <g class="brows" style="transform: translateY({-open * 4}px)">
+          <path d="M66 92 Q77 85 88 91" stroke="#16306e" stroke-width="4.5" fill="none" stroke-linecap="round" />
+          <path d="M112 89 Q124 82 136 90" stroke="#16306e" stroke-width="4.5" fill="none" stroke-linecap="round" />
+        </g>
+        <!-- eyes -->
+        <g class="eyes">
+          <ellipse cx="78" cy="109" rx="12" ry="14" fill="#fff" />
+          <ellipse cx="123" cy="108" rx="12" ry="14" fill="#fff" />
+          <ellipse cx="80" cy="111" rx="6" ry="7.5" fill="#1b1640" />
+          <ellipse cx="125" cy="110" rx="6" ry="7.5" fill="#1b1640" />
+          <circle cx="82.5" cy="107.5" r="2.2" fill="#fff" />
+          <circle cx="127.5" cy="106.5" r="2.2" fill="#fff" />
+        </g>
+        <!-- the monocle and its little gold chain -->
+        <g class="monocle">
+          <circle cx="123" cy="108" r="17" fill="#ffffff" opacity="0.14" />
+          <circle cx="123" cy="108" r="17" fill="none" stroke="#ffc400" stroke-width="4" />
+          <path d="M136 120 C146 132 150 146 144 160" stroke="#ffc400" stroke-width="2" fill="none" stroke-dasharray="3 2.5" stroke-linecap="round" />
+        </g>
+        <!-- cheeks -->
+        <circle cx="60" cy="128" r="8" fill="#ff7ab0" opacity="0.4" />
+        <circle cx="142" cy="128" r="8" fill="#ff7ab0" opacity="0.4" />
+        <!-- mouth (under the moustache) -->
+        {#if open > 0.05}
+          <ellipse cx="100" cy={143 + mouthH / 2} rx={mouthW} ry={mouthH} fill="#3a0f3f" />
+          <ellipse cx="100" cy={143 + mouthH * 1.1} rx={mouthW * 0.55} ry={mouthH * 0.45} fill="#ff6b9a" />
+        {:else}
+          <path d="M89 144 Q100 153 111 144" stroke="#3a0f3f" stroke-width="3.5" fill="none" stroke-linecap="round" />
+        {/if}
+        <!-- the grand handlebar moustache, curled at the ends -->
+        <g class="stache">
+          <path transform="translate(100 131) scale(1.35) translate(-100 -131)"
+            d="M100 128 C92 124 80 124 72 131 C66 136 58 138 52 133 C50 130 53 126 57 128 C54 131 58 134 62 131 C70 125 78 136 100 136 C122 136 130 125 138 131 C142 134 146 131 143 128 C147 126 150 130 148 133 C142 138 134 136 128 131 C120 124 108 124 100 128 Z"
+            fill="#0f0d2b" stroke="#0f0d2b" stroke-width="1.5" stroke-linejoin="round"
+          />
+        </g>
+      </g>
+
+      <!-- the top hat, worn at a jaunty angle -->
+      <g class="hat">
+        <g transform="rotate(-9 104 70)">
+          <ellipse cx="104" cy="72" rx="40" ry="8" fill="#1e1a33" />
+          <path d="M78 71 L81 24 C81 20 84 18 88 18 L120 18 C124 18 127 20 127 24 L130 71 Z" fill="#2b2547" />
+          <rect x="79.5" y="56" width="49" height="10" fill="#7b3fe4" />
+          <polygon points="117.0,55.5 118.4,59.1 122.2,59.3 119.3,61.7 120.2,65.4 117.0,63.4 113.8,65.4 114.7,61.7 111.8,59.3 115.6,59.1" fill="#ffc400" />
+          <path d="M86 24 L86 52" stroke="#3a3360" stroke-width="3" stroke-linecap="round" />
+        </g>
+      </g>
+
+      <!-- his free hand: a little blob hand that waves about while he talks -->
+      <g class="hand">
+        <circle cx="34" cy="172" r="12" fill="#3d8bff" />
+        <circle cx="27" cy="162" r="4.5" fill="#3d8bff" />
+        <circle cx="35" cy="159" r="4.5" fill="#3d8bff" />
+        <circle cx="43" cy="162" r="4.5" fill="#3d8bff" />
+      </g>
+
+      <!-- microphone in his other hand -->
+      <g class="mic">
+        <rect x="163" y="140" width="6" height="42" rx="3" fill="#2b2240" transform="rotate(8 166 160)" />
+        <circle cx="166" cy="134" r="11" fill="#c9c4ea" />
+        <circle cx="166" cy="134" r="11" fill="url(#lewis-grill)" />
+        <circle cx="163" cy="180" r="12" fill="#3d8bff" />
+        <circle cx="155" cy="176" r="4.5" fill="#3d8bff" />
+      </g>
     </g>
 
     <defs>
-      <pattern id="grill" width="4" height="4" patternUnits="userSpaceOnUse">
+      <pattern id="lewis-grill" width="4" height="4" patternUnits="userSpaceOnUse">
         <circle cx="2" cy="2" r="0.9" fill="#7d77a3" />
       </pattern>
     </defs>
@@ -97,15 +117,23 @@
 <style>
   .lewis { width: var(--size); aspect-ratio: 200 / 220; filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.35)); }
   svg { width: 100%; height: 100%; overflow: visible; }
-  .head { transform-origin: 100px 140px; transition: transform 0.08s; }
-  .talking .head { transform: translateY(calc(var(--bob) * -5px)) rotate(calc(var(--bob) * 3deg)); }
-  .lewis:not(.talking) .head { animation: breathe 3.2s ease-in-out infinite; }
+  /* Jelly: he squashes and stretches from the bottom. */
+  .blob { transform-origin: 100px 210px; transition: transform 0.08s; }
+  .talking .blob { transform: scale(calc(1 + var(--bob) * 0.04), calc(1 - var(--bob) * 0.04)); }
+  .lewis:not(.talking) .blob { animation: breathe 3.2s ease-in-out infinite; }
+  .face { transition: transform 0.08s; }
+  .talking .face { transform: translateY(calc(var(--bob) * -2px)); }
   .brows { transition: transform 0.1s; }
-  .eyes { transform-origin: 100px 91px; animation: blink 4.6s infinite; }
+  .eyes { transform-origin: 100px 109px; animation: blink 4.6s infinite; }
+  .hat { transform-origin: 104px 72px; transition: transform 0.15s; }
+  .talking .hat { animation: tip 1.6s ease-in-out infinite; }
+  .lewis:not(.talking) .hat { animation: lift 7s ease-in-out infinite; }
+  .stache { transform-origin: 100px 130px; transition: transform 0.08s; }
+  .talking .stache { transform: translateY(calc(var(--bob) * 2px)) scaleX(calc(1 + var(--bob) * 0.08)); }
+  .monocle { transform-origin: 123px 108px; }
   .mic { transform-origin: 162px 182px; transition: transform 0.12s; }
   .talking .mic { transform: rotate(-6deg) translateY(-3px); }
-  .spark { animation: twinkle 1.8s ease-in-out infinite; }
-  .hand { transform-origin: 46px 200px; transition: transform 0.3s cubic-bezier(0.2, 1.6, 0.4, 1); }
+  .hand { transform-origin: 40px 196px; transition: transform 0.3s cubic-bezier(0.2, 1.6, 0.4, 1); }
   .talking .hand { animation: gesture 2.4s ease-in-out infinite; }
   .talking svg { animation: sway 1.8s ease-in-out infinite; transform-origin: 50% 100%; }
   .lewis:not(.talking) .hand { animation: idlehand 5s ease-in-out infinite; }
@@ -118,10 +146,12 @@
   }
   @keyframes idlehand { 0%, 80%, 100% { transform: none; } 88% { transform: translate(-3px, -14px) rotate(-12deg); } }
   @keyframes sway { 0%, 100% { transform: rotate(-1.5deg); } 50% { transform: rotate(1.5deg) translateY(-2px); } }
-  @keyframes breathe { 50% { transform: translateY(-3px) rotate(-1.5deg); } }
+  @keyframes breathe { 50% { transform: scale(1.025, 0.975); } }
   @keyframes blink { 0%, 94%, 100% { transform: scaleY(1); } 97% { transform: scaleY(0.1); } }
-  @keyframes twinkle { 50% { opacity: 0.35; } }
+  @keyframes tip { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(-5deg) translateY(-3px); } }
+  /* Now and then he lifts his hat, ever so politely. */
+  @keyframes lift { 0%, 86%, 100% { transform: none; } 90%, 94% { transform: translateY(-10px) rotate(-6deg); } }
   @media (prefers-reduced-motion: reduce) {
-    .head, .eyes, .spark, .hand, svg { animation: none !important; }
+    .blob, .eyes, .hat, .hand, svg { animation: none !important; }
   }
 </style>

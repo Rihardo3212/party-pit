@@ -119,9 +119,11 @@
   .mapcard { border-radius: 26px; border: 6px solid #fff; box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5); overflow: hidden; }
   .side {
     background: #fff; color: #2b2240; border-radius: 26px; padding: 1rem; display: flex; flex-direction: column; gap: 0.45rem;
-    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45); overflow: auto;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45); overflow: hidden; min-height: 0;
   }
-  .thumb { width: 100%; height: 150px; object-fit: cover; border-radius: 16px; }
+  .side > * { flex: none; }
+  /* The photo gives way first, so every result row always fits (nobody scrolls a TV). */
+  .side > .thumb { flex: 0 1 150px; min-height: 56px; width: 100%; object-fit: cover; border-radius: 16px; }
   .pname { margin: 0; font-size: 1.9rem; line-height: 1.1; color: #ff8a1f; }
   .where { margin: 0; font-weight: 900; }
   .fact { margin: 0; font-size: 0.98rem; color: #5b5270; }

@@ -42,7 +42,7 @@
   import { TOUR_PHASES } from '../engine/tour.js';
   import { WEDGES } from '../content/wedges.js';
   import { topWins } from '../lib/wins.js';
-  import { AWARDS_AT, AWARD_GAP, REVEAL_AT } from '../lib/awards.js';
+  import { AWARDS_AT, AWARD_GAP, placeGroups, placeAt, drumAt, revealAt } from '../lib/awards.js';
   import { sfx, isMuted, setMuted, unlockAudio, audioReady } from '../lib/sound.js';
   import { play as playMusic, stopMusic, musicEnabled, setMusicEnabled } from '../lib/music.js';
   import { fx } from '../lib/fx.js';
@@ -419,16 +419,25 @@
       }
       case 'end':
         stopMusic();
-        // Drum roll behind the curtains, then a crash and the winner.
-        sfx.bigDrumroll(REVEAL_AT / 1000);
-        setTimeout(() => {
-          sfx.crash();
-          sfx.fanfare();
-          fx.confetti(260);
-        }, REVEAL_AT);
-        setTimeout(() => sfx.applause(2.4), REVEAL_AT + 400);
-        (b.results?.awards || []).forEach((_, i) => setTimeout(() => sfx.ding(), AWARDS_AT(b) + i * AWARD_GAP));
-        setTimeout(() => playMusic('lobby'), REVEAL_AT + 4500);
+        {
+          // Places pop up one by one from the bottom, then a drum roll, then the winner's big moment.
+          const groups = placeGroups(b);
+          const win = revealAt(b);
+          const winColor = b.units[b.results?.winners?.[0]]?.color;
+          groups.slice(1).reverse().forEach((_, k) => setTimeout(() => sfx.stamp(), placeAt(k)));
+          setTimeout(() => sfx.bigDrumroll((win - drumAt(b)) / 1000), drumAt(b));
+          setTimeout(() => {
+            sfx.crash();
+            sfx.fanfare();
+            fx.cannon(160, winColor ? [winColor, '#ffc400', '#ffffff'] : null);
+            fx.confetti(200);
+          }, win);
+          setTimeout(() => fx.cannon(110), win + 1100);
+          setTimeout(() => fx.confetti(140, winColor ? [winColor, '#ffc400', '#ffffff'] : null), win + 2200);
+          setTimeout(() => sfx.applause(3), win + 400);
+          (b.results?.awards || []).forEach((_, i) => setTimeout(() => sfx.ding(), AWARDS_AT(b) + i * AWARD_GAP));
+          setTimeout(() => playMusic('lobby'), win + 4500);
+        }
         wins = topWins();
         break;
     }

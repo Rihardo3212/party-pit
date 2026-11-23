@@ -68,6 +68,7 @@ export function normalize(s) {
     s.results.ranked = s.results.ranked || [];
     s.results.winners = s.results.winners || [];
     s.results.awards = s.results.awards || [];
+    s.results.places = s.results.places || {};
   }
   for (const e of Object.values(ENGINES)) e.normalize(s);
   return s;
@@ -458,11 +459,14 @@ export class GameHost {
     const ranked = [...s.unitOrder].sort(rank || byScore);
     const best = ranked[0];
     const winners = ranked.filter((u) => (rank || byScore)(u, best) === 0);
+    // Places: units that tie share one (two players on 0 are both #3, not #3 and #4).
+    const places = {};
+    ranked.forEach((u, i) => { places[u] = i > 0 && (rank || byScore)(u, ranked[i - 1]) === 0 ? places[ranked[i - 1]] : i + 1; });
     // Crowd Favourite: fans in the audience (only the ones still watching).
     for (const [id, a] of Object.entries(s.audience)) if (a.fan && s.players[a.fan] && this.isHere(id)) this.stat(a.fan, 'crowd');
     let awards = [];
     try { awards = pickAwards(s.stats); } catch (e) { console.warn('awards failed', e); }
-    s.results = { ranked, winners, awards };
+    s.results = { ranked, winners, places, awards };
     winners.forEach((u) => addWin(s.units[u].name));
     s.phase = 'end';
     this.save();

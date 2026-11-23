@@ -55,7 +55,7 @@
             {#if !d.feed.length}
               <p class="muted">Type your guesses on your phone!</p>
             {/if}
-            {#each d.feed as item, i (i + '-' + item.pid + '-' + item.kind + '-' + (item.text || ''))}
+            {#each d.feed as item, i (item.id ?? i)}
               {@const p = P(item.pid)}
               <div class="fi slide-up" class:ok={item.kind === 'ok'} class:close={item.kind === 'close'}>
                 <Avatar src={avatars[item.pid]} color={p?.color} name={p?.name} size={34} />

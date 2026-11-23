@@ -6,7 +6,7 @@ import { say, hush, preload, lewis } from './presenter.svelte.js';
 import { line, placeLine, bombCatLine } from '../content/presenter.js';
 import { placeById } from '../engine/pindrop.js';
 import { catOf } from '../engine/bomb.js';
-import { REVEAL_AT } from './awards.js';
+import { drumAt, revealAt } from './awards.js';
 
 const count = (o) => Object.keys(o || {}).length;
 const chance = (p) => Math.random() < p;
@@ -267,7 +267,8 @@ function phase(a, b) {
       const r = b.results;
       if (!r) break;
       hush();
-      say(line('drumroll'), { interrupt: true, maxWait: 1500 });
+      // The drum roll line goes with the drum roll, after the other places are shown.
+      setTimeout(() => say(line('drumroll'), { interrupt: true, maxWait: 1500 }), Math.max(0, drumAt(b) - 300));
       setTimeout(() => {
         if (r.winners.length > 1) say(line('tie'));
         else say(byUnit(b, r.winners[0], 'winner', 'winnerTeam'));
@@ -276,7 +277,7 @@ function phase(a, b) {
           say(line('awards'), { maxWait: 9000 });
           for (const aw of r.awards) say(line(`award_${aw.key}`), { maxWait: 16000 });
         }
-      }, REVEAL_AT + 400);
+      }, revealAt(b) + 400);
       break;
     }
   }

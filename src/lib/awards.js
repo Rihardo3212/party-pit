@@ -26,10 +26,29 @@ export const AWARDS = [
   { key: 'wrong', icon: '😬', name: 'Oops!', color: '#ff7a1a', min: 2, what: (v) => `${v} wrong answers` }
 ];
 
-// The end screen: curtains close, drum roll, and the winner is revealed at REVEAL_AT (ms).
-export const REVEAL_AT = 2200;
-// When the first award card pops in on the end screen (ms), after the podium. Cards follow every 450 ms.
-export const AWARDS_AT = (s) => REVEAL_AT + 300 + (s.results?.ranked?.length || 0) * 180 + 900;
+// The end screen, step by step: the places pop up one by one from last place, then a drum roll,
+// then the winner gets the big podium. All times are ms from the moment the end screen shows.
+export const END_FIRST = 900; // first place card, after the curtains
+export const END_STEP = 1100; // between places
+export const DRUM = 2400; // drum roll before the winner
+// Units grouped by shared place, best first: [[ids at place 1], [ids at place 2], ...].
+export function placeGroups(s) {
+  const r = s.results || {};
+  const groups = [];
+  for (const id of r.ranked || []) {
+    const p = r.winners?.includes(id) ? 1 : r.places?.[id] || (r.ranked.indexOf(id) + 1);
+    const g = groups.find((x) => x.place === p);
+    if (g) g.ids.push(id);
+    else groups.push({ place: p, ids: [id] });
+  }
+  return groups.sort((a, b) => a.place - b.place);
+}
+// When the k-th non-winner group shows (k = 0 is the group revealed first, the lowest place).
+export const placeAt = (k) => END_FIRST + k * END_STEP;
+export const drumAt = (s) => (placeGroups(s).length > 1 ? placeAt(placeGroups(s).length - 1) + 300 : 600);
+export const revealAt = (s) => drumAt(s) + DRUM;
+// When the first award card pops in (ms), after the winner's celebration. Cards follow every AWARD_GAP.
+export const AWARDS_AT = (s) => revealAt(s) + 2600;
 export const AWARD_GAP = 450;
 
 export const awardInfo =(key) => AWARDS.find((a) => a.key === key);

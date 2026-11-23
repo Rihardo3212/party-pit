@@ -31,7 +31,7 @@ function goTime(r) {
 // The number used for ranking. Lower is better for green and stop5.
 export function rankValue(game, res) {
   if (!res || res.foul || res.miss) return null;
-  if (game === 'stop5') return Math.abs(res.v - STOP_TARGET);
+  if (game === 'stop5') return Math.round(Math.abs(res.v - STOP_TARGET) / 10); // same 0.01 s the screen shows
   return res.v;
 }
 

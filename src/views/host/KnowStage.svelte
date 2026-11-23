@@ -48,7 +48,7 @@
       </div>
 
       <div class="options">
-        {#each k.options as o, i}
+        {#each k.options as o, i (`${k.idx}-${i}`)}
           <div
             class="opt flip-in"
             style="animation-delay:{150 + i * 90}ms"

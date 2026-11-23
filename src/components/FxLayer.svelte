@@ -37,6 +37,33 @@
     if (!raf) raf = requestAnimationFrame(frame);
   }
 
+  // Cannons: two bursts shot up from the bottom corners; they slow down and flutter like the rest.
+  function cannon(amount, colors) {
+    const w = canvas.width, h = canvas.height;
+    const n = Math.min(140, Math.round(amount * 0.5));
+    const k = h / 900;
+    const pal = colors || COLORS;
+    for (let i = 0; i < n; i++) {
+      const left = i % 2 === 0;
+      parts.push({
+        x: left ? -10 : w + 10,
+        y: h + 10,
+        vx: (left ? 1 : -1) * (5 + Math.random() * 9) * k,
+        vy: -(17 + Math.random() * 11) * k,
+        g: 0.42, drag: 0.985,
+        sway: 0.6 + Math.random() * 1.2,
+        ph: Math.random() * Math.PI * 2,
+        r: Math.random() * Math.PI,
+        vr: (Math.random() - 0.5) * 0.3,
+        s: (8 + Math.random() * 7) * Math.max(0.7, k),
+        round: Math.random() < 0.25,
+        c: pal[Math.floor(Math.random() * pal.length)],
+        life: 0
+      });
+    }
+    if (!raf) raf = requestAnimationFrame(frame);
+  }
+
   function frame() {
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -44,7 +71,8 @@
     parts = parts.filter((p) => p.y < canvas.height + 30 && p.life < 900 && !(p.fade !== undefined && p.fade <= 0));
     for (const p of parts) {
       p.life++;
-      p.vy = Math.min(p.vy + 0.03 * k, 3.6 * k); // gentle, like paper in the air
+      p.vy = Math.min(p.vy + (p.vy < 0 ? p.g : 0.03) * k, 3.6 * k); // shot up fast, then gentle, like paper in the air
+      if (p.drag) p.vx *= p.drag;
       p.x += p.vx + Math.sin(p.ph + p.life / 22) * p.sway * k;
       p.y += p.vy;
       p.r += p.vr;
@@ -79,6 +107,7 @@
     window.addEventListener('resize', resize);
     off = onFx((e) => {
       if (e.type === 'confetti') confetti(e.amount, e.colors);
+      if (e.type === 'cannon') cannon(e.amount, e.colors);
       // Fresh confetti (fired for this very moment) stays; older pieces fade out in ~1/3 s.
       if (e.type === 'calm') for (const p of parts) if (p.life > 30 && p.fade === undefined) p.fade = 1;
       if (e.type === 'stamp') {

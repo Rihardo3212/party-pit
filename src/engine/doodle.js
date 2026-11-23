@@ -94,14 +94,14 @@ function guess(g, from, text) {
     g.stat(from, 'eye');
     g.stat(d.drawer, 'art');
     d.artistPts = (d.artistPts || 0) + artistPts;
-    d.feed = [...d.feed, { pid: from, kind: 'ok' }].slice(-FEED);
+    d.feed = [...d.feed, { id: (d.fid = (d.fid || 0) + 1), pid: from, kind: 'ok' }].slice(-FEED);
     const left = guessers(g).filter((p) => !d.guessed[p]);
     if (!left.length) { endDrawing(g); return; }
   } else if (m === 'close') {
     d.close[from] = (d.close[from] || 0) + 1;
-    d.feed = [...d.feed, { pid: from, kind: 'close' }].slice(-FEED);
+    d.feed = [...d.feed, { id: (d.fid = (d.fid || 0) + 1), pid: from, kind: 'close' }].slice(-FEED);
   } else {
-    d.feed = [...d.feed, { pid: from, kind: 'wrong', text: clean }].slice(-FEED);
+    d.feed = [...d.feed, { id: (d.fid = (d.fid || 0) + 1), pid: from, kind: 'wrong', text: clean }].slice(-FEED);
   }
   g.save();
 }
