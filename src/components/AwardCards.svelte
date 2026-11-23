@@ -3,7 +3,7 @@
   import Avatar from './Avatar.svelte';
   import { awardInfo, AWARD_GAP } from '../lib/awards.js';
 
-  let { s, avatars, delay = 0 } = $props();
+  let { s, avatars, delay = 0, column = false } = $props();
   // who is a player id, or a team unit id.
   const whoOf = (id) => {
     const p = s.players[id];
@@ -15,7 +15,7 @@
 </script>
 
 {#if list.length}
-  <div class="awards">
+  <div class="awards" class:column>
     {#each list as a, i (a.key)}
       <div class="award card pop-in" style="animation-delay:{delay + i * AWARD_GAP}ms; --mc:{a.info.color}">
         <div class="icon-tile" style="--sz:54px">{a.info.icon}</div>
@@ -35,6 +35,7 @@
 
 <style>
   .awards { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .awards.column { flex-direction: column; flex-wrap: nowrap; gap: 0.7rem; }
   .award { display: flex; align-items: center; gap: 0.8rem; padding: 0.7rem 1.1rem 0.7rem 0.8rem; text-align: left; min-width: 230px; }
   .aname { font-family: var(--font-display); font-size: 1.35rem; color: var(--mc); line-height: 1.1; }
   .who { display: flex; align-items: center; gap: 0.4rem; margin: 0.2rem 0; font-size: 1.05rem; }

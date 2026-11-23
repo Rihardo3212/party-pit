@@ -54,6 +54,7 @@
     {/if}
   </div>
 
+  <div class="stage" class:side={hasAwards}>
   <div class="podium" class:small={hasAwards}>
     {#each order as g (g.place)}
       {@const top = g.place === 1}
@@ -84,28 +85,37 @@
     {/each}
   </div>
 
-  {#if won}<AwardCards {s} {avatars} delay={AWARDS_AT(s) - revealAt(s)} />{/if}
+  {#if hasAwards}
+    <!-- Awards sit beside the podium (space kept from the start, so the podium never jumps). -->
+    <div class="awards-side">
+      {#if won}<AwardCards {s} {avatars} column delay={AWARDS_AT(s) - revealAt(s)} />{/if}
+    </div>
+  {/if}
+  </div>
   {#if t >= AWARDS_AT(s)}<p class="muted pop-in hint">{ctrlName} can start a new round from their phone.</p>{/if}
 </section>
 
 <style>
-  .main { flex: 1; position: relative; display: flex; flex-direction: column; gap: 0.7rem; align-items: center; justify-content: center; text-align: center; padding: 1rem 2rem; }
+  .main { flex: 1; position: relative; display: flex; flex-direction: column; gap: 0.5rem; align-items: center; justify-content: center; text-align: center; padding: 0.4rem 2rem; }
   .modename { font-size: 1.3rem; }
-  .head { min-height: 5rem; display: grid; place-items: center; }
+  .head { min-height: 4.5rem; display: grid; place-items: center; }
   .soon { font-size: clamp(1.8rem, 3.4vw, 2.8rem); color: var(--muted); }
   .drum-line { font-size: clamp(2.2rem, 4.5vw, 3.6rem); display: flex; align-items: center; gap: 0.6rem; animation: throb 0.3s ease-in-out infinite alternate; }
   .drum { display: inline-block; font-size: 1.3em; animation: hop 0.18s ease-in-out infinite alternate; }
   .win-title {
-    font-size: clamp(3rem, 6.5vw, 5.4rem); color: var(--sun); margin: 0;
+    font-size: clamp(3rem, 5.6vw, 5.4rem); color: var(--sun); margin: 0; line-height: 1.05;
     text-shadow: 0 3px 0 #ff8a00, 0 6px 0 #d96800, 0 10px 30px -8px rgba(224, 33, 58, 0.6), 0 14px 22px rgba(0, 0, 0, 0.35);
   }
 
   /* The podium: toy blocks of different heights. */
+  .stage { display: flex; align-items: flex-end; justify-content: center; gap: 2rem; width: 100%; }
+  .stage.side .podium { width: auto; }
+  .awards-side { width: 290px; flex: none; align-self: center; }
   .podium { display: flex; align-items: flex-end; justify-content: center; gap: 0.9rem; width: 100%; }
   .col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; min-width: clamp(150px, 17vw, 230px); }
   .people { padding-inline: 0.5rem; }
   .col.top { min-width: clamp(200px, 24vw, 330px); overflow: clip; border-radius: 0 0 6px 6px; }
-  .top .people { padding-top: 3rem; }
+  .top .people { padding-top: 2.5rem; }
   .people { position: relative; display: flex; gap: 0.6rem; justify-content: center; align-items: flex-end; min-height: 4rem; padding-bottom: 0.6rem; }
   .who { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; position: relative; z-index: 1; }
   .pname { font-family: var(--font-display); font-size: 1.45rem; line-height: 1.05; }
